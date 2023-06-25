@@ -2,6 +2,7 @@
 import React, { lazy } from 'react';
 import { useRoutes } from 'react-router-dom';
 import AuthRoute from './AuthRoute';
+import ErrorBoundaryRoute from './ErrorBoundaryRoute';
 
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
@@ -13,15 +14,15 @@ export const AppRoutes: React.FC = () => {
   return useRoutes([
     {
       path: '/',
-      element: <SignIn />,
+      element: <ErrorBoundaryRoute component={<SignIn />} />,
     },
     {
       path: '/signin',
-      element: <SignIn />,
+      element: <ErrorBoundaryRoute component={<SignIn />} />,
     },
     {
       path: '/signUp',
-      element: <SignUp />,
+      element: <ErrorBoundaryRoute component={<SignUp />} />,
     },
     {
       path: '/dashboard',
@@ -41,7 +42,7 @@ export const AppRoutes: React.FC = () => {
     },
     {
       path: '*',
-      element: <PageNotFound />,
+      element: <ErrorBoundaryRoute component={<PageNotFound />} />,
     },
   ]);
 };
