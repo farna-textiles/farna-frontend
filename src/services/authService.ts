@@ -1,7 +1,10 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Cookies from 'js-cookie';
+
 export const isAuthenticated = () => {
-  // Replace with your actual implementation
-  return true;
-  // return !!localStorage.getItem('token');
+  const hasLocalStorageToken = !!localStorage.getItem('access_token');
+  const hasCookieToken = !!Cookies.get('access_token');
+  return hasLocalStorageToken || hasCookieToken;
 };
 
 export const userHasPermission = (path: string) => {
