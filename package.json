@@ -1,5 +1,6 @@
 {
   "name": "farna-frontend",
+  "proxy": "http://localhost:3001",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,18 +12,24 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.29.19",
     "@types/react-router-dom": "^5.3.3",
+    "axios": "^1.4.0",
+    "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^4.0.10",
     "react-router": "^6.13.0",
     "react-router-dom": "^6.13.0",
+    "react-toastify": "^9.1.3",
     "tailwind-merge": "^1.13.2"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^4.29.9",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
+    "@types/js-cookie": "^3.0.3",
     "@types/lodash": "^4.14.195",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",

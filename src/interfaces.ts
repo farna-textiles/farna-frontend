@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes, ReactNode } from 'react';
 
 export interface FormInputProps {
   id: string;
@@ -38,4 +38,15 @@ export interface ChangeEvent {
     name: string;
     value: any;
   };
+}
+
+export interface AuthRouteProps {
+  path: string;
+  children: ReactNode;
+  redirect?: boolean;
+}
+
+export interface ErrorBoundaryRouteProps {
+  component: React.ReactNode;
+  redirect?: boolean;
 }

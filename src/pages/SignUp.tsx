@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ChangeEvent, UserFormInput } from '../interfaces';
 import AuthBanner from '../components/auth/AuthBanner';
 import Form from '../components/elements/Form';
+import { useSignUp } from '../hooks/useAuth';
 
 const SignUp: React.FC = () => {
   const [userData, setUserData] = useState({
@@ -14,8 +15,18 @@ const SignUp: React.FC = () => {
     password: '',
   });
 
-  const handleFormSubmit = () => {
-    // Handle form submission logic
+  const { invitationToken } = useParams<{ invitationToken: string }>();
+
+  const signupMutation = useSignUp();
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    signupMutation.mutate({
+      ...userData,
+      invitationToken:
+        invitationToken &&
+        decodeURIComponent(invitationToken.replace(/%2E/g, '.')),
+    });
   };
 
   const inputList: UserFormInput[] = [

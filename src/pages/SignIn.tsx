@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 import Form from '../components/elements/Form';
 import { ChangeEvent, UserFormInput } from '../interfaces';
 import AuthBanner from '../components/auth/AuthBanner';
+import { useSignIn } from '../hooks/useAuth';
 
 const SignIn: React.FC = () => {
-  const [userData, setUserData] = useState({ email: '', password: '' });
+  const [userData, setUserData] = useState({ identifier : '', password: '' });
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
@@ -16,17 +17,21 @@ const SignIn: React.FC = () => {
       setAnimate(true);
     }, 100);
   }, []);
-  const handleFormSubmit = () => {
-    // Handle form submission logic
+
+  const signinMutation = useSignIn();
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    signinMutation.mutate(userData);
   };
 
   const inputList: UserFormInput[] = [
     {
-      label: 'Email Address',
-      type: 'email',
-      name: 'email',
-      value: userData.email,
-      placeholder: 'name@company.com',
+      label: 'Identifier',
+      type: 'text',
+      name: 'identifier',
+      value: userData.identifier,
+      placeholder: 'Enter email or username',
     },
     {
       label: 'Password',
@@ -82,7 +87,7 @@ const SignIn: React.FC = () => {
           <Form
             inputList={inputList}
             handleFormSubmit={handleFormSubmit}
-            buttonLabel="Create account"
+            buttonLabel="Login"
             onChangeHandler={onChangeHandler}
           />
         </div>
