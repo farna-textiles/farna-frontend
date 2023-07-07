@@ -50,3 +50,11 @@ export interface ErrorBoundaryRouteProps {
   component: React.ReactNode;
   redirect?: boolean;
 }
+
+export interface ErrorResponse {
+  statusCode: number;
+  message: string;
+  error: string;
+}
+
+export type ApiFunction<T> = (url: string, data: T) => Promise<any>;
