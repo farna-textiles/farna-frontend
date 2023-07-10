@@ -1,19 +1,6 @@
 import { API_URLS } from '../constants';
-import { ApiFunction } from '../interfaces';
+import { handleApiCall } from '../lib/utils';
 import api from './axios';
-
-const handleApiCall = async <T>(
-  apiFunction: ApiFunction<T>,
-  url: string,
-  data: T
-) => {
-  try {
-    const response = await apiFunction(url, data);
-    return response.data;
-  } catch (error: any) {
-    throw error.response.data;
-  }
-};
 
 export const signup = async (data: {
   email: string;
