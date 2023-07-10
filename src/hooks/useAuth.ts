@@ -19,10 +19,15 @@ export const useSignUp = () => {
 
 export const useSignIn = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   return useMutation(signin, {
     onSuccess: (data) => {
       notifySuccess('Welcome back!');
+      const successKey: QueryKey = ['confirmEmailSuccessMessage'];
+      queryClient.setQueryData(successKey, 'Email confirmed successfully');
+      queryClient.setQueryData(['userInfo'], data.user);
+      localStorage.setItem('userInfo', JSON.stringify(data.user));
       navigate('/');
     },
     onError: (error: ErrorResponse) => {

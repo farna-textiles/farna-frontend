@@ -57,4 +57,54 @@ export interface ErrorResponse {
   error: string;
 }
 
-export type ApiFunction<T> = (url: string, data: T) => Promise<any>;
+export type ApiFunction<T> = (url: string, config?: any) => Promise<any>;
+
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  confirmedAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type UserObject = User & Record<string, any>;
+
+export interface RowData {
+  [key: string]: string;
+}
+
+export interface TableSortProps<T extends RowData> {
+  data: T[];
+}
+
+export interface ThProps<T extends RowData> {
+  children: React.ReactNode;
+  field: keyof T;
+  reversed: boolean;
+  sorted: boolean;
+  onSort(field: keyof T): void;
+}
+
+export interface TableColumn<T> {
+  field: keyof T;
+  label: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface GenericTableProps<T> {
+  columns: TableColumn<T>[];
+  fetchData: (
+    page: number,
+    pageSize: number,
+    searchQuery: string
+  ) => Promise<PaginatedResponse<T>>;
+}
