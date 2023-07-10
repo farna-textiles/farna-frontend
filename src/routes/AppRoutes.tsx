@@ -5,6 +5,8 @@ import AuthRoute from './AuthRoute';
 import ErrorBoundaryRoute from './ErrorBoundaryRoute';
 import UserVerification from '../pages/UserVerification';
 import ConfirmEmail from '../pages/ConfirmEmail';
+import Layout from '../pages/Layout';
+import Users from '../pages/user/Users';
 
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
@@ -43,20 +45,39 @@ export const AppRoutes: React.FC = () => {
       ),
     },
     {
-      path: '/dashboard',
+      path: '/',
       element: (
         <AuthRoute path="/dashboard">
-          <Dashboard />
+          <Layout />
         </AuthRoute>
       ),
-    },
-    {
-      path: '/profile',
-      element: (
-        <AuthRoute path="/profile">
-          <Profile />
-        </AuthRoute>
-      ),
+      children: [
+        {
+          path: '/dashboard',
+          element: (
+            <AuthRoute path="/dashboard">
+              <Dashboard />
+            </AuthRoute>
+          ),
+        },
+        {
+          path: '/profile',
+          element: (
+            <AuthRoute path="/profile">
+              <Profile />
+            </AuthRoute>
+          ),
+        },
+        {
+          path: '/users',
+          element: (
+            <AuthRoute path="/users">
+              <Users />
+            </AuthRoute>
+          ),
+        },
+        { path: '*', element: <PageNotFound /> },
+      ],
     },
     {
       path: '*',
