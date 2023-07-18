@@ -16,6 +16,11 @@ export const handleApiCall = async <T>(
     const response = await apiFunction(url, data);
     return response.data;
   } catch (error: any) {
+    if (error.response.data.error === 'Forbidden')
+      error.response.data = {
+        ...error.response.data,
+        message: 'Access Denied (Unauthorized Resource)',
+      };
     throw error.response.data;
   }
 };
