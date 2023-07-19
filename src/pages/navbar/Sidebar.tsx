@@ -14,22 +14,21 @@ import logo from '../../../public/farna-logo.png';
 import LinksGroup from './LinksGroup';
 import UserButton from './UserButton';
 import { User } from '../../interfaces';
+import { IconAddressBook } from '@tabler/icons-react';
 
 const mockdata = [
   { label: 'Dashboard', icon: IconGauge, link: '/' },
   {
-    label: 'Market news',
-    icon: IconNotes,
-    initiallyOpened: true,
+    label: 'Customers',
+    icon: IconAddressBook,
+    initiallyOpened: false,
     links: [
-      { label: 'Overview', link: '/market/overview' },
-      { label: 'Forecasts', link: '/market/forecasts' },
-      { label: 'Outlook', link: '/market/outlook' },
-      { label: 'Real time', link: '/market/real-time' },
+      { label: 'All Customers', link: '/customers' },
+      { label: 'Create Customer', link: '/createcustomer' },
     ],
   },
   {
-    label: 'Releases',
+    label: 'Products',
     icon: IconCalendarStats,
     links: [
       { label: 'Upcoming releases', link: '/' },
@@ -111,11 +110,7 @@ const Sidebar = () => {
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <UserButton
-          image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-          name={userInfo!.username ?? ''}
-          email={userInfo!.email ?? ''}
-        />
+       
       </Navbar.Section>
     </Navbar>
   );
