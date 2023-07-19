@@ -1,17 +1,46 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { Box, Typography } from '@mui/material';
-
-import { TableColumn, UserObject as User } from '../../interfaces';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Edit from '@mui/icons-material/Edit';
+import { useMemo } from 'react';
+import {
+  ActionButton,
+  TableColumn,
+  UserObject as User,
+} from '../../interfaces';
 import GenericTable from '../../components/table/GenericTable';
 import { getAllUsers } from '../../api/userApi';
 
 const Users = () => {
-  const columns: TableColumn<User>[] = [
-    { field: 'id', label: 'ID' },
-    { field: 'username', label: 'Username' },
-    { field: 'email', label: 'Email' },
-    { field: 'role', label: 'Role' },
-  ];
+  const columns: TableColumn<User>[] = useMemo(
+    () => [
+      { field: 'id', label: 'ID' },
+      { field: 'username', label: 'Username' },
+      { field: 'email', label: 'Email' },
+      { field: 'role', label: 'Role' },
+    ],
+    []
+  );
+
+  const actionButtons: ActionButton[] = useMemo(
+    () => [
+      {
+        icon: <Edit />,
+        onClick: (id: number) => {
+          console.log(`Edit button clicked for item with ID: ${id}`);
+          // Perform edit logic
+        },
+      },
+      {
+        icon: <DeleteIcon />,
+        onClick: (id: number) => {
+          console.log(`Delete button clicked for item with ID: ${id}`);
+          // Perform delete logic
+        },
+      },
+    ],
+    []
+  );
 
   return (
     <Box sx={{ m: 4 }}>
@@ -23,7 +52,13 @@ const Users = () => {
         details.
       </Typography>
       <Box sx={{ my: 2 }}>
-        <GenericTable<User> columns={columns} fetchData={getAllUsers} />
+        <GenericTable<User>
+          columns={columns}
+          fetchData={getAllUsers}
+          actionButtons={actionButtons}
+          addButtonLink="/add"
+          addButtonLabel="Add User"
+        />
       </Box>
     </Box>
   );
