@@ -108,3 +108,12 @@ export interface GenericTableProps<T> {
     searchQuery: string
   ) => Promise<PaginatedResponse<T>>;
 }
+
+export interface ActionButton {
+  icon: React.ReactNode;
+  onClick: (id: number) => void;
+}
+
+export interface SearchBarProps {
+  onSearch: (value: string) => void;
+}

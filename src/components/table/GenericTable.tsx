@@ -1,6 +1,4 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable import/no-extraneous-dependencies */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Table,
@@ -9,41 +7,42 @@ import {
   TableCell,
   TableBody,
   TablePagination,
-  TextField,
   Grid,
   styled,
+  IconButton,
 } from '@mui/material';
-import { GenericTableProps } from '../../interfaces';
-
-const SearchBar: React.FC<{ onSearch: (value: string) => void }> = ({
-  onSearch,
-}) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  useEffect(() => {
-    onSearch(searchQuery);
-  }, [searchQuery, onSearch]);
-
-  return (
-    <TextField
-      label="Search"
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      variant="outlined"
-      size="small"
-    />
-  );
-};
+import { Link } from 'react-router-dom';
+import { ActionButton, GenericTableProps } from '../../interfaces';
+import SearchBar from '../elements/SearchBar';
 
 const Container = styled('div')(({ theme }) => ({
   marginTop: theme.spacing(2),
   marginBottom: theme.spacing(2),
 }));
 
+const AddButtonLink = styled(Link)(({ theme }) => ({
+  textDecoration: 'none',
+  color: theme.palette.primary.main,
+  padding: theme.spacing(1),
+  border: `1px solid ${theme.palette.primary.main}`,
+  borderRadius: theme.shape.borderRadius,
+  '&:hover': {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+  },
+}));
+
 const GenericTable = <T extends Record<string, unknown>>({
   columns,
   fetchData,
-}: GenericTableProps<T>) => {
+  addButtonLink,
+  addButtonLabel,
+  actionButtons,
+}: GenericTableProps<T> & {
+  addButtonLink?: string;
+  addButtonLabel?: string;
+  actionButtons?: ActionButton[];
+}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState('');
@@ -75,10 +74,15 @@ const GenericTable = <T extends Record<string, unknown>>({
 
   return (
     <Container>
-      <Grid container spacing={2}>
+      <Grid container justifyContent="space-between" spacing={8}>
         <Grid item>
           <SearchBar onSearch={setSearchQuery} />
         </Grid>
+        {addButtonLabel && addButtonLink && (
+          <Grid item>
+            <AddButtonLink to={addButtonLink}>{addButtonLabel}</AddButtonLink>
+          </Grid>
+        )}
       </Grid>
       <Table>
         <TableHead>
@@ -86,12 +90,15 @@ const GenericTable = <T extends Record<string, unknown>>({
             {columns.map((column) => (
               <TableCell key={column.field as string}>{column.label}</TableCell>
             ))}
+            {actionButtons && (
+              <TableCell key={columns.length}>Actions</TableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
           {isLoading ? (
             <TableRow>
-              <TableCell colSpan={columns.length}>Loading...</TableCell>
+              <TableCell colSpan={columns.length + 1}>Loading...</TableCell>
             </TableRow>
           ) : (
             data?.map((item) => (
@@ -101,6 +108,19 @@ const GenericTable = <T extends Record<string, unknown>>({
                     {String(item[column.field])}
                   </TableCell>
                 ))}
+                {actionButtons && (
+                  <TableCell>
+                    {actionButtons?.map((button, index) => (
+                      <IconButton
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                        onClick={() => button.onClick(item.id as number)}
+                      >
+                        {button.icon}
+                      </IconButton>
+                    ))}
+                  </TableCell>
+                )}
               </TableRow>
             ))
           )}
@@ -117,6 +137,12 @@ const GenericTable = <T extends Record<string, unknown>>({
       />
     </Container>
   );
+};
+
+GenericTable.defaultProps = {
+  addButtonLink: '',
+  addButtonLabel: '',
+  actionButtons: [],
 };
 
 export default GenericTable;
