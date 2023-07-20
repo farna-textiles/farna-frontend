@@ -10,9 +10,15 @@ import {
   Grid,
   styled,
   IconButton,
+  Radio,
+  Checkbox,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { ActionButton, GenericTableProps } from '../../interfaces';
+import {
+  ActionButton,
+  AdditionalColumn,
+  GenericTableProps,
+} from '../../interfaces';
 import SearchBar from '../elements/SearchBar';
 
 const Container = styled('div')(({ theme }) => ({
@@ -38,10 +44,12 @@ const GenericTable = <T extends Record<string, unknown>>({
   addButtonLink,
   addButtonLabel,
   actionButtons,
+  additionalColumn,
 }: GenericTableProps<T> & {
   addButtonLink?: string;
   addButtonLabel?: string;
   actionButtons?: ActionButton[];
+  additionalColumn?: AdditionalColumn<T>;
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -93,12 +101,17 @@ const GenericTable = <T extends Record<string, unknown>>({
             {actionButtons && (
               <TableCell key={columns.length}>Actions</TableCell>
             )}
+            {additionalColumn && (
+              <TableCell key={columns.length + 1}>Optional</TableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
           {isLoading ? (
             <TableRow>
-              <TableCell colSpan={columns.length + 1}>Loading...</TableCell>
+              <TableCell colSpan={columns.length + 1 + (actionButtons ? 1 : 0)}>
+                Loading...
+              </TableCell>
             </TableRow>
           ) : (
             data?.map((item) => (
@@ -119,6 +132,32 @@ const GenericTable = <T extends Record<string, unknown>>({
                         {button.icon}
                       </IconButton>
                     ))}
+                  </TableCell>
+                )}
+                {additionalColumn && (
+                  <TableCell>
+                    {additionalColumn.type === 'radio' && (
+                      <Radio
+                        checked={additionalColumn.valueGetter?.(item)}
+                        onChange={(e) =>
+                          additionalColumn.onChange?.(
+                            item.id as number,
+                            e.target.checked
+                          )
+                        }
+                      />
+                    )}
+                    {additionalColumn.type === 'checkbox' && (
+                      <Checkbox
+                        checked={additionalColumn.valueGetter?.(item)}
+                        onChange={(e) =>
+                          additionalColumn.onChange?.(
+                            item.id as number,
+                            e.target.checked
+                          )
+                        }
+                      />
+                    )}
                   </TableCell>
                 )}
               </TableRow>
@@ -143,6 +182,7 @@ GenericTable.defaultProps = {
   addButtonLink: '',
   addButtonLabel: '',
   actionButtons: [],
+  additionalColumn: null,
 };
 
 export default GenericTable;
