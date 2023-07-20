@@ -5,6 +5,7 @@ import Edit from '@mui/icons-material/Edit';
 import { useMemo } from 'react';
 import {
   ActionButton,
+  AdditionalColumn,
   TableColumn,
   UserObject as User,
 } from '../../interfaces';
@@ -42,6 +43,16 @@ const Users = () => {
     []
   );
 
+  const additionalColumn: AdditionalColumn<User> = {
+    type: 'radio',
+    onChange: (itemId: number, checked: boolean) => {
+      console.log(`Item with ID ${itemId} has been checked: ${checked}`);
+    },
+    valueGetter: (item: User) => {
+      return item.isActive;
+    },
+  };
+
   return (
     <Box sx={{ m: 4 }}>
       <Typography variant="h4" component="div" gutterBottom>
@@ -58,6 +69,7 @@ const Users = () => {
           actionButtons={actionButtons}
           addButtonLink="/add"
           addButtonLabel="Add User"
+          additionalColumn={additionalColumn}
         />
       </Box>
     </Box>

@@ -118,3 +118,9 @@ export interface ActionButton {
 export interface SearchBarProps {
   onSearch: (value: string) => void;
 }
+
+export interface AdditionalColumn<T> {
+  type: 'radio' | 'checkbox';
+  onChange: (itemId: number, checked: boolean) => void;
+  valueGetter: (item: T) => boolean;
+}
