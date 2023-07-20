@@ -1,4 +1,5 @@
 import React from 'react';
+import { Loader } from '@mantine/core';
 import { FormProps } from '../../interfaces';
 import Input from './Input';
 
@@ -7,6 +8,7 @@ const Form: React.FC<FormProps> = ({
   handleFormSubmit,
   onChangeHandler,
   buttonLabel,
+  isLoading,
 }) => (
   <form onSubmit={handleFormSubmit} className="space-y-5">
     {inputList.map((input) => (
@@ -22,9 +24,15 @@ const Form: React.FC<FormProps> = ({
     ))}
     <button
       type="submit"
-      className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
+      className="relative w-full px-4 py-2 h-10 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
     >
-      {buttonLabel}
+      {isLoading ? (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Loader color="white" />
+        </div>
+      ) : (
+        buttonLabel
+      )}
     </button>
   </form>
 );

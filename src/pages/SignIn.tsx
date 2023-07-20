@@ -9,7 +9,7 @@ import AuthBanner from '../components/auth/AuthBanner';
 import { useSignIn } from '../hooks/useAuth';
 
 const SignIn: React.FC = () => {
-  const [userData, setUserData] = useState({ identifier : '', password: '' });
+  const [userData, setUserData] = useState({ identifier: '', password: '' });
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
@@ -89,6 +89,7 @@ const SignIn: React.FC = () => {
             handleFormSubmit={handleFormSubmit}
             buttonLabel="Login"
             onChangeHandler={onChangeHandler}
+            isLoading={signinMutation.isLoading}
           />
         </div>
       </div>

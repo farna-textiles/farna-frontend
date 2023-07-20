@@ -27,6 +27,7 @@ export type FormProps = {
   handleFormSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   onChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
   buttonLabel: string;
+  isLoading: boolean;
 };
 
 export type AuthBannerProp = {
