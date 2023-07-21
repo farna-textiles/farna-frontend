@@ -7,9 +7,9 @@ import UserVerification from '../pages/UserVerification';
 import ConfirmEmail from '../pages/ConfirmEmail';
 import Layout from '../pages/Layout';
 import Users from '../pages/user/Users';
-import Customer from '../pages/Customer';
-import AddCustomer from '../pages/AddCustomer';
-import CreateCustomer from '../pages/CreateCustomer';
+import Customer from '../pages/customer/Customer';
+import AddCustomer from '../pages/customer/AddCustomer';
+import CreateCustomer from '../pages/customer/CreateCustomer';
 
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
@@ -96,13 +96,14 @@ export const AppRoutes: React.FC = () => {
           ),
         },
         {
-          path: '/createcustomer',
+          path: '/createcustomer/',
           element: (
-            <AuthRoute path="/createcustomer">
+            <AuthRoute path="/createcustomer/">
               <CreateCustomer />
             </AuthRoute>
           ),
         },
+
         { path: '*', element: <PageNotFound /> },
       ],
     },
