@@ -71,11 +71,29 @@ export interface User {
   updatedAt: string;
 }
 
+export interface Customer {
+  id: number;
+  name: string;
+  contact: string;
+}
 export type UserObject = User & Record<string, any>;
+export type CustomerObject = Customer & Record<string, any>;
 
 export interface RowData {
   [key: string]: string;
 }
+
+export interface RowData1 {
+  name: string;
+  contact: string;
+  designation: string;
+  house: string;
+  city: string;
+  country: string
+
+}
+export type RowObject = RowData & Record<string, any>;
+
 
 export interface TableSortProps<T extends RowData> {
   data: T[];
