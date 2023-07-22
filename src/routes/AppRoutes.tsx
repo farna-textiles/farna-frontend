@@ -103,7 +103,6 @@ export const AppRoutes: React.FC = () => {
             </AuthRoute>
           ),
         },
-
         { path: '*', element: <PageNotFound /> },
       ],
     },

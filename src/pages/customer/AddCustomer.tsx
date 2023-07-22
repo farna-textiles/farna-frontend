@@ -7,8 +7,6 @@ import { Delete } from '@mui/icons-material';
 import { RowObject as RowData } from '../../interfaces';
 import { PaginatedResponse } from '../../interfaces';
 
-
-
 const AddCustomer: React.FC = () => {
   const location = useLocation();
   const rowData: RowData | undefined = location.state;
@@ -29,9 +27,6 @@ const AddCustomer: React.FC = () => {
   const [tableData, setTableData] = useState<RowData[]>([]);
 
   const handleDeleteClick = (id: number) => {
-
-    // Optionally, you can also open a modal to confirm the delete action.
-    // Here, we'll directly proceed with the delete.
     const updatedData = tableData.filter((item) => item.id !== id);
     setTableData(updatedData);
   };
@@ -52,8 +47,6 @@ const AddCustomer: React.FC = () => {
     const newData: RowData[] = [
       { id: '5', name: data[0], contact: data[1], designation: data[2], house: data[3], city: data[4], country: data[5] },
     ];
-
-    console.log(newData);
     
   };
 
@@ -82,11 +75,6 @@ const AddCustomer: React.FC = () => {
       limit: pageSize,
     };
   };
-  
-  
-  
-  
-
   const handleConfirmClick = () => {
     setName(updatedName);
     setContact(updatedContact);
@@ -101,23 +89,14 @@ const AddCustomer: React.FC = () => {
         contact: modalContact,
       },
     ];
-    setTableData(newData);
     setModalName('');
     setModalContact('');
-
     console.log(modalName);
-  };
-
-  const handleAddClick = () => {
-    setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
-  
-
   const actionButtons: ActionButton[] = [
    
     {
@@ -133,10 +112,6 @@ const AddCustomer: React.FC = () => {
   const handleAddButtonClick = () => {
     setIsModalOpen(true);
   };
-
-  
-  
-
   const columns: TableColumn<RowObject>[] = [
     { field: 'name', label: 'Name' },
     { field: 'contact', label: 'Contact No.' },
@@ -146,7 +121,6 @@ const AddCustomer: React.FC = () => {
     { field: 'country', label: 'Country' },
   ];
   
-
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Edit Customer Information</h1>

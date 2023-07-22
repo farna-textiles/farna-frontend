@@ -83,17 +83,15 @@ export interface RowData {
   [key: string]: string;
 }
 
-export interface RowData1 {
+export interface Customerdata {
   name: string;
   contact: string;
   designation: string;
   house: string;
   city: string;
   country: string
-
 }
-export type RowObject = RowData & Record<string, any>;
-
+export type RowObject = Customerdata & Record<string, any>;
 
 export interface TableSortProps<T extends RowData> {
   data: T[];
