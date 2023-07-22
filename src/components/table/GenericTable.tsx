@@ -18,6 +18,7 @@ import {
   ActionButton,
   AdditionalColumn,
   GenericTableProps,
+  TableColumn,
 } from '../../interfaces';
 import SearchBar from '../elements/SearchBar';
 
@@ -39,6 +40,7 @@ const AddButtonLink = styled(Link)(({ theme }) => ({
 }));
 
 const GenericTable = <T extends Record<string, unknown>>({
+  tableName,
   columns,
   fetchData,
   addButtonLink,
@@ -56,7 +58,7 @@ const GenericTable = <T extends Record<string, unknown>>({
   const [searchQuery, setSearchQuery] = useState('');
 
   const { data: responseData, isLoading } = useQuery(
-    ['tableData', page, rowsPerPage, searchQuery],
+    [tableName, page, rowsPerPage, searchQuery],
     () => fetchData(page, rowsPerPage, searchQuery),
     {
       keepPreviousData: true,
@@ -80,6 +82,20 @@ const GenericTable = <T extends Record<string, unknown>>({
     setPage(0);
   };
 
+  const getColumnValue = (item: T, column: TableColumn<T>): React.ReactNode => {
+    if (typeof column.field === 'string' && column.field.includes('.')) {
+      const [firstKey, secondKey] = (column.field as string).split('.');
+      if (column.format) {
+        return column.format(
+          item[firstKey as keyof T][secondKey as keyof T[keyof T]]
+        );
+      }
+      return item[firstKey as keyof T][secondKey as keyof T[keyof T]];
+    }
+
+    return item[column.field] as React.ReactNode;
+  };
+
   return (
     <Container>
       <Grid container justifyContent="space-between" spacing={8}>
@@ -95,14 +111,16 @@ const GenericTable = <T extends Record<string, unknown>>({
       <Table>
         <TableHead>
           <TableRow>
+            {additionalColumn && (
+              <TableCell key={columns.length}>
+                {additionalColumn.columnName}
+              </TableCell>
+            )}
             {columns.map((column) => (
               <TableCell key={column.field as string}>{column.label}</TableCell>
             ))}
             {actionButtons && (
-              <TableCell key={columns.length}>Actions</TableCell>
-            )}
-            {additionalColumn && (
-              <TableCell key={columns.length + 1}>Optional</TableCell>
+              <TableCell key={columns.length + 1}>Actions</TableCell>
             )}
           </TableRow>
         </TableHead>
@@ -116,24 +134,6 @@ const GenericTable = <T extends Record<string, unknown>>({
           ) : (
             data?.map((item) => (
               <TableRow key={String(item.id)}>
-                {columns.map((column) => (
-                  <TableCell key={column.field as string}>
-                    {String(item[column.field])}
-                  </TableCell>
-                ))}
-                {actionButtons && (
-                  <TableCell>
-                    {actionButtons?.map((button, index) => (
-                      <IconButton
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={index}
-                        onClick={() => button.onClick(item.id as number)}
-                      >
-                        {button.icon}
-                      </IconButton>
-                    ))}
-                  </TableCell>
-                )}
                 {additionalColumn && (
                   <TableCell>
                     {additionalColumn.type === 'radio' && (
@@ -158,6 +158,24 @@ const GenericTable = <T extends Record<string, unknown>>({
                         }
                       />
                     )}
+                  </TableCell>
+                )}
+                {columns.map((column) => (
+                  <TableCell key={column.field as string}>
+                    {getColumnValue(item, column)}
+                  </TableCell>
+                ))}
+                {actionButtons && (
+                  <TableCell>
+                    {actionButtons?.map((button, index) => (
+                      <IconButton
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                        onClick={() => button.onClick(item.id as number)}
+                      >
+                        {button.icon}
+                      </IconButton>
+                    ))}
                   </TableCell>
                 )}
               </TableRow>

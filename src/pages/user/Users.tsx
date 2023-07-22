@@ -51,6 +51,7 @@ const Users = () => {
     valueGetter: (item: User) => {
       return item.isActive;
     },
+    columnName: '',
   };
 
   return (
@@ -64,6 +65,7 @@ const Users = () => {
       </Typography>
       <Box sx={{ my: 2 }}>
         <GenericTable<User>
+          tableName="Users"
           columns={columns}
           fetchData={getAllUsers}
           actionButtons={actionButtons}
