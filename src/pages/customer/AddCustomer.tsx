@@ -169,7 +169,6 @@ const AddCustomer: React.FC = () => {
             Confirm
           </button>
         )}
-        {/* Move the "Add Customer" button to the right */}
         {rowData && (
           <button
             className="ml-auto px-4 py-2 bg-blue-500 text-white rounded-md"
@@ -200,5 +199,4 @@ const AddCustomer: React.FC = () => {
     </div>
   );
 };
-
 export default AddCustomer;

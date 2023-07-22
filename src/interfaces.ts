@@ -140,3 +140,11 @@ export interface AdditionalColumn<T> {
   onChange: (itemId: number, checked: boolean) => void;
   valueGetter: (item: T) => boolean;
 }
+
+export interface ModalFormProps {
+  labels: string[];
+  buttonText: string;
+  onConfirmClick: () => void;
+  onCancelClick: () => void;
+  onModalDataSubmit: (data: string[]) => void;
+}
