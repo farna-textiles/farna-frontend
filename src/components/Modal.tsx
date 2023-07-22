@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-
-interface ModalFormProps {
-  labels: string[];
-  buttonText: string;
-  onConfirmClick: () => void;
-  onCancelClick: () => void;
-  onModalDataSubmit: (data: string[]) => void;
-}
+import { ModalFormProps } from '../interfaces';
 
 const ModalForm: React.FC<ModalFormProps> = ({
   labels,
