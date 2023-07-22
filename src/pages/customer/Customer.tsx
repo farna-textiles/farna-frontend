@@ -5,8 +5,6 @@ import { ActionButton, PaginatedResponse, TableColumn } from '../../interfaces';
 import { Edit, Delete } from '@mui/icons-material';
 import { CustomerObject as Customer} from '../../interfaces';
 
-
-
 const CustomerPage: React.FC = () => {
   const navigate = useNavigate();
 
@@ -63,8 +61,7 @@ const CustomerPage: React.FC = () => {
     };
     return paginatedData;
   };
-
-
+  
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-8">All Customers</h1>
