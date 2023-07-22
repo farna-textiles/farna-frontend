@@ -7,7 +7,7 @@ import UserVerification from '../pages/UserVerification';
 import ConfirmEmail from '../pages/ConfirmEmail';
 import Layout from '../pages/Layout';
 import Users from '../pages/user/Users';
-import Customer from '../pages/customer/Customer';
+import Customers from '../pages/customer/Customers';
 import AddCustomer from '../pages/customer/AddCustomer';
 import CreateCustomer from '../pages/customer/CreateCustomer';
 
@@ -83,7 +83,7 @@ export const AppRoutes: React.FC = () => {
           path: '/customers',
           element: (
             <AuthRoute path="/customers">
-              <Customer />
+              <Customers />
             </AuthRoute>
           ),
         },

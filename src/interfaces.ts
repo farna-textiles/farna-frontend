@@ -89,9 +89,9 @@ export interface Customerdata {
   designation: string;
   house: string;
   city: string;
-  country: string
+  country: string;
 }
-export type RowObject = Customerdata & Record<string, any>;
+export type RowObject = RowData & Record<string, any>;
 
 export interface TableSortProps<T extends RowData> {
   data: T[];
@@ -108,6 +108,7 @@ export interface ThProps<T extends RowData> {
 export interface TableColumn<T> {
   field: keyof T;
   label: string;
+  format?: (item: T[keyof T][keyof T[keyof T]]) => React.ReactNode;
 }
 
 export interface PaginatedResponse<T> {
@@ -118,6 +119,7 @@ export interface PaginatedResponse<T> {
 }
 
 export interface GenericTableProps<T> {
+  tableName: string;
   columns: TableColumn<T>[];
   fetchData: (
     page: number,
@@ -139,6 +141,7 @@ export interface AdditionalColumn<T> {
   type: 'radio' | 'checkbox';
   onChange: (itemId: number, checked: boolean) => void;
   valueGetter: (item: T) => boolean;
+  columnName: string;
 }
 
 export interface ModalFormProps {

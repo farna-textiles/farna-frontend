@@ -5,6 +5,6 @@ export const API_URLS = {
   AUTH_VERIFY: '/auth/verify',
   AUTH_CONFIRM_EMAIL: '/auth/confirm-email',
   ALL_USERS: '/users',
-
-  // Add more API names and URLs/paths as needed
+  ALL_CUSTOMERS: '/customers',
+  DELETE_CUSTOMER: '/customers/:id',
 };
