@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteCustomer, signin } from '../api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteCustomer, getCustomer, updateCustomer } from '../api';
 import { notifyError, notifySuccess } from '../lib/utils';
-import { ErrorResponse } from '../interfaces';
+import { Customer, ErrorResponse } from '../interfaces';
 
 export const useDeleteCustomer = () => {
   const queryClient = useQueryClient();
@@ -19,19 +19,25 @@ export const useDeleteCustomer = () => {
   });
 };
 
-export const useSignIn = () => {
+export const useCustomer = (customerId: number) => {
+  return useQuery(['customer', customerId], () => getCustomer(customerId));
+};
+
+export const useUpdateCustomer = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(signin, {
-    onSuccess: (data) => {
-      notifySuccess('Welcome back!');
-      const successKey: QueryKey = ['confirmEmailSuccessMessage'];
-      queryClient.setQueryData(successKey, 'Email confirmed successfully');
-      queryClient.setQueryData(['userInfo'], data.user);
-      localStorage.setItem('userInfo', JSON.stringify(data.user));
+  return useMutation<any, ErrorResponse, [number, Customer]>(updateCustomer, {
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries(['customer']);
+      notifySuccess('Customer updated successfully');
     },
-    onError: (error: ErrorResponse) => {
-      notifyError(error.message);
+
+    onError: async (error: ErrorResponse) => {
+      await queryClient.invalidateQueries(['customer']);
+
+      notifyError(
+        typeof error.message === 'object' ? error.message[0] : error.message
+      );
     },
   });
 };

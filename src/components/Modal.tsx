@@ -1,82 +1,103 @@
-import React, { useState } from 'react';
-import { ModalFormProps } from '../interfaces';
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-props-no-spreading */
+import { Modal, TextField, Button, Box, Typography } from '@mui/material';
+import { ChangeEvent, useState } from 'react';
+import { EditContactModalProps } from '../interfaces';
 
-const ModalForm: React.FC<ModalFormProps> = ({
-  labels,
-  buttonText,
-  onConfirmClick,
-  onCancelClick,
-  onModalDataSubmit,
-}) => {
-  const [modalData, setModalData] = useState<string[]>(Array(labels.length).fill(''));
+const EditModal = <T extends Record<string, unknown>>({
+  contact,
+  isOpen,
+  onClose,
+  onSave,
+  fields,
+}: EditContactModalProps<T>) => {
+  const [editedContact, setEditedContact] = useState<T>(contact);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const newData = [...modalData];
-    newData[index] = e.target.value;
-    setModalData(newData);
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    if (name.includes('.')) {
+      // Handle nested property updates
+      const [fieldName, nestedFieldName] = name.split('.');
+      setEditedContact((prevContact) => ({
+        ...prevContact,
+        [fieldName]: {
+          ...(prevContact[fieldName] as T),
+          [nestedFieldName]: value,
+        },
+      }));
+    } else {
+      setEditedContact((prevContact) => ({
+        ...prevContact,
+        [name]: value,
+      }));
+    }
   };
 
-  const handleConfirmClick = () => {
-    onModalDataSubmit(modalData);
-    onConfirmClick();
-  };
-
-  const handleCancelClick = () => {
-    onCancelClick();
+  const handleSaveClick = () => {
+    onSave(editedContact);
+    onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-10 overflow-y-auto">
-      <div className="fixed inset-0 w-full h-full bg-black opacity-40" onClick={() => handleCancelClick()}></div>
-      <div className="flex items-center min-h-screen px-4 py-8">
-        <div className="relative w-full max-w-lg p-4 mx-auto bg-white rounded-md shadow-lg">
-          <div className="flex justify-end">
-            <button
-              className="p-2 text-gray-400 rounded-md hover:bg-gray-100"
-              onClick={() => handleCancelClick()}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5 mx-auto"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-          <div className="max-w-sm mx-auto py-3 space-y-3 text-center">
-            <h4 className="text-lg font-medium text-gray-800">
-              Add Contact Information
-            </h4>
-            <form onSubmit={(e) => e.preventDefault()}>
-              {labels.map((label, index) => (
-                <div className="relative mb-4" key={index}>
-                  <input
-                    type="text"
-                    placeholder={label}
-                    className="w-full pl-2 pr-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
-                    value={modalData[index]}
-                    onChange={(e) => handleChange(e, index)}
-                  />
-                </div>
-              ))}
-              <button
-                className="block w-full mt-3 py-3 px-4 font-medium text-sm text-center text-white bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 rounded-lg ring-offset-2 ring-indigo-600 focus:ring-2"
-                onClick={handleConfirmClick}
-              >
-                {buttonText}
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Modal open={isOpen} onClose={onClose}>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          bgcolor: 'white',
+          boxShadow: 24,
+          p: 4,
+          minWidth: 400,
+          maxWidth: 600,
+          borderRadius: 8,
+        }}
+      >
+        <Typography variant="h5" align="center" gutterBottom>
+          Edit Contact
+        </Typography>
+        {fields.map((field) => {
+          const nestedValue =
+            (field.name as string).indexOf('.') !== -1
+              ? (field.name as string)
+                  .split('.')
+                  .reduce((obj, key) => (obj as any)?.[key], editedContact)
+              : editedContact[field.name as keyof typeof editedContact];
+
+          return (
+            <TextField
+              key={field.name.toString()}
+              label={field.label}
+              name={field.name.toString()}
+              value={nestedValue}
+              onChange={handleInputChange}
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              {...(field.type === 'number' && { type: 'number' })}
+            />
+          );
+        })}
+
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={onClose}
+            sx={{ marginRight: 2 }}
+          >
+            Cancel
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleSaveClick}>
+            Save
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
   );
 };
 
-export default ModalForm;
+export default EditModal;

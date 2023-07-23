@@ -7,4 +7,6 @@ export const API_URLS = {
   ALL_USERS: '/users',
   ALL_CUSTOMERS: '/customers',
   DELETE_CUSTOMER: '/customers/:id',
+  GET_CUSTOMER: '/customers/:id',
+  UPDATE_CUSTOMER: '/customers/:id',
 };

@@ -1,5 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import { MutationFunction } from '@tanstack/query-core';
 import { API_URLS } from '../constants';
-import { PaginatedResponse, User } from '../interfaces';
+import { Customer, PaginatedResponse, User } from '../interfaces';
 import { handleApiCall } from '../lib/utils';
 import api from './axios';
 
@@ -22,4 +24,19 @@ export const deleteCustomer = async (id: number, data = {}) => {
   const apiUrl = API_URLS.DELETE_CUSTOMER.replace(':id', String(id));
 
   return handleApiCall(api.delete, apiUrl, data);
+};
+
+export const getCustomer = async (id: number, data = {}) => {
+  const apiUrl = API_URLS.GET_CUSTOMER.replace(':id', String(id));
+
+  return handleApiCall(api.get, apiUrl, data);
+};
+
+export const updateCustomer: MutationFunction<any, [number, Customer]> = async (
+  params
+) => {
+  const [id, data] = params;
+  const apiUrl = API_URLS.UPDATE_CUSTOMER.replace(':id', String(id));
+
+  return handleApiCall(api.put, apiUrl, data);
 };

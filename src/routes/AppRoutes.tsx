@@ -10,6 +10,7 @@ import Users from '../pages/user/Users';
 import Customers from '../pages/customer/Customers';
 import AddCustomer from '../pages/customer/AddCustomer';
 import CreateCustomer from '../pages/customer/CreateCustomer';
+import EditCustomer from '../pages/customer/EditCustomer';
 
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
@@ -92,6 +93,22 @@ export const AppRoutes: React.FC = () => {
           element: (
             <AuthRoute path="/addcustomer">
               <AddCustomer />
+            </AuthRoute>
+          ),
+        },
+        {
+          path: '/customer/:id/edit',
+          element: (
+            <AuthRoute path="/customer/:id/edit">
+              <EditCustomer />
+            </AuthRoute>
+          ),
+        },
+        {
+          path: '/customer/:id',
+          element: (
+            <AuthRoute path="/customer/:id">
+              <EditCustomer />
             </AuthRoute>
           ),
         },
