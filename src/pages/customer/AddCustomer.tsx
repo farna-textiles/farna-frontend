@@ -1,16 +1,28 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Delete } from '@mui/icons-material';
 import Modal from '../../components/Modal';
 import GenericTable from '../../components/table/GenericTable';
-import { ActionButton, AdditionalColumn, RowObject, TableColumn } from '../../interfaces';
-import { Delete } from '@mui/icons-material';
-import { RowObject as RowData } from '../../interfaces';
-import { PaginatedResponse } from '../../interfaces';
+import {
+  ActionButton,
+  AdditionalColumn,
+  RowObject,
+  TableColumn,
+  RowObject as RowData,
+  PaginatedResponse,
+} from '../../interfaces';
 
 const AddCustomer: React.FC = () => {
   const location = useLocation();
   const rowData: RowData | undefined = location.state;
-  const labels = ['Name', 'Contact No.', 'Designation', 'House No', 'City', 'Country'];
+  const labels = [
+    'Name',
+    'Contact No.',
+    'Designation',
+    'House No',
+    'City',
+    'Country',
+  ];
 
   const initialName = rowData?.name || '';
   const initialContact = rowData?.contact || '';
@@ -45,9 +57,16 @@ const AddCustomer: React.FC = () => {
 
   const handleModalDataSubmit = (data: string[]) => {
     const newData: RowData[] = [
-      { id: '5', name: data[0], contact: data[1], designation: data[2], house: data[3], city: data[4], country: data[5] },
+      {
+        id: '5',
+        name: data[0],
+        contact: data[1],
+        designation: data[2],
+        house: data[3],
+        city: data[4],
+        country: data[5],
+      },
     ];
-    
   };
 
   const fetchData = async (
@@ -55,19 +74,36 @@ const AddCustomer: React.FC = () => {
     pageSize: number,
     searchQuery: string
   ): Promise<PaginatedResponse<RowObject>> => {
-    
     const dummyData: RowData[] = [
-      { id: '1', name: 'John Doe', contact: '1234567890', designation: 'Engineer', house: '123', city: 'New York', country: 'USA' },
-      { id: '2', name: 'Jane Smith', contact: '9876543210', designation: 'Manager', house: '456', city: 'Los Angeles', country: 'USA' },
+      {
+        id: '1',
+        name: 'John Doe',
+        contact: '1234567890',
+        designation: 'Engineer',
+        house: '123',
+        city: 'New York',
+        country: 'USA',
+      },
+      {
+        id: '2',
+        name: 'Jane Smith',
+        contact: '9876543210',
+        designation: 'Manager',
+        house: '456',
+        city: 'Los Angeles',
+        country: 'USA',
+      },
       // Add more dummy data as needed.
     ];
     const filteredData = searchQuery
-      ? dummyData.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
+      ? dummyData.filter((item) =>
+          item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
       : dummyData;
-  
+
     const startIndex = page * pageSize;
     const pagedData = filteredData.slice(startIndex, startIndex + pageSize);
-  
+
     return {
       data: pagedData,
       total: filteredData.length,
@@ -98,7 +134,6 @@ const AddCustomer: React.FC = () => {
     setIsModalOpen(false);
   };
   const actionButtons: ActionButton[] = [
-   
     {
       icon: <Delete />,
       onClick: (id: number) => {
@@ -120,7 +155,7 @@ const AddCustomer: React.FC = () => {
     { field: 'city', label: 'City' },
     { field: 'country', label: 'Country' },
   ];
-  
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Edit Customer Information</h1>

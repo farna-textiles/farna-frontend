@@ -55,7 +55,7 @@ export interface ErrorBoundaryRouteProps {
 export interface ErrorResponse {
   statusCode: number;
   message: string;
-  error: string;
+  error: string | string[];
 }
 
 export type ApiFunction<T> = (url: string, config?: any) => Promise<any>;
@@ -71,11 +71,31 @@ export interface User {
   updatedAt: string;
 }
 
-export interface Customer {
+export interface Address {
+  id?: number;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  postalCode: string;
+}
+
+export interface Contact {
   id: number;
   name: string;
-  contact: string;
+  designation: string;
+  contactNumber: string;
+  address?: Address;
+  isMainContact?: boolean;
 }
+
+export interface Customer {
+  id: number;
+  businessName: string;
+  contacts: Contact[];
+  mainContact?: Contact;
+}
+
 export type UserObject = User & Record<string, any>;
 export type CustomerObject = Customer & Record<string, any>;
 
@@ -108,7 +128,9 @@ export interface ThProps<T extends RowData> {
 export interface TableColumn<T> {
   field: keyof T;
   label: string;
-  format?: (item: T[keyof T][keyof T[keyof T]]) => React.ReactNode;
+  format?:
+    | ((item: T[keyof T][keyof T[keyof T]]) => React.ReactNode)
+    | ((item: T[keyof T]) => React.ReactNode);
 }
 
 export interface PaginatedResponse<T> {
@@ -131,6 +153,7 @@ export interface GenericTableProps<T> {
 export interface ActionButton {
   icon: React.ReactNode;
   onClick: (id: number) => void;
+  title?: string;
 }
 
 export interface SearchBarProps {
@@ -150,4 +173,18 @@ export interface ModalFormProps {
   onConfirmClick: () => void;
   onCancelClick: () => void;
   onModalDataSubmit: (data: string[]) => void;
+}
+
+export interface FieldConfig<T> {
+  label: string;
+  name: keyof T | string;
+  type?: string;
+}
+
+export interface EditContactModalProps<T> {
+  contact: T;
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (editedContact: T) => void;
+  fields: FieldConfig<T>[];
 }

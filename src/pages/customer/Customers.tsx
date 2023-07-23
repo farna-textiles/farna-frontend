@@ -3,6 +3,8 @@ import { Box, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import {
   ActionButton,
   TableColumn,
@@ -14,7 +16,7 @@ import { useDeleteCustomer } from '../../hooks/useCustomer';
 
 const Customers = () => {
   const deleteCustomerMutation = useDeleteCustomer();
-
+  const navigate = useNavigate();
   const columns: TableColumn<User>[] = useMemo(
     () => [
       { field: 'id', label: 'ID' },
@@ -36,8 +38,15 @@ const Customers = () => {
   const actionButtons: ActionButton[] = useMemo(
     () => [
       {
+        icon: <FullscreenIcon />,
+        onClick: (id: number) => {
+          navigate(`/customer/${id}`);
+        },
+        title: 'View',
+      },
+      {
         icon: <Edit />,
-        onClick: (id: number) => {},
+        onClick: (id: number) => navigate(`/customer/${id}/edit`),
       },
       {
         icon: <DeleteIcon />,
@@ -46,7 +55,7 @@ const Customers = () => {
         },
       },
     ],
-    [deleteCustomerMutation]
+    [deleteCustomerMutation, navigate]
   );
 
   return (
