@@ -40,13 +40,13 @@ const Customers = () => {
       {
         icon: <FullscreenIcon />,
         onClick: (id: number) => {
-          navigate(`/customer/${id}`);
+          navigate(`/customers/${id}`);
         },
         title: 'View',
       },
       {
         icon: <Edit />,
-        onClick: (id: number) => navigate(`/customer/${id}/edit`),
+        onClick: (id: number) => navigate(`/customers/${id}/edit`),
       },
       {
         icon: <DeleteIcon />,
@@ -70,7 +70,7 @@ const Customers = () => {
           columns={columns}
           fetchData={getAllCustomers}
           actionButtons={actionButtons}
-          addButtonLink="/create-customer"
+          addButtonLink="/customer"
           addButtonLabel="Create Customer"
         />
       </Box>

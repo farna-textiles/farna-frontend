@@ -19,7 +19,7 @@ import { ActionButton, TableColumn, AdditionalColumn } from '../../interfaces';
 interface DataTableProps<T> {
   data: T[];
   columns: TableColumn<T>[];
-  actionButtons: ActionButton[];
+  actionButtons?: ActionButton[];
   additionalColumn?: AdditionalColumn<T>;
   isLoading?: boolean;
   customButtonLabel?: string;
@@ -110,7 +110,9 @@ const DataTable = <T extends { id: number }>({
             {columns.map((column) => (
               <TableCell key={column.field as string}>{column.label}</TableCell>
             ))}
-            {actionButtons.length > 0 && <TableCell>Actions</TableCell>}
+            {actionButtons && actionButtons.length > 0 && (
+              <TableCell>Actions</TableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -121,8 +123,8 @@ const DataTable = <T extends { id: number }>({
               )
             )
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((item) => (
-              <TableRow key={item.id}>
+            .map((item, dataIndex) => (
+              <TableRow key={item.id || dataIndex}>
                 {additionalColumn && (
                   <TableCell>
                     {additionalColumn.type === 'radio' && (
@@ -131,7 +133,7 @@ const DataTable = <T extends { id: number }>({
                         disabled={isLoading}
                         onChange={(e) =>
                           handleAdditionalColumnChange(
-                            item.id,
+                            item.id || dataIndex,
                             e.target.checked
                           )
                         }
@@ -158,7 +160,7 @@ const DataTable = <T extends { id: number }>({
                       : item[column.field]}
                   </TableCell>
                 ))}
-                {actionButtons.length > 0 && (
+                {actionButtons && actionButtons.length > 0 && (
                   <TableCell>
                     {actionButtons.map((button, index) => (
                       <IconButton
@@ -166,7 +168,7 @@ const DataTable = <T extends { id: number }>({
                         key={index}
                         title={button.title}
                         disabled={isLoading}
-                        onClick={() => button.onClick(item.id)}
+                        onClick={() => button.onClick(item.id || dataIndex)}
                       >
                         {button.icon}
                       </IconButton>
@@ -195,6 +197,7 @@ DataTable.defaultProps = {
   isLoading: false,
   customButtonLabel: '',
   onCustomButtonClick: () => {},
+  actionButtons: [],
 };
 
 export default DataTable;

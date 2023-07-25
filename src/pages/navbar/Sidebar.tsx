@@ -2,19 +2,18 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { Navbar, Group, ScrollArea, createStyles, rem } from '@mantine/core';
 import {
-  IconNotes,
   IconCalendarStats,
   IconGauge,
   IconPresentationAnalytics,
   IconFileAnalytics,
   IconAdjustments,
   IconLock,
+  IconAddressBook,
 } from '@tabler/icons-react';
 import logo from '../../../public/farna-logo.png';
 import LinksGroup from './LinksGroup';
 import UserButton from './UserButton';
 import { User } from '../../interfaces';
-import { IconAddressBook } from '@tabler/icons-react';
 
 const mockdata = [
   { label: 'Dashboard', icon: IconGauge, link: '/' },
@@ -24,7 +23,7 @@ const mockdata = [
     initiallyOpened: false,
     links: [
       { label: 'All Customers', link: '/customers' },
-      { label: 'Create Customer', link: '/createcustomer' },
+      { label: 'Create Customer', link: '/customer' },
     ],
   },
   {
@@ -110,7 +109,7 @@ const Sidebar = () => {
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-      <UserButton
+        <UserButton
           image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
           name={userInfo!.username ?? ''}
           email={userInfo!.email ?? ''}
