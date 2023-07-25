@@ -3,10 +3,11 @@ import { Box, Button, TextField, Typography, styled } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { ChangeEvent, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import {
   ActionButton,
   AdditionalColumn,
+  Address,
   Contact,
   Customer,
   FieldConfig,
@@ -57,6 +58,8 @@ const EditCustomer = () => {
     parseInt(id as string, 10) as number
   );
   const updateCustomerMutation = useUpdateCustomer();
+  const navigate = useNavigate();
+
   const initializeEditedCustomer = (data: {
     contacts: Contact[];
     mainContact: Contact;
@@ -128,13 +131,13 @@ const EditCustomer = () => {
 
   const columns: TableColumn<Contact>[] = useMemo(
     () => [
-      { field: 'name', label: 'Business' },
-      { field: 'designation', label: 'Name' },
+      { field: 'name', label: 'Name' },
+      { field: 'designation', label: 'Designation' },
       { field: 'contactNumber', label: 'Contact #' },
       {
         field: 'address',
         label: 'Address',
-        format: (address) => {
+        format: (address: Address) => {
           const { street, city, postalCode } = address;
           return `${street}, ${city} - ${postalCode}`;
         },
@@ -195,8 +198,11 @@ const EditCustomer = () => {
     });
   };
 
-  const handleSaveButtonClick = () => {
-    if (id) updateCustomerMutation.mutate([+id, editedCustomer]);
+  const handleSaveButtonClick = async () => {
+    if (id) {
+      await updateCustomerMutation.mutateAsync([+id, editedCustomer]);
+      navigate(`/customers/${id}`);
+    }
   };
 
   return (

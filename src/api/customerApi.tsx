@@ -32,6 +32,10 @@ export const getCustomer = async (id: number, data = {}) => {
   return handleApiCall(api.get, apiUrl, data);
 };
 
+export const createCustomer = async (data: Omit<Customer, 'id'>) => {
+  return handleApiCall(api.post, API_URLS.CREATE_CUSTOMER, data);
+};
+
 export const updateCustomer: MutationFunction<any, [number, Customer]> = async (
   params
 ) => {

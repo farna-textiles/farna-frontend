@@ -9,4 +9,5 @@ export const API_URLS = {
   DELETE_CUSTOMER: '/customers/:id',
   GET_CUSTOMER: '/customers/:id',
   UPDATE_CUSTOMER: '/customers/:id',
+  CREATE_CUSTOMER: '/customers',
 };

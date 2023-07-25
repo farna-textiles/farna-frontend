@@ -1,6 +1,12 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteCustomer, getCustomer, updateCustomer } from '../api';
+import { useNavigate } from 'react-router';
+import {
+  createCustomer,
+  deleteCustomer,
+  getCustomer,
+  updateCustomer,
+} from '../api';
 import { notifyError, notifySuccess } from '../lib/utils';
 import { Customer, ErrorResponse } from '../interfaces';
 
@@ -30,6 +36,26 @@ export const useUpdateCustomer = () => {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries(['customer']);
       notifySuccess('Customer updated successfully');
+    },
+
+    onError: async (error: ErrorResponse) => {
+      await queryClient.invalidateQueries(['customer']);
+
+      notifyError(
+        typeof error.message === 'object' ? error.message[0] : error.message
+      );
+    },
+  });
+};
+
+export const useCreateCustomer = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  return useMutation(createCustomer, {
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries(['customer']);
+      navigate(`/customers/${data.id}`);
+      notifySuccess('Customer created successfully');
     },
 
     onError: async (error: ErrorResponse) => {
