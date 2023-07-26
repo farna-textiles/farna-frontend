@@ -1,7 +1,6 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable import/no-extraneous-dependencies */
 import { Modal, TextField, Button, Box, Typography } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { Formik, Form, Field, FormikTouched, FormikErrors } from 'formik';
 import { EditContactModalProps } from '../interfaces';
 
 const EditModal = <T extends Record<string, unknown>>({
@@ -10,36 +9,8 @@ const EditModal = <T extends Record<string, unknown>>({
   onClose,
   onSave,
   fields,
+  validationSchema,
 }: EditContactModalProps<T>) => {
-  const [editedContact, setEditedContact] = useState<T>(contact);
-
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    if (name.includes('.')) {
-      // Handle nested property updates
-      const [fieldName, nestedFieldName] = name.split('.');
-      setEditedContact((prevContact) => ({
-        ...prevContact,
-        [fieldName]: {
-          ...(prevContact[fieldName] as T),
-          [nestedFieldName]: value,
-        },
-      }));
-    } else {
-      setEditedContact((prevContact) => ({
-        ...prevContact,
-        [name]: value,
-      }));
-    }
-  };
-
-  const handleSaveClick = () => {
-    onSave(editedContact);
-    onClose();
-  };
-
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box
@@ -59,42 +30,67 @@ const EditModal = <T extends Record<string, unknown>>({
         <Typography variant="h5" align="center" gutterBottom>
           Edit Contact
         </Typography>
-        {fields.map((field) => {
-          const nestedValue =
-            (field.name as string).indexOf('.') !== -1
-              ? (field.name as string)
-                  .split('.')
-                  .reduce((obj, key) => (obj as any)?.[key], editedContact)
-              : editedContact[field.name as keyof typeof editedContact];
 
-          return (
-            <TextField
-              key={field.name.toString()}
-              label={field.label}
-              name={field.name.toString()}
-              value={nestedValue}
-              onChange={handleInputChange}
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              {...(field.type === 'number' && { type: 'number' })}
-            />
-          );
-        })}
+        <Formik
+          initialValues={contact}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            onSave(values);
+            onClose();
+          }}
+        >
+          {({ errors, touched }) => (
+            <Form>
+              {fields.map((field) => {
+                const isNestedField: boolean = (field.name as string).includes(
+                  '.'
+                );
+                const [parent, child] = (field.name as string).split('.');
+                const fieldName = isNestedField ? child : field.name;
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={onClose}
-            sx={{ marginRight: 2 }}
-          >
-            Cancel
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleSaveClick}>
-            Save
-          </Button>
-        </Box>
+                // Assert the type of the touched and errors objects
+                const touchedWithShape = touched as FormikTouched<T>;
+                const errorsWithShape = errors as FormikErrors<T>;
+
+                const touch = isNestedField
+                  ? touchedWithShape[parent]?.[child]
+                  : touchedWithShape[fieldName];
+                const error = isNestedField
+                  ? errorsWithShape[parent]?.[child]
+                  : errorsWithShape[fieldName];
+
+                return (
+                  <Field
+                    key={field.name}
+                    type={field.type === 'number' ? 'number' : 'text'}
+                    name={field.name}
+                    as={TextField}
+                    label={field.label}
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    error={touch && !!error}
+                    helperText={touch && error}
+                  />
+                );
+              })}
+
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={onClose}
+                  sx={{ marginRight: 2 }}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" variant="contained" color="primary">
+                  Save
+                </Button>
+              </Box>
+            </Form>
+          )}
+        </Formik>
       </Box>
     </Modal>
   );
