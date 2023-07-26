@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import { Loader } from '@mantine/core';
 import {
   ActionButton,
   AdditionalColumn,
@@ -154,7 +155,10 @@ const EditCustomer = () => {
         onClick: (contactId: number) => {
           handleEditClick(
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            editedCustomer.contacts.find((contact) => contact.id === contactId)!
+            editedCustomer.contacts.find(
+              (contact, index) =>
+                contact.id === contactId || contactId === index
+            )!
           );
         },
       },
@@ -163,7 +167,8 @@ const EditCustomer = () => {
         title: 'Delete',
         onClick: (contactId: number) => {
           const updatedContacts = editedCustomer.contacts.filter(
-            (contact) => contact.id !== contactId
+            (contact, index) =>
+              contact.id ? contact.id !== contactId : index !== contactId
           );
           const updatedSampleObject = {
             ...editedCustomer,
@@ -181,8 +186,8 @@ const EditCustomer = () => {
     type: 'radio',
     valueGetter: (item) => !!item.isMainContact,
     onChange: (contactId) => {
-      const updatedContacts = editedCustomer.contacts.map((contact) =>
-        contact.id === contactId
+      const updatedContacts = editedCustomer.contacts.map((contact, index) =>
+        contact.id === contactId || contactId === index
           ? { ...contact, isMainContact: true }
           : { ...contact, isMainContact: false }
       );
@@ -244,6 +249,7 @@ const EditCustomer = () => {
           onClick={handleSaveButtonClick}
           disabled={updateCustomerMutation.isLoading}
         >
+          {updateCustomerMutation.isLoading && <Loader />}
           Save
         </CustomButton>
       </Box>
