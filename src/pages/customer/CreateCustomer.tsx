@@ -1,6 +1,5 @@
 import { Box, Button, TextField, Typography, styled } from '@mui/material';
-import { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { ChangeEvent, useMemo, useState } from 'react';
 import Edit from '@mui/icons-material/Edit';
 import {
   ActionButton,
@@ -16,6 +15,7 @@ import EditModal from '../../components/Modal';
 import { useCreateCustomer } from '../../hooks/useCustomer';
 
 const CustomButton = styled(Button)(({ theme, disabled }) => ({
+  position: 'relative',
   textDecoration: 'none',
   color: theme.palette.primary.main,
   padding: theme.spacing(1),
@@ -35,6 +35,22 @@ const CustomButton = styled(Button)(({ theme, disabled }) => ({
       color: theme.palette.text.primary,
     },
   }),
+  ...(disabled && {
+    pointerEvents: 'none',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      background: 'rgba(255, 255, 255, 0.7)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: theme.shape.borderRadius,
+    },
+  }),
 }));
 
 const CreateCustomer = () => {
@@ -48,8 +64,6 @@ const CreateCustomer = () => {
     number | null
   >(null);
   const craeteCustomerMutation = useCreateCustomer();
-
-  const navigate = useNavigate();
 
   const mainContactRadioColumn: AdditionalColumn<Contact> = useMemo(
     () => ({
@@ -205,10 +219,16 @@ const CreateCustomer = () => {
           actionButtons={actionButtons}
           additionalColumn={mainContactRadioColumn}
           onCustomButtonClick={handleAddContact}
+          isLoading={craeteCustomerMutation.isLoading}
         />
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        <CustomButton onClick={handleSaveButtonClick}>Save</CustomButton>
+        <CustomButton
+          onClick={handleSaveButtonClick}
+          disabled={craeteCustomerMutation.isLoading}
+        >
+          Save and Exit
+        </CustomButton>
       </Box>
     </Box>
   );
