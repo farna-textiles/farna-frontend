@@ -1,4 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { InputHTMLAttributes, ReactNode } from 'react';
+import { Schema } from 'yup';
 
 export interface FormInputProps {
   id: string;
@@ -187,4 +189,5 @@ export interface EditContactModalProps<T> {
   onClose: () => void;
   onSave: (editedContact: T) => void;
   fields: FieldConfig<T>[];
+  validationSchema: Schema<Omit<T, 'id'>>;
 }
