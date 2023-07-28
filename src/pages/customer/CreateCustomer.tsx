@@ -13,7 +13,7 @@ import {
   TableColumn,
 } from '../../interfaces';
 import DataTable from '../../components/table/DataTable';
-import EditModal from '../../components/Modal';
+import CustomModal from '../../components/Modal';
 import { useCreateCustomer } from '../../hooks/useCustomer';
 
 const CustomButton = styled(Button)(({ theme, disabled }) => ({
@@ -222,13 +222,14 @@ const CreateCustomer = () => {
 
       <hr className="my-12" />
       {(selectedContact || selectedContactIndex) && (
-        <EditModal<Contact & Record<string, any>>
-          contact={selectedContact as Contact}
+        <CustomModal<Contact & Record<string, any>>
+          data={selectedContact as Contact}
           isOpen={isModalOpen}
           onClose={handleModalClose}
           onSave={handleContactSave}
           fields={contactFields}
           validationSchema={contactValidationSchema}
+          title={selectedContact ? 'Edit Contact' : 'Add Contact'}
         />
       )}
       <Box sx={{ my: 2 }}>

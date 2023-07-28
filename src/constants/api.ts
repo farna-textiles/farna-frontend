@@ -34,4 +34,5 @@ export const API_URLS = {
     UPDATE: '/orders/:id',
     DELETE: '/orders/:id',
   },
+  REACTIVATION_REQUEST: '/auth/reactivation',
 };

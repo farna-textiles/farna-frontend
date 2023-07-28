@@ -1,18 +1,22 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import { confirmEmail, signin, signup, verify } from '../api';
+import { confirmEmail, reactivation, signin, signup, verify } from '../api';
 import { notifyError, notifySuccess } from '../lib/utils';
 import { ErrorResponse } from '../interfaces';
+import statusCode from '../constants/codes';
 
 export const useSignUp = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   return useMutation(signup, {
     onSuccess: (data) => {
       navigate('/signin');
-      notifySuccess('Congratulations! You have successfully signed up.');
-      notifySuccess('Please check your email for further instructions.');
+      notifySuccess('Signup successful! Check your email for instructions.');
+    },
+    onError: (error: ErrorResponse) => {
+      notifyError(error.message);
     },
   });
 };
@@ -28,7 +32,25 @@ export const useSignIn = () => {
       queryClient.setQueryData(successKey, 'Email confirmed successfully');
       queryClient.setQueryData(['userInfo'], data.user);
       localStorage.setItem('userInfo', JSON.stringify(data.user));
+      queryClient.removeQueries(['accountDisableError']);
       navigate('/');
+    },
+    onError: (error: ErrorResponse) => {
+      if (
+        error.statusCode === statusCode.BadRequest &&
+        error.message === 'Account is disabled'
+      ) {
+        queryClient.setQueryData(['accountDisableError'], error.message);
+      }
+      notifyError(error.message);
+    },
+  });
+};
+
+export const useReactivation = () => {
+  return useMutation(reactivation, {
+    onSuccess: (data) => {
+      notifySuccess('Re-activation request sent successfully');
     },
     onError: (error: ErrorResponse) => {
       notifyError(error.message);

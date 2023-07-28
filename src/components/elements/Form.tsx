@@ -9,6 +9,7 @@ const Form: React.FC<FormProps> = ({
   onChangeHandler,
   buttonLabel,
   isLoading,
+  error,
 }) => (
   <form onSubmit={handleFormSubmit} className="space-y-5">
     {inputList.map((input) => (
@@ -22,6 +23,7 @@ const Form: React.FC<FormProps> = ({
         />
       </div>
     ))}
+    {error}
     <button
       type="submit"
       className="relative w-full px-4 py-2 h-10 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"

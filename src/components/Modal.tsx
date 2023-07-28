@@ -3,13 +3,14 @@ import { Modal, TextField, Button, Box, Typography } from '@mui/material';
 import { Formik, Form, Field, FormikTouched, FormikErrors } from 'formik';
 import { EditContactModalProps } from '../interfaces';
 
-const EditModal = <T extends Record<string, unknown>>({
-  contact,
+const CustomModal = <T extends Record<string, unknown>>({
+  data,
   isOpen,
   onClose,
   onSave,
   fields,
   validationSchema,
+  title,
 }: EditContactModalProps<T>) => {
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -28,11 +29,11 @@ const EditModal = <T extends Record<string, unknown>>({
         }}
       >
         <Typography variant="h5" align="center" gutterBottom>
-          Edit Contact
+          {title}
         </Typography>
 
         <Formik
-          initialValues={contact}
+          initialValues={data}
           validationSchema={validationSchema}
           onSubmit={(values) => {
             onSave(values);
@@ -58,11 +59,10 @@ const EditModal = <T extends Record<string, unknown>>({
                 const error = isNestedField
                   ? errorsWithShape[parent]?.[child]
                   : errorsWithShape[fieldName];
-
                 return (
                   <Field
                     key={field.name}
-                    type={field.type === 'number' ? 'number' : 'text'}
+                    type={field.type ?? 'text'}
                     name={field.name}
                     as={TextField}
                     label={field.label}
@@ -96,4 +96,4 @@ const EditModal = <T extends Record<string, unknown>>({
   );
 };
 
-export default EditModal;
+export default CustomModal;

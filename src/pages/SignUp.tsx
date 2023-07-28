@@ -111,7 +111,7 @@ const SignUp: React.FC = () => {
             handleFormSubmit={handleFormSubmit}
             buttonLabel="Create account"
             onChangeHandler={onChangeHandler}
-            isLoading={false}
+            isLoading={signupMutation.isLoading}
           />
         </div>
       </div>

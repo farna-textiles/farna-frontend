@@ -1,16 +1,28 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import * as Yup from 'yup';
 import Form from '../components/elements/Form';
-import { ChangeEvent, UserFormInput } from '../interfaces';
+import {
+  ChangeEvent,
+  FieldConfig,
+  FogetPassword,
+  UserFormInput,
+} from '../interfaces';
 import AuthBanner from '../components/auth/AuthBanner';
-import { useSignIn } from '../hooks/useAuth';
+import { useReactivation, useSignIn } from '../hooks/useAuth';
+import CustomModal from '../components/Modal';
 
 const SignIn: React.FC = () => {
   const [userData, setUserData] = useState({ identifier: '', password: '' });
   const [animate, setAnimate] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalData, setModalData] = useState<FogetPassword>({
+    email: '',
+  });
 
   useEffect(() => {
     setTimeout(() => {
@@ -19,7 +31,7 @@ const SignIn: React.FC = () => {
   }, []);
 
   const signinMutation = useSignIn();
-
+  const reactivateMutation = useReactivation();
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     signinMutation.mutate(userData);
@@ -42,9 +54,55 @@ const SignIn: React.FC = () => {
     },
   ];
 
+  const userFields: FieldConfig<FogetPassword>[] = useMemo(
+    () => [{ label: 'Email', name: 'email', type: 'email' }],
+    []
+  );
+
+  const userValidationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Email is required.'),
+  });
+
+  const requestLink = useMemo(() => {
+    const isError = signinMutation?.error?.message === 'Account is disabled';
+
+    return (
+      <div className="flex justify-end">
+        {isError ? (
+          <p className="text-red-500 w-fit">
+            Click{' '}
+            <span
+              className="underline cursor-pointer text-black"
+              onClick={() => reactivateMutation.mutate(userData)}
+            >
+              here
+            </span>{' '}
+            to submit a reactivation request.
+          </p>
+        ) : (
+          <p
+            className="text-black w-fit cursor-pointer hover:underline"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Forgot your password?
+          </p>
+        )}
+      </div>
+    );
+  }, [reactivateMutation, signinMutation?.error?.message, userData]);
+
   const onChangeHandler = (e: ChangeEvent) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalSave = (data: FogetPassword) => {
+    // api not available
+    handleModalClose();
   };
 
   return (
@@ -54,6 +112,15 @@ const SignIn: React.FC = () => {
           animate ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
+        <CustomModal<FogetPassword & Record<string, any>>
+          data={modalData as FogetPassword}
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
+          onSave={handleModalSave}
+          fields={userFields}
+          validationSchema={userValidationSchema}
+          title="Forget Password"
+        />
         <div className="w-full max-w-md space-y-8 px-4 bg-white text-gray-600 sm:px-0">
           <div className="">
             <img
@@ -89,7 +156,8 @@ const SignIn: React.FC = () => {
             handleFormSubmit={handleFormSubmit}
             buttonLabel="Login"
             onChangeHandler={onChangeHandler}
-            isLoading={signinMutation.isLoading}
+            isLoading={signinMutation.isLoading || reactivateMutation.isLoading}
+            error={requestLink}
           />
         </div>
       </div>

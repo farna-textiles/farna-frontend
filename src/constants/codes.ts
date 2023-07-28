@@ -1,7 +1,6 @@
-export const statusCode = {
+const statusCode = {
   Forbidden: 403,
+  BadRequest: 400,
 };
 
-export const status = {
-  Forbidden: 403,
-};
+export default statusCode;
