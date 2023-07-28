@@ -25,3 +25,10 @@ export const verify = async (data: { verificationToken: string }) => {
 export const confirmEmail = async (data: { confirmationToken: string }) => {
   return handleApiCall(api.post, API_URLS.AUTH_CONFIRM_EMAIL, data);
 };
+
+export const reactivation = async (data: {
+  identifier: string;
+  password: string;
+}) => {
+  return handleApiCall(api.post, API_URLS.REACTIVATION_REQUEST, data);
+};

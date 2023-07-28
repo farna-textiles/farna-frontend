@@ -18,7 +18,7 @@ import {
 } from '../../interfaces';
 import { useCustomer, useUpdateCustomer } from '../../hooks/useCustomer';
 import DataTable from '../../components/table/DataTable';
-import EditModal from '../../components/Modal';
+import CustomModal from '../../components/Modal';
 
 const initialContactState: Omit<Contact, 'id'> & { id?: number } = {
   name: '',
@@ -244,13 +244,14 @@ const EditCustomer = () => {
 
       <hr className="my-12" />
       {(selectedContact || isAddingContact) && (
-        <EditModal<Contact & Record<string, any>>
-          contact={selectedContact as Contact}
+        <CustomModal<Contact & Record<string, any>>
+          data={selectedContact as Contact}
           isOpen={isModalOpen}
           onClose={handleModalClose}
           onSave={handleContactSave}
           fields={contactFields}
           validationSchema={contactValidationSchema}
+          title="Add Contact"
         />
       )}
       <Box sx={{ my: 2 }}>

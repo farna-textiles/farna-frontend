@@ -11,6 +11,10 @@ export interface FormButtonProps {
   text: string;
 }
 
+export interface FogetPassword {
+  email: string;
+}
+
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   type: string;
   name: string;
@@ -30,6 +34,7 @@ export type FormProps = {
   onChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
   buttonLabel: string;
   isLoading: boolean;
+  error?: ReactNode;
 };
 
 export type AuthBannerProp = {
@@ -247,12 +252,13 @@ export interface FieldConfig<T> {
 }
 
 export interface EditContactModalProps<T> {
-  contact: T;
+  data: T;
   isOpen: boolean;
   onClose: () => void;
   onSave: (editedContact: T) => void;
   fields: FieldConfig<T>[];
   validationSchema: Schema<Omit<T, 'id'>>;
+  title: string;
 }
 
 export interface Option<T = string> {
