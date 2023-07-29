@@ -30,9 +30,8 @@ const mockdata = [
     label: 'Products',
     icon: IconCalendarStats,
     links: [
-      { label: 'Upcoming releases', link: '/' },
-      { label: 'Previous releases', link: '/' },
-      { label: 'Releases schedule', link: '/' },
+      { label: 'Create Product', link: '/product/new' },
+      { label: 'View Products', link: '/products' },
     ],
   },
   { label: 'Analytics', icon: IconPresentationAnalytics },

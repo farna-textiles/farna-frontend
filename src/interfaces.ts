@@ -73,6 +73,16 @@ export interface User {
   updatedAt: string;
 }
 
+export interface Product {
+  id: string;
+  lotNo: number;
+  danier: string;
+  type: string;
+  noOfFilaments: number;
+  luster: string;
+  userId: string;
+}
+
 export interface Address {
   id?: number;
   street: string;
@@ -100,6 +110,7 @@ export interface Customer {
 
 export type UserObject = User & Record<string, any>;
 export type CustomerObject = Customer & Record<string, any>;
+export type ProductObject = Product & Record<string, any>;
 
 export interface RowData {
   [key: string]: string;
