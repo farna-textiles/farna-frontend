@@ -7,13 +7,12 @@ import { ErrorResponse } from '../interfaces';
 import statusCode from '../constants/codes';
 
 export const useSignUp = () => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   return useMutation(signup, {
     onSuccess: (data) => {
       navigate('/signin');
-      notifySuccess('Signup successful! Check your email for instructions.');
+      notifySuccess(data.message);
     },
     onError: (error: ErrorResponse) => {
       notifyError(error.message);
