@@ -10,4 +10,12 @@ export const API_URLS = {
   GET_CUSTOMER: '/customers/:id',
   UPDATE_CUSTOMER: '/customers/:id',
   CREATE_CUSTOMER: '/customers',
+  Products: {
+    ALL_PRODUCTS: '/products',
+    UPDATE_PRODUCT: '/products/:id',
+    DELETE_PRODUCT: '/products/:id',
+    CREATE_PRODUCT: '/products',
+    GET_PRODUCT: '/products/:id',
+  }
 };
+
