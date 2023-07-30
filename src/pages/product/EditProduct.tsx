@@ -60,7 +60,7 @@ const EditProduct: React.FC<EditProductProps> = ({ open, onClose, data }) => {
 
   return (
     <Modal open={open} onClose={handleClose} className='flex justify-center items-center'>
-      {(product.id !== '') ? (
+      {(true) ? (
         <div className='md:w-1/2 w-[90%] bg-white py-4 px-8  rounded-md'>
           <Formik initialValues={product} onSubmit={handleSave} validationSchema={validationSchema}>
             {() => (

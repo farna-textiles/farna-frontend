@@ -22,7 +22,7 @@ const CreateUserEnd: React.FC<CreateUserEndProps> = ({ trigger }) => {
         }}
       >
         <Form>
-          <h1 className='font-semibold text-2xl pb-4'>Create User</h1>
+          <h1 className='font-semibold text-2xl pb-4'>Create End Use</h1>
           <Grid container spacing={2}>
             <div className='flex flex-col flex-1 py-4 pl-4 space-y-4'>
               <div>

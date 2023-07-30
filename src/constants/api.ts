@@ -16,6 +16,10 @@ export const API_URLS = {
     DELETE_PRODUCT: '/products/:id',
     CREATE_PRODUCT: '/products',
     GET_PRODUCT: '/products/:id',
+  },
+  EndUse: {
+    ALL_ENDUSES: '/end-uses',
   }
+
 };
 
