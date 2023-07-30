@@ -4,9 +4,12 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import MultiSelect from './component/MultiSelect';
 import AddIcon from '@mui/icons-material/Add';
-import CreateUserEnd from './CreateUserEnd';
-import { Box } from '@mantine/core';
-
+import CreateUserEnd from './CreateEndUse';
+import { Box, Loader } from '@mantine/core';
+import { getAllEndUses } from '../../api/endUserApi';
+import ScreenLoader from '../../components/screen-loader/ScreenLoader';
+import { User } from '../../interfaces';
+import { createProduct } from '../../api/productApi';
 
 const validationSchema = Yup.object().shape({
   lotNo: Yup.number().required('Lot No is required').min(1, 'Must be a positive value'),
@@ -27,30 +30,49 @@ const CreateProduct = () => {
     userId: ''
   };
 
-  useEffect(() => {
-  }, []);
-
   const [selectedOptions, setSlectedOptions] = useState<String[]>([]);
   const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState([
-    { value: 'option1', label: 'Option 1' },
-    { value: 'option2', label: 'Option 2' },
-    { value: 'option3', label: 'Option 3' },
-  ]);
+
+  const [isLoader, setIsLoader] = useState(true);
+  const [loaderMessage, setLoaderMessage] = useState("");
+  const [options, setOptions] = useState([]);
   const [optionNew, setOptionNew] = useState<Object[]>([]);
 
+  
   const handleCreate = (values: object) => {
+    setLoaderMessage("Product Creation in progress")
+    setIsLoader(true);
     let tmp = {
         ...values,
         'endUser':{
             db:selectedOptions,
             new: optionNew
-        }
+        },
+        'userId': ''
     }
     console.log(tmp, "Form Submit")
     const userInfoString = localStorage.getItem('userInfo');
-    // const userInfo: User = userInfoString ? JSON.parse(userInfoString) : null; 
+    const userInfo: User = userInfoString ? JSON.parse(userInfoString) : null;
+    tmp['userId'] = userInfo.id;
+    createProduct(tmp)
+    .then(() => {
+      setIsLoader(false);
+    })
+    .catch((error) => {
+      console.error(error);
+    })
   };
+  
+  useEffect(() => {
+    setLoaderMessage("Fething End Uses")
+    getAllEndUses().then((response) => {
+      let allEndUsesOptions = response?.data?.map((item: { name: string; id: string; }) => ({label: item.name, value: item.id}))
+      setOptions(allEndUsesOptions);
+      setIsLoader(false);
+      setLoaderMessage("")
+    })
+    .catch(() => {})
+  }, [isLoader]);
 
   const SaveSelectOption = (values: string[]) => {
     setSlectedOptions([...values])
@@ -58,6 +80,10 @@ const CreateProduct = () => {
 
   const handleCreateUser = (name: string, description?: string) => {
     const useEnd = { name, description }
+    if (optionNew.some((option) => option.name === name)) {
+      // add error message
+      return; 
+    }
     setOptionNew([...optionNew, useEnd])
     handleClose()
   };
@@ -70,11 +96,11 @@ const CreateProduct = () => {
     setOpen(false);
   };
 
+  if (isLoader) return <ScreenLoader message={loaderMessage}/>
   return (
         <div className='w-full mx-auto bg-white py-4 px-8  rounded-md'>
           {open && 
           <Modal open={open} onClose={handleClose} className='flex justify-center items-center'>
-
                 <div className='md:w-1/2 w-[90%] bg-white py-4 px-8 rounded-md outline-none'>
                     <CreateUserEnd trigger={handleCreateUser} />
                 </div>

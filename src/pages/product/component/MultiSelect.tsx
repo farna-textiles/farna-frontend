@@ -27,6 +27,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, title, trigger, newO
         <FormControl sx={{ width: '100%' }}>
         <InputLabel sx={{ background: 'white', paddingLeft: '5px', paddingRight: '5px' }}>{title}</InputLabel>
         <Select
+            required
             multiple
             fullWidth
             value={selectedOptions}

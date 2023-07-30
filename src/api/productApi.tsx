@@ -78,7 +78,7 @@ export const getAllProductsTemp = async (page: number, pageSize: number, searchQ
     return handleApiCall(api.get, apiUrl, data);
   };
   
-  export const createProduct = async (data: Omit<Product, 'id'>) => {
+  export const createProduct = async (data: object) => {
     return handleApiCall(api.post, API_URLS.Products.CREATE_PRODUCT, data);
   };
   
