@@ -1,7 +1,7 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { Box, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
+import './responsiveStyles.css';
 import { useMemo } from 'react';
 import {
   ActionButton,
@@ -55,7 +55,7 @@ const Users = () => {
   };
 
   return (
-    <Box sx={{ m: 4 }}>
+    <Box sx={{ m: 2 }}>
       <Typography variant="h4" component="div" gutterBottom>
         User Management
       </Typography>
@@ -64,15 +64,17 @@ const Users = () => {
         details.
       </Typography>
       <Box sx={{ my: 2 }}>
-        <GenericTable<User>
-          tableName="Users"
-          columns={columns}
-          fetchData={getAllUsers}
-          actionButtons={actionButtons}
-          addButtonLink="/add"
-          addButtonLabel="Add User"
-          additionalColumn={additionalColumn}
-        />
+      <div className="responsive-font">
+  <GenericTable<User>
+    tableName="Users"
+    columns={columns}
+    fetchData={getAllUsers}
+    actionButtons={actionButtons}
+    addButtonLink="/add"
+    addButtonLabel="Add User"
+    additionalColumn={additionalColumn}
+  />
+</div>
       </Box>
     </Box>
   );

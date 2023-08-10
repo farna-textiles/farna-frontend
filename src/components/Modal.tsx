@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { Modal, TextField, Button, Box, Typography } from '@mui/material';
 import { Formik, Form, Field, FormikTouched, FormikErrors } from 'formik';
 import { EditContactModalProps } from '../interfaces';
@@ -14,18 +13,7 @@ const EditModal = <T extends Record<string, unknown>>({
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          bgcolor: 'white',
-          boxShadow: 24,
-          p: 4,
-          minWidth: 400,
-          maxWidth: 600,
-          borderRadius: 8,
-        }}
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg p-4 min-w-[300px] md:min-w-[400px] max-w-[80%] md:max-w-[600px] rounded-lg"
       >
         <Typography variant="h5" align="center" gutterBottom>
           Edit Contact
@@ -41,46 +29,45 @@ const EditModal = <T extends Record<string, unknown>>({
         >
           {({ errors, touched }) => (
             <Form>
-              {fields.map((field) => {
-                const isNestedField: boolean = (field.name as string).includes(
-                  '.'
-                );
-                const [parent, child] = (field.name as string).split('.');
-                const fieldName = isNestedField ? child : field.name;
+              <div className="max-h-[70vh] overflow-y-auto">
+                {fields.map((field) => {
+                  const isNestedField: boolean = (field.name as string).includes('.');
+                  const [parent, child] = (field.name as string).split('.');
+                  const fieldName = isNestedField ? child : field.name;
 
-                // Assert the type of the touched and errors objects
-                const touchedWithShape = touched as FormikTouched<T>;
-                const errorsWithShape = errors as FormikErrors<T>;
+                  const touchedWithShape = touched as FormikTouched<T>;
+                  const errorsWithShape = errors as FormikErrors<T>;
 
-                const touch = isNestedField
-                  ? touchedWithShape[parent]?.[child]
-                  : touchedWithShape[fieldName];
-                const error = isNestedField
-                  ? errorsWithShape[parent]?.[child]
-                  : errorsWithShape[fieldName];
+                  const touch = isNestedField
+                    ? touchedWithShape[parent]?.[child]
+                    : touchedWithShape[fieldName];
+                  const error = isNestedField
+                    ? errorsWithShape[parent]?.[child]
+                    : errorsWithShape[fieldName];
 
-                return (
-                  <Field
-                    key={field.name}
-                    type={field.type === 'number' ? 'number' : 'text'}
-                    name={field.name}
-                    as={TextField}
-                    label={field.label}
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={touch && !!error}
-                    helperText={touch && error}
-                  />
-                );
-              })}
+                  return (
+                    <Field
+                      key={field.name}
+                      type={field.type === 'number' ? 'number' : 'text'}
+                      name={field.name}
+                      as={TextField}
+                      label={field.label}
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      error={touch && !!error}
+                      helperText={touch && error}
+                    />
+                  );
+                })}
+              </div>
 
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+              <Box className="flex justify-end mt-3">
                 <Button
                   variant="outlined"
                   color="primary"
                   onClick={onClose}
-                  sx={{ marginRight: 2 }}
+                  className="mr-2"
                 >
                   Cancel
                 </Button>

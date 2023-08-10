@@ -208,7 +208,7 @@ const CreateCustomer = () => {
   };
 
   return (
-    <Box sx={{ m: 4 }}>
+    <Box sx={{ m: 0, p: 2 }}>
       <Typography variant="h4" component="div" gutterBottom>
         Create Customer
       </Typography>
@@ -218,20 +218,23 @@ const CreateCustomer = () => {
         onChange={handleBusinessNameChange}
         variant="outlined"
         size="small"
+        sx={{ width: '100%', marginBottom: 2 }}
       />
 
       <hr className="my-12" />
-      {(selectedContact || selectedContactIndex) && (
-        <EditModal<Contact & Record<string, any>>
-          contact={selectedContact as Contact}
-          isOpen={isModalOpen}
-          onClose={handleModalClose}
-          onSave={handleContactSave}
-          fields={contactFields}
-          validationSchema={contactValidationSchema}
-        />
-      )}
-      <Box sx={{ my: 2 }}>
+
+      {/* Wrap DataTable in a container */}
+      <Box sx={{ overflowX: 'auto' }}>
+        {(selectedContact || selectedContactIndex) && (
+          <EditModal<Contact & Record<string, any>>
+            contact={selectedContact as Contact}
+            isOpen={isModalOpen}
+            onClose={handleModalClose}
+            onSave={handleContactSave}
+            fields={contactFields}
+            validationSchema={contactValidationSchema}
+          />
+        )}
         <DataTable<Contact>
           data={newCustomer.contacts}
           columns={columns}
@@ -242,6 +245,7 @@ const CreateCustomer = () => {
           isLoading={craeteCustomerMutation.isLoading}
         />
       </Box>
+
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
         <CustomButton
           onClick={handleSaveButtonClick}
@@ -253,5 +257,4 @@ const CreateCustomer = () => {
     </Box>
   );
 };
-
 export default CreateCustomer;
