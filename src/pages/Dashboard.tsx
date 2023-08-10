@@ -1,5 +1,10 @@
+import { Text, Progress, Card } from '@mantine/core';
 const Dashboard: React.FC = () => {
-  return <h1>Dashboard Page</h1>;
+  return (
+<>
+dashbaoard
+</>
+  )
 };
 
 export default Dashboard;

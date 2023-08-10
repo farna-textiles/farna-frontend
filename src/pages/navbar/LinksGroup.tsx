@@ -72,6 +72,7 @@ const LinksGroup = ({
   icon: Icon,
   label,
   initiallyOpened,
+  onLinkClick,
   links,
   link = '/',
 }: LinksGroupProps) => {

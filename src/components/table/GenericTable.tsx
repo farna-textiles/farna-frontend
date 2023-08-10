@@ -110,7 +110,8 @@ const GenericTable = <T extends Record<string, unknown>>({
           </Grid>
         )}
       </Grid>
-      <Table>
+      <div className="overflow-x-auto">
+      <Table className="overflow-x-auto">
         <TableHead>
           <TableRow>
             {additionalColumn && (
@@ -185,6 +186,7 @@ const GenericTable = <T extends Record<string, unknown>>({
           )}
         </TableBody>
       </Table>
+      </div>
       <TablePagination
         rowsPerPageOptions={[5, 10, 20]}
         component="div"

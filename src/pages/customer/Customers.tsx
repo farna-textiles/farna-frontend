@@ -1,10 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import { Box, Typography } from '@mui/material';
+import React, { useMemo } from 'react';
+import { Box, Typography, Grid } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import { useNavigate } from 'react-router';
 import {
   ActionButton,
   TableColumn,
@@ -59,23 +58,31 @@ const Customers = () => {
   );
 
   return (
-    <Box sx={{ m: 4 }}>
-      <Typography variant="h4" component="div" gutterBottom>
-        Customers
-      </Typography>
-      <hr className="mb-12" />
-      <Box sx={{ my: 2 }}>
-        <GenericTable<User>
-          tableName="Customers"
-          columns={columns}
-          fetchData={getAllCustomers}
-          actionButtons={actionButtons}
-          addButtonLink="/customer"
-          addButtonLabel="Create Customer"
-        />
-      </Box>
-    </Box>
-  );
+    <Box className="m-4">
+    <Typography variant="h4" component="div" className="mb-4">
+      Customers
+    </Typography>
+    <hr className="mb-4" />
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <div className="overflow-x-auto">
+          <div className="min-w-full">
+    
+            <GenericTable<User>
+              tableName="Customers"
+              columns={columns}
+              fetchData={getAllCustomers}
+              actionButtons={actionButtons}
+              addButtonLink="/customer"
+              addButtonLabel="Create Customer"
+            />
+          </div>
+        </div>
+      </Grid>
+    </Grid>
+  </Box>
+  
+    );
 };
 
 export default Customers;

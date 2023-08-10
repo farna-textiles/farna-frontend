@@ -24,6 +24,10 @@ const CustomButton = styled(Button)(({ theme, disabled }) => ({
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
   },
+  '@media (max-width: 640px)': {
+    padding: theme.spacing(0.5),
+    fontSize: '0.875rem',
+  },
   ...(disabled && {
     backgroundColor: theme.palette.grey[300],
     color: theme.palette.text.primary,
@@ -38,6 +42,7 @@ const CustomButton = styled(Button)(({ theme, disabled }) => ({
 
 const MainContactCard = ({ mainContact }: { mainContact: Contact }) => {
   return (
+    <Box sx={{ m: 4 }} className="sm:m-6 md:m-8 lg:m-10">
     <Card elevation={3}>
       <CardContent>
         <Box display="flex" alignItems="center" mb={2}>
@@ -67,6 +72,7 @@ const MainContactCard = ({ mainContact }: { mainContact: Contact }) => {
         )}
       </CardContent>
     </Card>
+    </Box>
   );
 };
 
