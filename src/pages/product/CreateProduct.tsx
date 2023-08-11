@@ -1,199 +1,242 @@
-import React, { useEffect, useState } from 'react';
-import { Button, TextField, Grid, Modal, Typography } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import { Button, TextField, Grid, Modal, Box, Typography } from '@mui/material';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import MultiSelect from './component/MultiSelect';
 import AddIcon from '@mui/icons-material/Add';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import Multiselect from 'multiselect-react-dropdown';
+import { debounce } from 'lodash';
 import CreateUserEnd from './CreateEndUse';
-import { Box, Loader } from '@mantine/core';
+import { EndUse, EndUseOption, Product } from '../../interfaces';
+import { notifyError } from '../../lib/utils';
 import { getAllEndUses } from '../../api/endUserApi';
-import ScreenLoader from '../../components/screen-loader/ScreenLoader';
-import { User } from '../../interfaces';
-import { createProduct } from '../../api/productApi';
+import useCreateEndUse from '../../hooks/useEndUse';
+import { userInfo } from '../../services/authService';
+import { useCreateProduct } from '../../hooks/useProduct';
 
 const validationSchema = Yup.object().shape({
-  lotNo: Yup.number().required('Lot No is required').min(1, 'Must be a positive value'),
-  danier: Yup.string().required('Danier is required'),
-  type: Yup.string().required('Type is required'),
-  noOfFilaments: Yup.number().required('No Of Filaments is required').min(1, 'Must be a positive value'),
+  lotNo: Yup.string()
+    .required('Lot No is required')
+    .matches(/^[a-zA-Z0-9]+$/, 'Invalid lot number'),
+  denier: Yup.string().required('Denier is required'),
+  type: Yup.string()
+    .required('Type is required')
+    .matches(/^[a-zA-Z0-9]+$/, 'Invalid type'),
+  noOfFilaments: Yup.string()
+    .required('No Of Filaments is required')
+    .matches(/^[a-zA-Z0-9]+$/, 'Invalid No of Filaments'),
   luster: Yup.string().required('Luster is required'),
 });
 
-
 const CreateProduct = () => {
-  const initialValue = {
+  const initialValue: Product = {
     lotNo: '',
-    danier: '',
+    denier: '',
     type: '',
     noOfFilaments: '',
     luster: '',
-    userId: ''
+    userId: '',
   };
 
-  const [selectedOptions, setSlectedOptions] = useState<String[]>([]);
+  const [selectedOptions, setSlectedOptions] = useState<EndUseOption[]>([]);
   const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const dropdownRef = useRef<Multiselect | null>(null);
 
-  const [isLoader, setIsLoader] = useState(true);
-  const [loaderMessage, setLoaderMessage] = useState("");
-  const [options, setOptions] = useState([]);
-  const [optionNew, setOptionNew] = useState<Object[]>([]);
+  const endUseMutation = useCreateEndUse();
+  const createProductMutation = useCreateProduct();
 
-  
-  const handleCreate = (values: object) => {
-    setLoaderMessage("Product Creation in progress")
-    setIsLoader(true);
-    let tmp = {
-        ...values,
-        'endUser':{
-            db:selectedOptions,
-            new: optionNew
-        },
-        'userId': ''
+  const {
+    data: endUses,
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+  } = useInfiniteQuery(
+    ['endUses', searchTerm],
+    async ({ pageParam = 1 }) => {
+      const response = await getAllEndUses(pageParam, searchTerm);
+      return response.data;
+    },
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.length === 0) return undefined;
+        return allPages.length + 1;
+      },
     }
-    console.log(tmp, "Form Submit")
-    const userInfoString = localStorage.getItem('userInfo');
-    const userInfo: User = userInfoString ? JSON.parse(userInfoString) : null;
-    tmp['userId'] = userInfo.id;
-    createProduct(tmp)
-    .then(() => {
-      setIsLoader(false);
-    })
-    .catch((error) => {
-      console.error(error);
-    })
-  };
-  
+  );
+
+  const flatEndUses = endUses?.pages.flat();
+
   useEffect(() => {
-    setLoaderMessage("Fething End Uses")
-    getAllEndUses().then((response) => {
-      let allEndUsesOptions = response?.data?.map((item: { name: string; id: string; }) => ({label: item.name, value: item.id}))
-      setOptions(allEndUsesOptions);
-      setIsLoader(false);
-      setLoaderMessage("")
-    })
-    .catch(() => {})
-  }, [isLoader]);
+    const handleScroll = (e: Event) => {
+      const dropdown = e.target as HTMLElement;
+      if (
+        dropdown.scrollHeight - dropdown.scrollTop === dropdown.clientHeight &&
+        hasNextPage
+      ) {
+        fetchNextPage();
+      }
+    };
 
-  const SaveSelectOption = (values: string[]) => {
-    setSlectedOptions([...values])
-  }
+    if (dropdownRef.current) {
+      const dropdown = document.querySelector('.optionContainer');
 
-  const handleCreateUser = (name: string, description?: string) => {
-    const useEnd = { name, description }
-    if (optionNew.some((option) => option.name === name)) {
-      // add error message
-      return; 
+      if (dropdown) {
+        dropdown.addEventListener('scroll', handleScroll);
+        return () => dropdown.removeEventListener('scroll', handleScroll);
+      }
     }
-    setOptionNew([...optionNew, useEnd])
-    handleClose()
+
+    return () => {};
+  }, [dropdownRef, fetchNextPage, hasNextPage]);
+
+  const handleCreate = async (values: Product) => {
+    const data = {
+      ...values,
+      endUses: [...selectedOptions.map((option) => option.value)],
+      userId: userInfo().id,
+    };
+
+    await createProductMutation.mutateAsync(data as Product);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
+  const formFields = [
+    {
+      name: 'lotNo',
+      label: 'Lot No',
+      type: 'text',
+    },
+    {
+      name: 'denier',
+      label: 'Denier',
+      type: 'text',
+    },
+    {
+      name: 'type',
+      label: 'Type',
+      type: 'text',
+    },
+    {
+      name: 'noOfFilaments',
+      label: 'No Of Filaments',
+      type: 'text',
+    },
+    {
+      name: 'luster',
+      label: 'Luster',
+      type: 'text',
+    },
+  ];
+
+  const SaveSelectOption = (values: EndUseOption[]) => {
+    setSlectedOptions([...values]);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  if (isLoader) return <ScreenLoader message={loaderMessage}/>
+  const handleCreateEndUse = async (name: string, description?: string) => {
+    const useEnd = { name, description };
+    if (flatEndUses?.some((option) => option.name === name)) {
+      notifyError('End Use already exists');
+      return;
+    }
+    await endUseMutation.mutateAsync(useEnd);
+    handleClose();
+  };
+
+  const setSearchTermDebounced = debounce((value: string) => {
+    setSearchTerm(value);
+    refetch();
+  }, 300);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
   return (
-        <div className='w-full mx-auto bg-white py-4 px-8  rounded-md'>
-          {open && 
-          <Modal open={open} onClose={handleClose} className='flex justify-center items-center'>
-                <div className='md:w-1/2 w-[90%] bg-white py-4 px-8 rounded-md outline-none'>
-                    <CreateUserEnd trigger={handleCreateUser} />
-                </div>
-            </Modal>
-          }
-          <Formik initialValues={initialValue} onSubmit={handleCreate} validationSchema={validationSchema}>
-            {() => (
-              <Form>
-                <h1 className='font-semibold text-2xl pb-4'>Create Product</h1>
-                <Grid container spacing={2}>
-                  <div className='flex flex-col flex-1 py-4 pl-4 space-y-4'>
-                    <div>
-                      <Field
-                        as={TextField}
-                        id="lotNo"
-                        name="lotNo"
-                        fullWidth
-                        type="number"
-                        label="Lot No"
-                        variant="outlined"
-                      />
-                      <ErrorMessage name="lotNo" component="div" style={{ color: 'red', fontSize: '12px' }} />
-                    </div>
+    <Box sx={{ m: 4 }}>
+      <Typography variant="h4" component="div" gutterBottom>
+        Create Product
+      </Typography>
+      <hr className="my-12" />
 
-                    <div>
-                      <Field
-                        as={TextField}
-                        id="danier"
-                        fullWidth
-                        name="danier"
-                        type="text"
-                        label="Danier"
-                        variant="outlined"
-                      />
-                      <ErrorMessage name="danier" component="div" style={{ color: 'red', fontSize: '12px' }} />
-                    </div>
-
-                    <div>
-                      <Field
-                        as={TextField}
-                        id="type"
-                        name="type"
-                        type="text"
-                        fullWidth
-                        label="Type"
-                        variant="outlined"
-                      />
-                      <ErrorMessage name="type" component="div" style={{ color: 'red', fontSize: '12px' }} />
-                    </div>
-
-                    <div>
-                      <Field
-                        as={TextField}
-                        fullWidth
-                        id="noOfFilaments"
-                        name="noOfFilaments"
-                        type="number"
-                        label="No Of Filaments"
-                        variant="outlined"
-                      />
-                      <ErrorMessage name="noOfFilaments" component="div" style={{ color: 'red', fontSize: '12px' }} />
-                    </div>
-
-                    <div>
-                      <Field
-                        as={TextField}
-                        id="luster"
-                        name="luster"
-                        fullWidth
-                        type="text"
-                        label="Luster"
-                        variant="outlined"
-                      />
-                      <ErrorMessage name="luster" component="div" style={{ color: 'red', fontSize: '12px' }} />
-                    </div>
-                    <div className='flex spaxe-x-2 justify-between items-center' >
-                        <div className='w-[90%]'><MultiSelect options={options} newOptions={optionNew} title="Select End User" trigger={SaveSelectOption}/></div>
-                        <div onClick={handleOpen} className='w-[8%] flex justify-center items-center border border-gray-300 cursor-pointer hover:border-none hover:bg-gray-300 rounded-md h-full px-2'><AddIcon /></div>
-                    </div>
-                  </div>
-                </Grid>
-                
-                <Grid item xs={12} style={{ textAlign: 'right' }}>
-                  <Button type="submit" variant="contained" color="primary">
-                    Create
-                  </Button>
-                </Grid>
-              </Form>
-            )}
-          </Formik>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        className="flex justify-center items-center"
+      >
+        <div className="md:w-1/2 w-[90%] bg-white py-4 px-8 rounded-md outline-none">
+          <CreateUserEnd trigger={handleCreateEndUse} />
         </div>
-  )
-  
+      </Modal>
+
+      <Formik
+        initialValues={initialValue}
+        onSubmit={handleCreate}
+        validationSchema={validationSchema}
+      >
+        {() => (
+          <Form>
+            <Grid container spacing={2}>
+              <div className="flex flex-col flex-1 py-4 pl-4 space-y-4">
+                {formFields.map((field) => (
+                  <div key={field.name}>
+                    <Field
+                      as={TextField}
+                      id={field.name}
+                      name={field.name}
+                      fullWidth
+                      type={field.type}
+                      label={field.label}
+                      variant="outlined"
+                    />
+                    <ErrorMessage
+                      name={field.name}
+                      component="div"
+                      style={{ color: 'red', fontSize: '12px' }}
+                    />
+                  </div>
+                ))}
+                <div className="flex spaxe-x-2 justify-between items-center">
+                  <div className="w-[90%]">
+                    <Multiselect
+                      options={flatEndUses?.map((item: EndUse) => ({
+                        name: item.name,
+                        value: item.id,
+                      }))}
+                      ref={dropdownRef}
+                      displayValue="name"
+                      showCheckbox
+                      placeholder="Select EndUse"
+                      onSearch={(value: string) =>
+                        setSearchTermDebounced(value)
+                      }
+                      onSelect={SaveSelectOption}
+                      className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:border-primary"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleOpen}
+                    className="w-[8%] flex justify-center items-center border border-gray-300 cursor-pointer hover:border-none hover:bg-gray-300 rounded-md h-full px-2"
+                  >
+                    <AddIcon />
+                  </button>
+                </div>
+              </div>
+            </Grid>
+            <Grid item xs={12} style={{ textAlign: 'right' }}>
+              <Button type="submit" variant="contained" color="primary">
+                Create
+              </Button>
+            </Grid>
+          </Form>
+        )}
+      </Formik>
+    </Box>
+  );
 };
 
 export default CreateProduct;
