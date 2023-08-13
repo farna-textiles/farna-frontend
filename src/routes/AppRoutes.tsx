@@ -12,12 +12,14 @@ import CreateCustomer from '../pages/customer/CreateCustomer';
 import EditCustomer from '../pages/customer/EditCustomer';
 import ShowCustomer from '../pages/customer/ShowCustomer';
 import Products from '../pages/product/Products';
-import CreateProduct from '../pages/product/CreateProduct';
 
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const Profile = lazy(() => import('../pages/Profile'));
+const CreateProduct = lazy(() => import('../pages/product/CreateProduct'));
+const EditProduct = lazy(() => import('../pages/product/EditProduct'));
+
 const PageNotFound = lazy(() => import('../pages/PageNotFound'));
 
 export const AppRoutes: React.FC = () => {
@@ -103,6 +105,14 @@ export const AppRoutes: React.FC = () => {
           element: (
             <AuthRoute path="/product/new">
               <CreateProduct />
+            </AuthRoute>
+          ),
+        },
+        {
+          path: '/products/:id/edit',
+          element: (
+            <AuthRoute path="/products/:id/edit">
+              <EditProduct />
             </AuthRoute>
           ),
         },

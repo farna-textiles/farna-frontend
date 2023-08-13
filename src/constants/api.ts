@@ -18,8 +18,7 @@ export const API_URLS = {
     GET_PRODUCT: '/products/:id',
   },
   EndUse: {
-    ALL_ENDUSES: '/end-uses',
-  }
-
+    ALL: '/end-use',
+    CREATE: '/end-use',
+  },
 };
-
