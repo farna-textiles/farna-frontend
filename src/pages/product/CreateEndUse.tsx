@@ -1,12 +1,56 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { TextField, Button, Grid } from '@mui/material';
+import { TextField, Button, Grid, styled } from '@mui/material';
+import { Loader } from '@mantine/core';
 
 interface CreateUserEndProps {
   trigger: (name: string, description?: string) => void;
+  isLoading: boolean;
 }
 
-const CreateUserEnd: React.FC<CreateUserEndProps> = ({ trigger }) => {
+const CustomButton = styled(Button)(({ theme, disabled }) => ({
+  position: 'relative',
+  textDecoration: 'none',
+  color: theme.palette.primary.main,
+  padding: theme.spacing(1),
+  border: `1px solid ${theme.palette.primary.main}`,
+  borderRadius: theme.shape.borderRadius,
+  '&:hover': {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+  },
+  ...(disabled && {
+    backgroundColor: theme.palette.grey[300],
+    color: theme.palette.text.primary,
+    pointerEvents: 'none',
+    '&:hover': {
+      backgroundColor: theme.palette.grey[300],
+      borderColor: theme.palette.grey[300],
+      color: theme.palette.text.primary,
+    },
+  }),
+  ...(disabled && {
+    pointerEvents: 'none',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      background: 'rgba(255, 255, 255, 0.7)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: theme.shape.borderRadius,
+    },
+  }),
+}));
+
+const CreateUserEnd: React.FC<CreateUserEndProps> = ({
+  trigger,
+  isLoading,
+}) => {
   return (
     <Formik
       initialValues={{ name: '', description: '' }}
@@ -66,9 +110,14 @@ const CreateUserEnd: React.FC<CreateUserEndProps> = ({ trigger }) => {
           >
             Reset
           </Button>
-          <Button type="submit" variant="contained" color="primary">
+          <CustomButton type="submit" disabled={isLoading}>
+            {isLoading && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Loader color="white" />
+              </div>
+            )}
             Create
-          </Button>
+          </CustomButton>
         </Grid>
       </Form>
     </Formik>

@@ -1,11 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, TextField, Grid, Modal, Box, Typography } from '@mui/material';
+import {
+  Button,
+  TextField,
+  Grid,
+  Modal,
+  Box,
+  Typography,
+  styled,
+} from '@mui/material';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import AddIcon from '@mui/icons-material/Add';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Multiselect from 'multiselect-react-dropdown';
 import { debounce } from 'lodash';
+import { Loader } from '@mantine/core';
 import CreateUserEnd from './CreateEndUse';
 import { EndUse, EndUseOption, Product } from '../../interfaces';
 import { notifyError } from '../../lib/utils';
@@ -28,6 +37,45 @@ const validationSchema = Yup.object().shape({
   luster: Yup.string().required('Luster is required'),
 });
 
+const CustomButton = styled(Button)(({ theme, disabled }) => ({
+  position: 'relative',
+  textDecoration: 'none',
+  color: theme.palette.primary.main,
+  padding: theme.spacing(1),
+  border: `1px solid ${theme.palette.primary.main}`,
+  borderRadius: theme.shape.borderRadius,
+  '&:hover': {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+  },
+  ...(disabled && {
+    backgroundColor: theme.palette.grey[300],
+    color: theme.palette.text.primary,
+    pointerEvents: 'none',
+    '&:hover': {
+      backgroundColor: theme.palette.grey[300],
+      borderColor: theme.palette.grey[300],
+      color: theme.palette.text.primary,
+    },
+  }),
+  ...(disabled && {
+    pointerEvents: 'none',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      background: 'rgba(255, 255, 255, 0.7)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: theme.shape.borderRadius,
+    },
+  }),
+}));
+
 const CreateProduct = () => {
   const initialValue: Product = {
     lotNo: '',
@@ -41,6 +89,10 @@ const CreateProduct = () => {
   const [selectedOptions, setSlectedOptions] = useState<EndUseOption[]>([]);
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [multiselectOptions, setMultiselectOptions] = useState<EndUseOption[]>(
+    []
+  );
+
   const dropdownRef = useRef<Multiselect | null>(null);
 
   const endUseMutation = useCreateEndUse();
@@ -62,6 +114,7 @@ const CreateProduct = () => {
         if (lastPage.length === 0) return undefined;
         return allPages.length + 1;
       },
+      suspense: false,
     }
   );
 
@@ -89,6 +142,17 @@ const CreateProduct = () => {
 
     return () => {};
   }, [dropdownRef, fetchNextPage, hasNextPage]);
+
+  useEffect(() => {
+    if (flatEndUses) {
+      const newOptions = flatEndUses.map((item: EndUse) => ({
+        name: item.name,
+        value: item.id?.toString() || '',
+      }));
+
+      setMultiselectOptions(newOptions);
+    }
+  }, [flatEndUses]);
 
   const handleCreate = async (values: Product) => {
     const data = {
@@ -128,7 +192,13 @@ const CreateProduct = () => {
     },
   ];
 
+  const setSearchTermDebounced = debounce((value: string) => {
+    setSearchTerm(() => value);
+    refetch();
+  }, 300);
+
   const SaveSelectOption = (values: EndUseOption[]) => {
+    setSearchTermDebounced('');
     setSlectedOptions([...values]);
   };
 
@@ -145,11 +215,6 @@ const CreateProduct = () => {
     await endUseMutation.mutateAsync(useEnd);
     handleClose();
   };
-
-  const setSearchTermDebounced = debounce((value: string) => {
-    setSearchTerm(value);
-    refetch();
-  }, 300);
 
   const handleOpen = () => {
     setOpen(true);
@@ -168,7 +233,10 @@ const CreateProduct = () => {
         className="flex justify-center items-center"
       >
         <div className="md:w-1/2 w-[90%] bg-white py-4 px-8 rounded-md outline-none">
-          <CreateUserEnd trigger={handleCreateEndUse} />
+          <CreateUserEnd
+            trigger={handleCreateEndUse}
+            isLoading={endUseMutation.isLoading}
+          />
         </div>
       </Modal>
 
@@ -202,10 +270,7 @@ const CreateProduct = () => {
                 <div className="flex spaxe-x-2 justify-between items-center">
                   <div className="w-[90%]">
                     <Multiselect
-                      options={flatEndUses?.map((item: EndUse) => ({
-                        name: item.name,
-                        value: item.id,
-                      }))}
+                      options={multiselectOptions}
                       ref={dropdownRef}
                       displayValue="name"
                       showCheckbox
@@ -228,9 +293,17 @@ const CreateProduct = () => {
               </div>
             </Grid>
             <Grid item xs={12} style={{ textAlign: 'right' }}>
-              <Button type="submit" variant="contained" color="primary">
+              <CustomButton
+                type="submit"
+                disabled={createProductMutation.isLoading}
+              >
+                {createProductMutation.isLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Loader color="white" />
+                  </div>
+                )}
                 Create
-              </Button>
+              </CustomButton>
             </Grid>
           </Form>
         )}

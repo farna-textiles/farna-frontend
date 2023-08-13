@@ -12,6 +12,8 @@ import {
   IconButton,
   Radio,
   Checkbox,
+  TableContainer,
+  Paper,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import {
@@ -39,6 +41,37 @@ const AddButtonLink = styled(Link)(({ theme }) => ({
   },
 }));
 
+const StyledTableRow = styled(TableRow)({
+  '&:hover': {
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+  },
+});
+
+const EnhancedTableHead = styled(TableHead)(({ theme }) => ({
+  boxShadow: '0px 3px 10px rgba(0, 0, 0, 0.1)',
+  backgroundColor: theme.palette.primary.light,
+}));
+
+const StyledIcon = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  '&:hover': {
+    color: theme.palette.secondary.dark,
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+  },
+}));
+
+const WhiteTextTableCell = styled(TableCell)({
+  color: 'white',
+  fontWeight: 'bold',
+});
+
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  maxWidth: '100%',
+  overflowX: 'auto',
+  background: theme.palette.background.paper,
+  boxShadow: theme.shadows[1],
+}));
+
 const GenericTable = <T extends Record<string, unknown>>({
   tableName,
   columns,
@@ -54,9 +87,8 @@ const GenericTable = <T extends Record<string, unknown>>({
   additionalColumn?: AdditionalColumn<T>;
 }) => {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
-
   const { data: responseData, isLoading } = useQuery(
     [tableName, page, rowsPerPage, searchQuery],
     () => fetchData(page, rowsPerPage, searchQuery),
@@ -110,81 +142,90 @@ const GenericTable = <T extends Record<string, unknown>>({
           </Grid>
         )}
       </Grid>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {additionalColumn && (
-              <TableCell key={columns.length}>
-                {additionalColumn.columnName}
-              </TableCell>
+      <StyledTableContainer className="mt-10">
+        <Table style={{ minWidth: '1000px' }}>
+          <EnhancedTableHead>
+            <StyledTableRow>
+              {additionalColumn && (
+                <WhiteTextTableCell key={columns.length}>
+                  {additionalColumn.columnName}
+                </WhiteTextTableCell>
+              )}
+              {columns.map((column) => (
+                <WhiteTextTableCell key={column.field as string}>
+                  {column.label}
+                </WhiteTextTableCell>
+              ))}
+              {actionButtons && (
+                <WhiteTextTableCell key={columns.length + 1}>
+                  Actions
+                </WhiteTextTableCell>
+              )}
+            </StyledTableRow>
+          </EnhancedTableHead>
+          <TableBody>
+            {isLoading ? (
+              <StyledTableRow>
+                <TableCell
+                  colSpan={columns.length + 1 + (actionButtons ? 1 : 0)}
+                >
+                  Loading...
+                </TableCell>
+              </StyledTableRow>
+            ) : (
+              data?.map((item) => (
+                <StyledTableRow key={String(item.id)}>
+                  {additionalColumn && (
+                    <TableCell>
+                      {additionalColumn.type === 'radio' && (
+                        <Radio
+                          checked={additionalColumn.valueGetter?.(item)}
+                          onChange={(e) =>
+                            additionalColumn.onChange?.(
+                              item.id as number,
+                              e.target.checked
+                            )
+                          }
+                        />
+                      )}
+                      {additionalColumn.type === 'checkbox' && (
+                        <Checkbox
+                          checked={additionalColumn.valueGetter?.(item)}
+                          onChange={(e) =>
+                            additionalColumn.onChange?.(
+                              item.id as number,
+                              e.target.checked
+                            )
+                          }
+                        />
+                      )}
+                    </TableCell>
+                  )}
+                  {columns.map((column) => (
+                    <TableCell key={column.field as string}>
+                      {getColumnValue(item, column)}
+                    </TableCell>
+                  ))}
+                  {actionButtons && (
+                    <TableCell>
+                      {actionButtons?.map((button, index) => (
+                        <StyledIcon
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={index}
+                          onClick={() => button.onClick(item.id as number)}
+                        >
+                          {button.icon}
+                        </StyledIcon>
+                      ))}
+                    </TableCell>
+                  )}
+                </StyledTableRow>
+              ))
             )}
-            {columns.map((column) => (
-              <TableCell key={column.field as string}>{column.label}</TableCell>
-            ))}
-            {actionButtons && (
-              <TableCell key={columns.length + 1}>Actions</TableCell>
-            )}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {isLoading ? (
-            <TableRow>
-              <TableCell colSpan={columns.length + 1 + (actionButtons ? 1 : 0)}>
-                Loading...
-              </TableCell>
-            </TableRow>
-          ) : (
-            data?.map((item) => (
-              <TableRow key={String(item.id)}>
-                {additionalColumn && (
-                  <TableCell>
-                    {additionalColumn.type === 'radio' && (
-                      <Radio
-                        checked={additionalColumn.valueGetter?.(item)}
-                        onChange={(e) =>
-                          additionalColumn.onChange?.(
-                            item.id as number,
-                            e.target.checked
-                          )
-                        }
-                      />
-                    )}
-                    {additionalColumn.type === 'checkbox' && (
-                      <Checkbox
-                        checked={additionalColumn.valueGetter?.(item)}
-                        onChange={(e) =>
-                          additionalColumn.onChange?.(
-                            item.id as number,
-                            e.target.checked
-                          )
-                        }
-                      />
-                    )}
-                  </TableCell>
-                )}
-                {columns.map((column) => (
-                  <TableCell key={column.field as string}>
-                    {getColumnValue(item, column)}
-                  </TableCell>
-                ))}
-                {actionButtons && (
-                  <TableCell>
-                    {actionButtons?.map((button, index) => (
-                      <IconButton
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={index}
-                        onClick={() => button.onClick(item.id as number)}
-                      >
-                        {button.icon}
-                      </IconButton>
-                    ))}
-                  </TableCell>
-                )}
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+          </TableBody>
+        </Table>
+      </StyledTableContainer>
+
       <TablePagination
         rowsPerPageOptions={[5, 10, 20]}
         component="div"

@@ -4,13 +4,20 @@ import { EndUsesListProps } from '../../../interfaces';
 
 const EndUsesList: React.FC<EndUsesListProps> = ({ endUses }) => {
   return (
-    <div>
-      {endUses.map((endUse, index) => (
-        <span key={index} title={endUse.description || ''}>
-          {endUse.name}
-          {index !== endUses.length - 1 && ' | '}
-        </span>
-      ))}
+    <div className="p-5">
+      <div className="flex flex-wrap justify-start cursor-default">
+        {endUses.map((endUse, index) => (
+          <div
+            key={index}
+            title={endUse.description}
+            className={`flex justify-center items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-${endUse.color}-700 bg-${endUse.color}-100 border border-${endUse.color}-700`}
+          >
+            <div className="text-xs font-normal leading-none max-w-full flex-initial">
+              {endUse.name}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
