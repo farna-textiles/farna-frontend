@@ -92,9 +92,7 @@ const GenericTable = <T extends Record<string, unknown>>({
       }
       return item[firstKey as keyof T][secondKey as keyof T[keyof T]];
     }
-    if (column.format) {
-      return column.format(item[column.field]);
-    }
+
     return item[column.field] as React.ReactNode;
   };
 

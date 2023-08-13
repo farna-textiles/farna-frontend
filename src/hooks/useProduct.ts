@@ -1,78 +1,65 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import { updateCustomer } from '../api';
+import {
+  createCustomer,
+  deleteCustomer,
+  getCustomer,
+  updateCustomer,
+} from '../api';
 import { notifyError, notifySuccess } from '../lib/utils';
-import {
-  Customer,
-  ErrorResponse,
-  Product,
-  ProductData,
-  ProductUpdateData,
-} from '../interfaces';
-import {
-  createProduct,
-  deleteProduct,
-  getProduct,
-  updateProduct,
-} from '../api/productApi';
+import { Customer, ErrorResponse } from '../interfaces';
 
-export const useDeleteProduct = () => {
+export const useDeleteCustomer = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(deleteProduct, {
+  return useMutation(deleteCustomer, {
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries(['Products']);
-      notifySuccess('Product deleted successfully');
+      await queryClient.invalidateQueries(['Customers']);
+      notifySuccess('Customer deleted successfully');
     },
 
     onError(error, variables, context) {
-      notifyError('Failed to delete product');
+      notifyError('Failed to delete customer');
     },
   });
 };
 
-export const useProduct = (productId: number, initialData?: Product) => {
-  return useQuery(['product', productId], () => getProduct(productId), {
-    initialData,
-  });
+export const useCustomer = (customerId: number) => {
+  return useQuery(['customer', customerId], () => getCustomer(customerId));
 };
 
-export const useUpdateProduct = () => {
+export const useUpdateCustomer = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<any, ErrorResponse, [number, ProductUpdateData]>(
-    updateProduct,
-    {
-      onSuccess: async (data) => {
-        await queryClient.invalidateQueries(['products']);
-
-        notifySuccess('Product updated successfully');
-      },
-
-      onError: async (error: ErrorResponse) => {
-        await queryClient.invalidateQueries(['products']);
-
-        notifyError(
-          typeof error.message === 'object' ? error.message[0] : error.message
-        );
-      },
-    }
-  );
-};
-
-export const useCreateProduct = () => {
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  return useMutation(createProduct, {
+  return useMutation<any, ErrorResponse, [number, Customer]>(updateCustomer, {
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries(['product']);
-      navigate(`/products`);
-      notifySuccess('Product created successfully');
+      await queryClient.invalidateQueries(['customer']);
+      notifySuccess('Customer updated successfully');
     },
 
     onError: async (error: ErrorResponse) => {
-      await queryClient.invalidateQueries(['product']);
+      await queryClient.invalidateQueries(['customer']);
+
+      notifyError(
+        typeof error.message === 'object' ? error.message[0] : error.message
+      );
+    },
+  });
+};
+
+export const useCreateCustomer = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  return useMutation(createCustomer, {
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries(['customer']);
+      navigate(`/customers/${data.id}`);
+      notifySuccess('Customer created successfully');
+    },
+
+    onError: async (error: ErrorResponse) => {
+      await queryClient.invalidateQueries(['customer']);
 
       notifyError(
         typeof error.message === 'object' ? error.message[0] : error.message

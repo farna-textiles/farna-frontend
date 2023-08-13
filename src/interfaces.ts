@@ -74,22 +74,15 @@ export interface User {
 }
 
 export interface Product {
-  id?: string;
-  lotNo: string;
-  denier: string;
+  id: string;
+  lotNo: number;
+  danier: string;
   type: string;
-  noOfFilaments: string;
+  noOfFilaments: number;
   luster: string;
   userId: string;
 }
 
-export interface ProductData extends Product {
-  endUses: EndUse[];
-}
-
-export interface ProductUpdateData extends Product {
-  endUses: string[];
-}
 export interface Address {
   id?: number;
   street: string;
@@ -97,16 +90,6 @@ export interface Address {
   state: string;
   country: string;
   postalCode: string;
-}
-
-export interface EndUse {
-  id?: number;
-  name: string;
-  description?: string;
-}
-
-export interface EndUsesListProps {
-  endUses: EndUse[];
 }
 
 export interface Contact {
@@ -218,21 +201,4 @@ export interface EditContactModalProps<T> {
   onSave: (editedContact: T) => void;
   fields: FieldConfig<T>[];
   validationSchema: Schema<Omit<T, 'id'>>;
-}
-
-export interface Option<T = string> {
-  value: T;
-  label: string;
-}
-
-export interface EndUseOption {
-  name: string;
-  value: string;
-}
-
-export interface MultiSelectProps<T = string> {
-  options: Option<T>[];
-  title: string;
-  newOptions?: Option<T>[];
-  trigger: (event: T[]) => void;
 }
