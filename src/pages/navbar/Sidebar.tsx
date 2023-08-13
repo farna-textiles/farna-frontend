@@ -30,8 +30,8 @@ const mockdata = [
     label: 'Products',
     icon: IconCalendarStats,
     links: [
+      { label: 'All Products', link: '/products' },
       { label: 'Create Product', link: '/product/new' },
-      { label: 'View Products', link: '/products' },
     ],
   },
   { label: 'Analytics', icon: IconPresentationAnalytics },
@@ -110,8 +110,8 @@ const Sidebar = () => {
       <Navbar.Section className={classes.footer}>
         <UserButton
           image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-          name={userInfo!.username ?? ''}
-          email={userInfo!.email ?? ''}
+          name={userInfo?.username ?? ''}
+          email={userInfo?.email ?? ''}
         />
       </Navbar.Section>
     </Navbar>
