@@ -88,7 +88,7 @@ export interface ProductData extends Product {
 }
 
 export interface ProductUpdateData extends Product {
-  endUses: string[];
+  endUses: number[];
 }
 export interface Address {
   id?: number;
@@ -184,6 +184,7 @@ export interface ActionButton {
   icon: React.ReactNode;
   onClick: (id: number) => void;
   title?: string;
+  disabled?: boolean;
 }
 
 export interface SearchBarProps {
@@ -227,7 +228,7 @@ export interface Option<T = string> {
 
 export interface EndUseOption {
   name: string;
-  value: string;
+  value: number;
 }
 
 export interface MultiSelectProps<T = string> {

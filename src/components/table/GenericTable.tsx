@@ -13,9 +13,10 @@ import {
   Radio,
   Checkbox,
   TableContainer,
-  Paper,
+  Theme,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { Loader } from '@mantine/core';
 import {
   ActionButton,
   AdditionalColumn,
@@ -29,23 +30,53 @@ const Container = styled('div')(({ theme }) => ({
   marginBottom: theme.spacing(2),
 }));
 
-const AddButtonLink = styled(Link)(({ theme }) => ({
-  textDecoration: 'none',
-  color: theme.palette.primary.main,
-  padding: theme.spacing(1),
-  border: `1px solid ${theme.palette.primary.main}`,
-  borderRadius: theme.shape.borderRadius,
-  '&:hover': {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-  },
-}));
+const AddButtonLink = styled(Link)<{ disabled?: boolean }>(
+  ({ theme, disabled }: { theme: Theme; disabled?: boolean }) => ({
+    position: 'relative',
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    padding: theme.spacing(1),
+    border: `1px solid ${theme.palette.primary.main}`,
+    borderRadius: theme.shape.borderRadius,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.common.white,
+    },
+    ...(disabled && {
+      backgroundColor: theme.palette.grey[300],
+      color: theme.palette.text.primary,
+      pointerEvents: 'none',
+      '&:hover': {
+        backgroundColor: theme.palette.grey[300],
+        borderColor: theme.palette.grey[300],
+        color: theme.palette.text.primary,
+      },
+    }),
+    ...(disabled && {
+      pointerEvents: 'none',
+      '&::after': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'rgba(255, 255, 255, 0.7)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: theme.shape.borderRadius,
+      },
+    }),
+  })
+);
 
-const StyledTableRow = styled(TableRow)({
+const StyledTableRow = styled(TableRow)(({ theme, index }) => ({
   '&:hover': {
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
   },
-});
+  backgroundColor: index % 2 === 0 ? 'white' : 'rgba(0, 0, 0, 0.04)',
+}));
 
 const EnhancedTableHead = styled(TableHead)(({ theme }) => ({
   boxShadow: '0px 3px 10px rgba(0, 0, 0, 0.1)',
@@ -80,11 +111,13 @@ const GenericTable = <T extends Record<string, unknown>>({
   addButtonLabel,
   actionButtons,
   additionalColumn,
+  loadInProgress = false,
 }: GenericTableProps<T> & {
   addButtonLink?: string;
   addButtonLabel?: string;
   actionButtons?: ActionButton[];
   additionalColumn?: AdditionalColumn<T>;
+  loadInProgress: boolean;
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -138,7 +171,17 @@ const GenericTable = <T extends Record<string, unknown>>({
         </Grid>
         {addButtonLabel && addButtonLink && (
           <Grid item>
-            <AddButtonLink to={addButtonLink}>{addButtonLabel}</AddButtonLink>
+            <AddButtonLink
+              to={addButtonLink}
+              disabled={isLoading || loadInProgress}
+            >
+              {(isLoading || loadInProgress) && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Loader color="blue" size={30} />
+                </div>
+              )}
+              {addButtonLabel}
+            </AddButtonLink>
           </Grid>
         )}
       </Grid>
@@ -173,8 +216,8 @@ const GenericTable = <T extends Record<string, unknown>>({
                 </TableCell>
               </StyledTableRow>
             ) : (
-              data?.map((item) => (
-                <StyledTableRow key={String(item.id)}>
+              data?.map((item, index) => (
+                <StyledTableRow key={String(item.id)} index={index}>
                   {additionalColumn && (
                     <TableCell>
                       {additionalColumn.type === 'radio' && (
@@ -208,10 +251,12 @@ const GenericTable = <T extends Record<string, unknown>>({
                   ))}
                   {actionButtons && (
                     <TableCell>
-                      {actionButtons?.map((button, index) => (
+                      {actionButtons?.map((button) => (
                         <StyledIcon
+                          title={button.title}
                           // eslint-disable-next-line react/no-array-index-key
-                          key={index}
+                          key={button.title}
+                          disabled={button.disabled || isLoading}
                           onClick={() => button.onClick(item.id as number)}
                         >
                           {button.icon}
