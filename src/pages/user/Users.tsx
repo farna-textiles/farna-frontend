@@ -72,6 +72,7 @@ const Users = () => {
           addButtonLink="/add"
           addButtonLabel="Add User"
           additionalColumn={additionalColumn}
+          loadInProgress={false}
         />
       </Box>
     </Box>

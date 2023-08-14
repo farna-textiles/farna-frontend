@@ -72,6 +72,7 @@ const Customers = () => {
           actionButtons={actionButtons}
           addButtonLink="/customer"
           addButtonLabel="Create Customer"
+          loadInProgress={deleteCustomerMutation.isLoading}
         />
       </Box>
     </Box>
