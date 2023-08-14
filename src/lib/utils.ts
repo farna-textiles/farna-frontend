@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { toast } from 'react-toastify';
 import { ApiFunction } from '../interfaces';
+import { userInfo } from '../services/authService';
 
 export const notifySuccess = (text: string) =>
   toast.success(text, { theme: 'light' });
@@ -16,6 +17,9 @@ export const handleApiCall = async <T>(
     const response = await apiFunction(url, data);
     return response.data;
   } catch (error: any) {
+    if (error.code === 'ERR_BAD_REQUEST' && !userInfo()) {
+      // redirect to sign in
+    }
     throw error.response.data;
   }
 };

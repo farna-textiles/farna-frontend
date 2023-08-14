@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import Edit from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Typography } from '@mui/material';
@@ -43,13 +43,17 @@ const Products = () => {
     () => [
       {
         icon: <Edit />,
+        title: 'Edit',
         onClick: (id: number) => navigate(`/products/${id}/edit`),
+        disabled: deleteProductMutation.isLoading,
       },
       {
         icon: <DeleteIcon />,
         onClick: (id: number) => {
           deleteProductMutation.mutateAsync(id);
         },
+        title: 'Delete',
+        disabled: deleteProductMutation.isLoading,
       },
     ],
     [deleteProductMutation, navigate]
@@ -70,6 +74,7 @@ const Products = () => {
             actionButtons={actionButtons}
             addButtonLink="/product/new"
             addButtonLabel="Create Product"
+            loadInProgress={deleteProductMutation.isLoading}
           />
         </Box>
       </>

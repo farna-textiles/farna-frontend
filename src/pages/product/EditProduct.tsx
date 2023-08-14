@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, TextField, Grid, Modal, Box, Typography } from '@mui/material';
+import { TextField, Grid, Modal, Box, Typography } from '@mui/material';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import AddIcon from '@mui/icons-material/Add';
@@ -20,6 +20,7 @@ import { getAllEndUses } from '../../api/endUserApi';
 import useCreateEndUse from '../../hooks/useEndUse';
 import { userInfo } from '../../services/authService';
 import { useProduct, useUpdateProduct } from '../../hooks/useProduct';
+import CustomButton from '../../components/elements/CustomButton';
 
 const validationSchema = Yup.object().shape({
   lotNo: Yup.string()
@@ -44,7 +45,9 @@ const EditProduct = () => {
   const [selectedOptions, setSlectedOptions] = useState<EndUseOption[]>([]);
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
-
+  const [multiselectOptions, setMultiselectOptions] = useState<EndUseOption[]>(
+    []
+  );
   const endUseMutation = useCreateEndUse();
   const updateProductMutation = useUpdateProduct();
 
@@ -66,6 +69,7 @@ const EditProduct = () => {
         if (lastPage.length === 0) return undefined;
         return allPages.length + 1;
       },
+      suspense: false,
     }
   );
 
@@ -92,6 +96,28 @@ const EditProduct = () => {
     return () => {};
   }, [fetchNextPage, hasNextPage]);
 
+  useEffect(() => {
+    if (flatEndUses) {
+      const newOptions = flatEndUses.map((item: EndUse) => ({
+        name: item.name,
+        value: item.id || -1,
+      }));
+
+      setMultiselectOptions(newOptions);
+    }
+  }, [flatEndUses]);
+
+  useEffect(() => {
+    const newOptions =
+      productData?.endUses?.map((endUse: EndUse) => {
+        return {
+          name: endUse.name,
+          value: endUse.id || 0,
+        };
+      }) || [];
+    setSlectedOptions(newOptions);
+  }, [productData?.endUses]);
+
   const handleUpdate = async (values: Product) => {
     const data = {
       ...values,
@@ -102,6 +128,12 @@ const EditProduct = () => {
     if (id) {
       await updateProductMutation.mutateAsync([+id, data as ProductUpdateData]);
       navigate(`/products`);
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
     }
   };
 
@@ -173,7 +205,10 @@ const EditProduct = () => {
         className="flex justify-center items-center"
       >
         <div className="md:w-1/2 w-[90%] bg-white py-4 px-8 rounded-md outline-none">
-          <CreateUserEnd trigger={handleCreateEndUse} />
+          <CreateUserEnd
+            trigger={handleCreateEndUse}
+            isLoading={endUseMutation.isLoading}
+          />
         </div>
       </Modal>
 
@@ -183,7 +218,7 @@ const EditProduct = () => {
         validationSchema={validationSchema}
       >
         {() => (
-          <Form>
+          <Form onKeyDown={handleKeyDown}>
             <Grid container spacing={2}>
               <div className="flex flex-col flex-1 py-4 pl-4 space-y-4">
                 {formFields.map((field) => (
@@ -207,10 +242,7 @@ const EditProduct = () => {
                 <div className="flex spaxe-x-2 justify-between items-center">
                   <div className="w-[90%]">
                     <Multiselect
-                      options={flatEndUses?.map((item: EndUse) => ({
-                        name: item.name,
-                        value: item.id,
-                      }))}
+                      options={multiselectOptions}
                       displayValue="name"
                       showCheckbox
                       placeholder="Select EndUse"
@@ -243,9 +275,13 @@ const EditProduct = () => {
               </div>
             </Grid>
             <Grid item xs={12} style={{ textAlign: 'right' }}>
-              <Button type="submit" variant="contained" color="primary">
-                Update
-              </Button>
+              <CustomButton
+                type="submit"
+                disabled={updateProductMutation.isLoading}
+                isLoading={updateProductMutation.isLoading}
+              >
+                Save & Exit
+              </CustomButton>
             </Grid>
           </Form>
         )}

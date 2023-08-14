@@ -1,20 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  Button,
-  TextField,
-  Grid,
-  Modal,
-  Box,
-  Typography,
-  styled,
-} from '@mui/material';
+import { TextField, Grid, Modal, Box, Typography } from '@mui/material';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import AddIcon from '@mui/icons-material/Add';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Multiselect from 'multiselect-react-dropdown';
 import { debounce } from 'lodash';
-import { Loader } from '@mantine/core';
 import CreateUserEnd from './CreateEndUse';
 import { EndUse, EndUseOption, Product } from '../../interfaces';
 import { notifyError } from '../../lib/utils';
@@ -22,6 +13,7 @@ import { getAllEndUses } from '../../api/endUserApi';
 import useCreateEndUse from '../../hooks/useEndUse';
 import { userInfo } from '../../services/authService';
 import { useCreateProduct } from '../../hooks/useProduct';
+import CustomButton from '../../components/elements/CustomButton';
 
 const validationSchema = Yup.object().shape({
   lotNo: Yup.string()
@@ -36,45 +28,6 @@ const validationSchema = Yup.object().shape({
     .matches(/^[a-zA-Z0-9]+$/, 'Invalid No of Filaments'),
   luster: Yup.string().required('Luster is required'),
 });
-
-const CustomButton = styled(Button)(({ theme, disabled }) => ({
-  position: 'relative',
-  textDecoration: 'none',
-  color: theme.palette.primary.main,
-  padding: theme.spacing(1),
-  border: `1px solid ${theme.palette.primary.main}`,
-  borderRadius: theme.shape.borderRadius,
-  '&:hover': {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-  },
-  ...(disabled && {
-    backgroundColor: theme.palette.grey[300],
-    color: theme.palette.text.primary,
-    pointerEvents: 'none',
-    '&:hover': {
-      backgroundColor: theme.palette.grey[300],
-      borderColor: theme.palette.grey[300],
-      color: theme.palette.text.primary,
-    },
-  }),
-  ...(disabled && {
-    pointerEvents: 'none',
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      background: 'rgba(255, 255, 255, 0.7)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: theme.shape.borderRadius,
-    },
-  }),
-}));
 
 const CreateProduct = () => {
   const initialValue: Product = {
@@ -147,7 +100,7 @@ const CreateProduct = () => {
     if (flatEndUses) {
       const newOptions = flatEndUses.map((item: EndUse) => ({
         name: item.name,
-        value: item.id?.toString() || '',
+        value: item.id || -1,
       }));
 
       setMultiselectOptions(newOptions);
@@ -216,6 +169,12 @@ const CreateProduct = () => {
     handleClose();
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -246,7 +205,7 @@ const CreateProduct = () => {
         validationSchema={validationSchema}
       >
         {() => (
-          <Form>
+          <Form onKeyDown={handleKeyDown}>
             <Grid container spacing={2}>
               <div className="flex flex-col flex-1 py-4 pl-4 space-y-4">
                 {formFields.map((field) => (
@@ -296,13 +255,9 @@ const CreateProduct = () => {
               <CustomButton
                 type="submit"
                 disabled={createProductMutation.isLoading}
+                isLoading={createProductMutation.isLoading}
               >
-                {createProductMutation.isLoading && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Loader color="white" />
-                  </div>
-                )}
-                Create
+                Save & Exit
               </CustomButton>
             </Grid>
           </Form>
