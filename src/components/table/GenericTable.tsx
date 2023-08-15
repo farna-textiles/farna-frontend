@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Table,
@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Loader } from '@mantine/core';
+import { throttle } from 'lodash';
 import {
   ActionButton,
   AdditionalColumn,
@@ -130,6 +131,14 @@ const GenericTable = <T extends Record<string, unknown>>({
     }
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const setSearchTermThrottled = useCallback(
+    throttle((value: string) => {
+      setSearchQuery(value);
+    }, 300),
+    []
+  );
+
   const data = responseData?.data;
   const total = responseData?.total;
 
@@ -167,7 +176,7 @@ const GenericTable = <T extends Record<string, unknown>>({
     <Container>
       <Grid container justifyContent="space-between" spacing={8}>
         <Grid item>
-          <SearchBar onSearch={setSearchQuery} />
+          <SearchBar onSearch={setSearchTermThrottled} />
         </Grid>
         {addButtonLabel && addButtonLink && (
           <Grid item>
@@ -251,11 +260,11 @@ const GenericTable = <T extends Record<string, unknown>>({
                   ))}
                   {actionButtons && (
                     <TableCell>
-                      {actionButtons?.map((button) => (
+                      {actionButtons?.map((button, buttonsIndex) => (
                         <StyledIcon
                           title={button.title}
                           // eslint-disable-next-line react/no-array-index-key
-                          key={button.title}
+                          key={buttonsIndex}
                           disabled={button.disabled || isLoading}
                           onClick={() => button.onClick(item.id as number)}
                         >
