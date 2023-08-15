@@ -165,10 +165,6 @@ const EditProduct = () => {
     },
   ];
 
-  const SaveSelectOption = (values: EndUseOption[]) => {
-    setSlectedOptions([...values]);
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -187,6 +183,11 @@ const EditProduct = () => {
     setSearchTerm(value);
     refetch();
   }, 300);
+
+  const SaveSelectOption = (values: EndUseOption[]) => {
+    setSearchTermDebounced('');
+    setSlectedOptions([...values]);
+  };
 
   const handleOpen = () => {
     setOpen(true);
