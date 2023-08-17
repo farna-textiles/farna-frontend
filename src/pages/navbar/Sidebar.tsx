@@ -39,8 +39,8 @@ const mockdata = [
     label: 'Product Orders',
     icon: IconCalendarStats,
     links: [
-      { label: 'All Orders', link: '/allorders' },
-      { label: 'Recent Orders', link: '/route?' },
+      { label: 'Create Orders', link: '/order' },
+      { label: 'Recent Orders', link: '/recent-order' },
     ],
   },
 

@@ -12,7 +12,8 @@ import CreateCustomer from '../pages/customer/CreateCustomer';
 import EditCustomer from '../pages/customer/EditCustomer';
 import ShowCustomer from '../pages/customer/ShowCustomer';
 import Products from '../pages/product/Products';
-import AllOrder from '../pages/productOrder/allOrder';
+import RecentOrders from '../pages/productOrder/recentOrders';
+import CreateOrder from '../pages/productOrder/CreateOrder';
 
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
@@ -142,10 +143,18 @@ export const AppRoutes: React.FC = () => {
           ),
         },
         {
-          path: '/allorders',
+          path: '/order',
           element: (
-            <AuthRoute path="/allorders">
-              <AllOrder />
+            <AuthRoute path="/order">
+              <CreateOrder />
+            </AuthRoute>
+          ),
+        },
+        {
+          path: '/recent-order',
+          element: (
+            <AuthRoute path="/recent-order">
+              <RecentOrders />
             </AuthRoute>
           ),
         },
