@@ -34,6 +34,14 @@ const mockdata = [
       { label: 'Create Product', link: '/product/new' },
     ],
   },
+  {
+    label: 'Product Orders',
+    icon: IconCalendarStats,
+    links: [
+      { label: 'Create Orders', link: '/order' },
+      { label: 'Recent Orders', link: '/recent-order' },
+    ],
+  },
   { label: 'Analytics', icon: IconPresentationAnalytics },
   { label: 'Users', icon: IconFileAnalytics, link: '/users' },
   { label: 'Settings', icon: IconAdjustments },
