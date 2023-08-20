@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable import/no-extraneous-dependencies */
 import { InputHTMLAttributes, ReactNode } from 'react';
 import { Schema } from 'yup';
@@ -10,6 +11,8 @@ export interface FormInputProps {
 export interface FormButtonProps {
   text: string;
 }
+
+
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   type: string;
@@ -42,6 +45,8 @@ export interface ChangeEvent {
     value: any;
   };
 }
+
+
 
 export interface AuthRouteProps {
   path: string;
@@ -116,6 +121,14 @@ export interface Contact {
   contactNumber: string;
   address?: Address;
   isMainContact?: boolean;
+}
+export interface Product {
+  id: number;
+  lotNo: string;
+  denier: number;
+  NoOfFilaments: number;
+  luster: string;
+  userId: number;
 }
 
 export interface Customer {

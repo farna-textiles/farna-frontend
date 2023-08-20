@@ -143,8 +143,9 @@ const TableSort = <T extends RowData>({ data }: TableSortProps<T>) => {
       <Table
         horizontalSpacing="md"
         verticalSpacing="xs"
+        sx={{ minWidth: 700 }}
         miw={700}
-        sx={{ tableLayout: 'fixed' }}
+      
       >
         <thead>
           <tr>

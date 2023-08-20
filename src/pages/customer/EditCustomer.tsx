@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable import/no-extraneous-dependencies */
 import { Box, Button, TextField, Typography, styled } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -231,50 +232,50 @@ const EditCustomer = () => {
 
   return (
     <Box className="p-4 sm:p-6 md:p-8 lg:p-10 overflow-hidden">
-    <Typography variant="h4" component="div" className="mb-4">
-      Edit Customer
-    </Typography>
-    <TextField
-      label="Business Name"
-      value={editedCustomer.businessName}
-      onChange={handleBusinessNameChange}
-      variant="outlined"
-      size="small"
-      className="w-full"
-    />
-  
-    <hr className="my-4 sm:my-8" />
-    {(selectedContact || isAddingContact) && (
-      <EditModal<Contact & Record<string, any>>
-        contact={selectedContact as Contact}
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        onSave={handleContactSave}
-        fields={contactFields}
-        validationSchema={contactValidationSchema}
+      <Typography variant="h4" component="div" className="mb-4">
+        Edit Customer
+      </Typography>
+      <TextField
+        label="Business Name"
+        value={editedCustomer.businessName}
+        onChange={handleBusinessNameChange}
+        variant="outlined"
+        size="small"
+        className="w-full"
       />
-    )}
-    <Box className="my-2">
-      <DataTable<Contact>
-        data={editedCustomer.contacts}
-        columns={columns}
-        actionButtons={actionButtons}
-        additionalColumn={mainContactRadioColumn}
-        customButtonLabel="Add New Contact"
-        onCustomButtonClick={handleAddContact}
-        isLoading={updateCustomerMutation.isLoading}
-      />
+
+      <hr className="my-4 sm:my-8" />
+      {(selectedContact || isAddingContact) && (
+        <EditModal<Contact & Record<string, any>>
+          contact={selectedContact as Contact}
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
+          onSave={handleContactSave}
+          fields={contactFields}
+          validationSchema={contactValidationSchema}
+        />
+      )}
+      <Box className="my-2">
+        <DataTable<Contact>
+          data={editedCustomer.contacts}
+          columns={columns}
+          actionButtons={actionButtons}
+          additionalColumn={mainContactRadioColumn}
+          customButtonLabel="Add New Contact"
+          onCustomButtonClick={handleAddContact}
+          isLoading={updateCustomerMutation.isLoading}
+        />
+      </Box>
+      <Box className="flex justify-end mt-4 sm:mt-6">
+        <CustomButton
+          onClick={handleSaveButtonClick}
+          disabled={updateCustomerMutation.isLoading}
+        >
+          {updateCustomerMutation.isLoading && <Loader />}
+          Save
+        </CustomButton>
+      </Box>
     </Box>
-    <Box className="flex justify-end mt-4 sm:mt-6">
-      <CustomButton
-        onClick={handleSaveButtonClick}
-        disabled={updateCustomerMutation.isLoading}
-      >
-        {updateCustomerMutation.isLoading && <Loader />}
-        Save
-      </CustomButton>
-    </Box>
-  </Box>
   );
 };
 

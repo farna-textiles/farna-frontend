@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import {
   Table,
@@ -88,19 +89,20 @@ const DataTable = <T extends { id: number }>({
 
   return (
     <Container>
-      <Grid container justifyContent="space-between" spacing={8}>
-        <Grid item>
-          <SearchBar onSearch={setSearchQuery} />
-        </Grid>
-        {customButtonLabel && onCustomButtonClick && (
-          <Grid item>
-            <CustomButton onClick={onCustomButtonClick} disabled={isLoading}>
-              {customButtonLabel}
-            </CustomButton>
-          </Grid>
-        )}
+    <Grid container justifyContent="space-between" spacing={2}>
+      <Grid item xs={12} md={6}>
+        <SearchBar onSearch={setSearchQuery} />
       </Grid>
+      {customButtonLabel && onCustomButtonClick && (
+        <Grid item>
+          <CustomButton onClick={onCustomButtonClick} disabled={isLoading}>
+            {customButtonLabel}
+          </CustomButton>
+        </Grid>
+      )}
+    </Grid>
 
+    <div style={{ overflowX: 'auto' }}>
       <Table>
         <TableHead>
           <TableRow>
@@ -179,6 +181,7 @@ const DataTable = <T extends { id: number }>({
             ))}
         </TableBody>
       </Table>
+      </div>
       <TablePagination
         rowsPerPageOptions={[5, 10, 20]}
         component="div"

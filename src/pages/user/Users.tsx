@@ -1,7 +1,7 @@
+/* eslint-disable prettier/prettier */
 import { Box, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
-import './responsiveStyles.css';
 import { useMemo } from 'react';
 import {
   ActionButton,
@@ -64,17 +64,17 @@ const Users = () => {
         details.
       </Typography>
       <Box sx={{ my: 2 }}>
-      <div className="responsive-font">
-  <GenericTable<User>
-    tableName="Users"
-    columns={columns}
-    fetchData={getAllUsers}
-    actionButtons={actionButtons}
-    addButtonLink="/add"
-    addButtonLabel="Add User"
-    additionalColumn={additionalColumn}
-  />
-</div>
+        <div className="responsive-font">
+          <GenericTable<User>
+            tableName="Users"
+            columns={columns}
+            fetchData={getAllUsers}
+            actionButtons={actionButtons}
+            addButtonLink="/add"
+            addButtonLabel="Add User"
+            additionalColumn={additionalColumn}
+          />
+        </div>
       </Box>
     </Box>
   );

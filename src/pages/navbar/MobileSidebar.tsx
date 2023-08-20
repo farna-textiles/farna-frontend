@@ -15,7 +15,6 @@ import {
   IconGauge,
   IconPresentationAnalytics,
   IconFileAnalytics,
-  IconBrandGoogleAnalytics,
   IconAdjustments,
   IconLogout,
   IconLock,

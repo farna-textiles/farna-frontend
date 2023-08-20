@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable import/no-extraneous-dependencies */
 import { Box, Button, TextField, Typography, styled } from '@mui/material';
 import { ChangeEvent, useMemo, useState } from 'react';
@@ -223,7 +224,7 @@ const CreateCustomer = () => {
 
       <hr className="my-12" />
 
-      {/* Wrap DataTable in a container */}
+
       <Box sx={{ overflowX: 'auto' }}>
         {(selectedContact || selectedContactIndex) && (
           <EditModal<Contact & Record<string, any>>

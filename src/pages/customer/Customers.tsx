@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+/* eslint-disable prettier/prettier */
+import  { useMemo } from 'react';
 import { Box, Typography, Grid } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
@@ -59,30 +60,28 @@ const Customers = () => {
 
   return (
     <Box className="m-4">
-    <Typography variant="h4" component="div" className="mb-4">
-      Customers
-    </Typography>
-    <hr className="mb-4" />
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <div className="overflow-x-auto">
-          <div className="min-w-full">
-    
-            <GenericTable<User>
-              tableName="Customers"
-              columns={columns}
-              fetchData={getAllCustomers}
-              actionButtons={actionButtons}
-              addButtonLink="/customer"
-              addButtonLabel="Create Customer"
-            />
+      <Typography variant="h4" component="div" className="mb-4">
+        Customers
+      </Typography>
+      <hr className="mb-4" />
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <div className="overflow-x-auto">
+            <div className="min-w-full">
+              <GenericTable<User>
+                tableName="Customers"
+                columns={columns}
+                fetchData={getAllCustomers}
+                actionButtons={actionButtons}
+                addButtonLink="/customer"
+                addButtonLabel="Create Customer"
+              />
+            </div>
           </div>
-        </div>
+        </Grid>
       </Grid>
-    </Grid>
-  </Box>
-  
-    );
+    </Box>
+  );
 };
 
 export default Customers;

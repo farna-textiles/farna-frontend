@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { lazy } from 'react';
 import { useRoutes } from 'react-router-dom';
@@ -117,6 +118,15 @@ export const AppRoutes: React.FC = () => {
           ),
         },
         {
+          path: '/products',
+          element: (
+            <AuthRoute path="/products">
+              <Products />
+            </AuthRoute>
+          ),
+        },
+
+        {
           path: '/customers/:id/edit',
           element: (
             <AuthRoute path="/customers/:id/edit">
@@ -124,6 +134,23 @@ export const AppRoutes: React.FC = () => {
             </AuthRoute>
           ),
         },
+        {
+          path: '/editproduct/',
+          element: (
+            <AuthRoute path="/editproduct/">
+              <EditProduct />
+            </AuthRoute>
+          ),
+        },
+        {
+          path: '/createproduct/',
+          element: (
+            <AuthRoute path="/createproduct/">
+              <CreateProduct />
+            </AuthRoute>
+          ),
+        },
+
         {
           path: '/customers/:id',
           element: (
@@ -140,6 +167,7 @@ export const AppRoutes: React.FC = () => {
             </AuthRoute>
           ),
         },
+
         { path: '*', element: <PageNotFound /> },
       ],
     },

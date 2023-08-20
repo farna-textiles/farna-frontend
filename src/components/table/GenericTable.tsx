@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -101,17 +102,17 @@ const GenericTable = <T extends Record<string, unknown>>({
   return (
     <Container>
       <Grid container justifyContent="space-between" spacing={8}>
-        <Grid item>
-          <SearchBar onSearch={setSearchQuery} />
-        </Grid>
-        {addButtonLabel && addButtonLink && (
-          <Grid item>
-            <AddButtonLink to={addButtonLink}>{addButtonLabel}</AddButtonLink>
-          </Grid>
-        )}
+    <Grid item className="mb-2 md:mb-0"> {/* Adjust margin for spacing */}
+      <SearchBar onSearch={setSearchQuery} />
+    </Grid>
+    {addButtonLabel && addButtonLink && (
+      <Grid item>
+        <AddButtonLink to={addButtonLink}>{addButtonLabel}</AddButtonLink>
       </Grid>
+    )}
+  </Grid>
       <div className="overflow-x-auto">
-      <Table className="overflow-x-auto">
+      <Table className="min-w-full md:w-full sm:w-full"> 
         <TableHead>
           <TableRow>
             {additionalColumn && (

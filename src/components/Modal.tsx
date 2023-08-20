@@ -55,6 +55,7 @@ const EditModal = <T extends Record<string, unknown>>({
                       variant="outlined"
                       fullWidth
                       margin="normal"
+                      className
                       error={touch && !!error}
                       helperText={touch && error}
                     />
