@@ -70,7 +70,6 @@ const CreateOrder: React.FC = () => {
   const { data: currencyUnits } = useCurrencyUnits();
   const { data: paymentMethods } = usePaymentMethods();
   const useCreateOrderMutation = useCraeteOrder();
-
   const formik = useFormik({
     initialValues: {
       salesReceiptDate: new Date().toISOString().split('T')[0],
