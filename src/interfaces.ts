@@ -269,3 +269,15 @@ export type PaymentMethod = {
   id: number;
   name: string;
 };
+
+export interface Order {
+  id: number;
+  salesReceiptDate: string;
+  validity: string;
+  shipmentType: string;
+  PI_number: string;
+  paymentType: PaymentMethod;
+  currencyUnit: CurrencyUnit;
+  customer: Customer;
+  orderProducts: ProductOrderType[];
+}

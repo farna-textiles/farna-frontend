@@ -1,84 +1,71 @@
-import {
-  Table,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Paper,
-} from '@mui/material';
+import { useMemo } from 'react';
+import Edit from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, Typography } from '@mui/material';
+import { useNavigate } from 'react-router';
+import { ActionButton, TableColumn, Order } from '../../interfaces';
+import GenericTable from '../../components/table/GenericTable';
+import { useDeleteProduct } from '../../hooks/useProduct';
+import { getAllOrders } from '../../api';
 
-const RecentOrders = () => {
-  const recentOrdersData = [
-    {
-      lotNo: '123',
-      diner: 'Medium',
-      type: 'Type A',
-      noOfFlament: 5,
-      luster: 'High',
-      endUse: 'Clothing',
-      quantity: 10,
-      rate: 25,
-    },
-    {
-      lotNo: '124',
-      diner: 'Thick',
-      type: 'Type B',
-      noOfFlament: 8,
-      luster: 'Medium',
-      endUse: 'Furniture',
-      quantity: 20,
-      rate: 30,
-    },
-  ];
+const Products = () => {
+  const deleteProductMutation = useDeleteProduct();
 
-  const fieldMappings = [
-    { key: 'lotNo', label: 'Lot No.' },
-    { key: 'diner', label: 'Diner' },
-    { key: 'type', label: 'Type' },
-    { key: 'noOfFlament', label: 'No of Flament' },
-    { key: 'luster', label: 'Luster' },
-    { key: 'endUse', label: 'End Use' },
-    { key: 'quantity', label: 'Quantity' },
-    { key: 'rate', label: 'Rate' },
-    { key: 'amount', label: 'Amount' },
-  ];
+  const navigate = useNavigate();
+
+  const columns: TableColumn<Order>[] = useMemo(
+    () => [
+      { field: 'id', label: 'Order ID' },
+      { field: 'salesReceiptDate', label: 'Sales Receipt Date' },
+      { field: 'validity', label: 'Validity Date' },
+      { field: 'shipmentType', label: 'Shipment Type' },
+      { field: 'PI_number', label: 'PI Number' },
+      // ... You can continue this pattern for other fields if needed
+    ],
+    []
+  );
+
+  const actionButtons: ActionButton[] = useMemo(
+    () => [
+      {
+        icon: <Edit />,
+        title: 'Edit',
+        onClick: (id: number) => navigate(`/products/${id}/edit`),
+        disabled: deleteProductMutation.isLoading,
+      },
+      {
+        icon: <DeleteIcon />,
+        onClick: (id: number) => {
+          deleteProductMutation.mutateAsync(id);
+        },
+        title: 'Delete',
+        disabled: deleteProductMutation.isLoading,
+      },
+    ],
+    [deleteProductMutation, navigate]
+  );
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-semibold mb-2 sm:text-2xl">Recent orders</h1>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {fieldMappings.map((field) => (
-                <TableCell key={field.key} sx={{ fontWeight: 'bold' }}>
-                  {field.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {recentOrdersData.map((order) => (
-              <TableRow key={order.lotNo}>
-                {fieldMappings.map((field) => (
-                  <TableCell
-                    key={field.key}
-                    sx={{ borderBottom: 'none', fontSize: '14px' }}
-                  >
-                    {order[field.key]}
-                    {field.key === 'amount' && (
-                      <div>{order.quantity * order.rate}</div>
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+    <Box sx={{ m: 4 }}>
+      <Typography variant="h4" component="div" gutterBottom>
+        Recent Order
+      </Typography>
+      <>
+        <hr className="mb-12" />
+        <Box sx={{ my: 2 }}>
+          <GenericTable<Order>
+            tableName="Orders"
+            columns={columns}
+            fetchData={getAllOrders}
+            // actionButtons={actionButtons}
+            addButtonLink="/order/new"
+            addButtonLabel="Create Product Order"
+            loadInProgress={deleteProductMutation.isLoading}
+          />
+        </Box>
+      </>
+    </Box>
   );
 };
 
-export default RecentOrders;
+export default Products;

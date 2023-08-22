@@ -29,5 +29,6 @@ export const API_URLS = {
   },
   ORDER_METHODS: {
     CREATE: '/orders',
+    ALL: '/orders',
   },
 };

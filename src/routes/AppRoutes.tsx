@@ -143,9 +143,9 @@ export const AppRoutes: React.FC = () => {
           ),
         },
         {
-          path: '/order',
+          path: '/order/new',
           element: (
-            <AuthRoute path="/order">
+            <AuthRoute path="/order/new">
               <CreateOrder />
             </AuthRoute>
           ),
