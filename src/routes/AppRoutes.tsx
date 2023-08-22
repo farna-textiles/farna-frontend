@@ -151,9 +151,9 @@ export const AppRoutes: React.FC = () => {
           ),
         },
         {
-          path: '/recent-order',
+          path: '/orders',
           element: (
-            <AuthRoute path="/recent-order">
+            <AuthRoute path="/orders">
               <RecentOrders />
             </AuthRoute>
           ),

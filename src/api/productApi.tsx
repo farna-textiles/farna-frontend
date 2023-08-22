@@ -19,6 +19,21 @@ export const getAllProducts = async (
   return response.data;
 };
 
+export const getProducts = async (
+  page: number,
+  searchQuery: string,
+  pageSize = 5
+): Promise<PaginatedResponse<Product>> => {
+  const response = await api.get(API_URLS.Products.ALL_PRODUCTS, {
+    params: {
+      limit: pageSize,
+      page,
+      searchTerm: searchQuery,
+    },
+  });
+  return response.data;
+};
+
 export const deleteProduct = async (id: number, data = {}) => {
   const apiUrl = API_URLS.Products.DELETE_PRODUCT.replace(':id', String(id));
   return handleApiCall(api.delete, apiUrl, data);

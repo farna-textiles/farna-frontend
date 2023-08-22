@@ -83,6 +83,14 @@ export interface Product {
   userId: string;
 }
 
+export type ProductOrderType = Omit<Product, 'id'> & {
+  id: number;
+  quantity: number;
+  rate: number;
+  endUses: EndUse[];
+  [key: string]: any;
+};
+
 export interface ProductData extends Product {
   endUses: EndUse[];
 }
@@ -237,3 +245,27 @@ export interface MultiSelectProps<T = string> {
   newOptions?: Option<T>[];
   trigger: (event: T[]) => void;
 }
+
+export interface InfiniteSearchDropdownProps<T> {
+  items: T[];
+  hasNextPage: boolean;
+  fetchNextPage: () => void;
+  onSelect: (item: T) => void;
+  itemToString: (item: T) => string;
+  selectedItem?: T;
+  height?: number;
+  width?: string | number;
+  itemSize?: number;
+}
+
+export type CurrencyUnit = {
+  id: number;
+  name: string;
+  code: string;
+  symbol: string;
+};
+
+export type PaymentMethod = {
+  id: number;
+  name: string;
+};
