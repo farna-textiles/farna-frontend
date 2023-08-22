@@ -21,4 +21,13 @@ export const API_URLS = {
     ALL: '/end-use',
     CREATE: '/end-use',
   },
+  CURRENCY_UNITS: {
+    ALL: '/currency-unit',
+  },
+  PAYMENT_METHODS: {
+    ALL: '/payment-types',
+  },
+  ORDER_METHODS: {
+    CREATE: '/orders',
+  },
 };
