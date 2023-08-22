@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { notifyError, notifySuccess } from '../lib/utils';
 import { ErrorResponse } from '../interfaces';
-import createOrder from '../api/orderApi';
+import { createOrder } from '../api';
 
 const useCraeteOrder = () => {
   const queryClient = useQueryClient();
@@ -10,7 +10,7 @@ const useCraeteOrder = () => {
   return useMutation(createOrder, {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries(['orders']);
-      navigate(`/orders/${data.id}`);
+      navigate(`/orders`);
       notifySuccess('Product Order created successfully');
     },
 
