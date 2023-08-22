@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
 import { AppRoutes } from './routes/AppRoutes';
 import 'react-toastify/dist/ReactToastify.css';
+import getCurrencyUnits from './api/currencyUnitApi';
 
 const App: React.FC = () => {
   const queryClient = new QueryClient({
@@ -13,6 +14,11 @@ const App: React.FC = () => {
         suspense: true,
       },
     },
+  });
+
+  queryClient.prefetchQuery({
+    queryKey: ['currencyUnits'],
+    queryFn: getCurrencyUnits,
   });
   return (
     <BrowserRouter>
