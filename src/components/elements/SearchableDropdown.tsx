@@ -114,7 +114,7 @@ const SearchDropdown = <T extends { id: number }>({
                     </ListItemButton>
                   </ListItem>
                 ))}
-                {isFetchingNextPage && (
+                {isFetchingNextPage && hasNextPage && (
                   <ListItem>
                     <CircularProgress size={24} />
                   </ListItem>
