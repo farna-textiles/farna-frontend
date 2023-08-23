@@ -70,6 +70,7 @@ const CreateOrder: React.FC = () => {
   const { data: currencyUnits } = useCurrencyUnits();
   const { data: paymentMethods } = usePaymentMethods();
   const useCreateOrderMutation = useCraeteOrder();
+
   const formik = useFormik({
     initialValues: {
       salesReceiptDate: new Date().toISOString().split('T')[0],
@@ -100,6 +101,13 @@ const CreateOrder: React.FC = () => {
       }
     },
   });
+
+  const handleProductRemove = (lotNo: string) => {
+    const updatedProducts = selectedProducts.filter(
+      (product) => product.lotNo !== lotNo
+    );
+    setSelectedProducts(updatedProducts);
+  };
 
   const selectedCurrencySymbol = useMemo(() => {
     return currencyUnits.find(
@@ -343,6 +351,9 @@ const CreateOrder: React.FC = () => {
                     {field.label}
                   </TableCell>
                 ))}
+                <TableCell align="center" sx={headerCellStyle}>
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -353,6 +364,7 @@ const CreateOrder: React.FC = () => {
                   product={product}
                   currency={selectedCurrencySymbol}
                   onProductUpdate={handleProductUpdate}
+                  onProductRemove={handleProductRemove}
                 />
               ))}
             </TableBody>
