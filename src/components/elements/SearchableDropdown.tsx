@@ -39,8 +39,13 @@ const SearchDropdown = <T extends { id: number }>({
       queryKey: [`${type}Search`, inputValue],
       queryFn: ({ pageParam = 1 }) => queryFn(pageParam, inputValue),
       getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.length === 0) return undefined;
-        return allPages.length + 1;
+        const totalPages = Math.ceil(lastPage.total / 5);
+        const currentPage = allPages.length;
+
+        if (currentPage < totalPages) {
+          return currentPage + 1;
+        }
+        return undefined;
       },
       suspense: false,
       keepPreviousData: true,
@@ -119,11 +124,11 @@ const SearchDropdown = <T extends { id: number }>({
                     </ListItemButton>
                   </ListItem>
                 ))}
-                {isFetchingNextPage && hasNextPage && (
+                {isFetchingNextPage && hasNextPage ? (
                   <ListItem>
                     <CircularProgress size={24} />
                   </ListItem>
-                )}
+                ) : null}
               </List>
             </Paper>
           </div>
