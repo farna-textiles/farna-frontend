@@ -43,6 +43,7 @@ export const useUpdateOrder = () => {
     {
       onSuccess: async (data) => {
         await queryClient.invalidateQueries(['orders']);
+        await queryClient.invalidateQueries(['order']);
 
         notifySuccess('Order updated successfully');
       },
