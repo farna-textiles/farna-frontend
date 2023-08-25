@@ -21,7 +21,7 @@ const Dashboard = lazy(() => import('../pages/Dashboard'));
 const Profile = lazy(() => import('../pages/Profile'));
 const CreateProduct = lazy(() => import('../pages/product/CreateProduct'));
 const EditProduct = lazy(() => import('../pages/product/EditProduct'));
-
+const EditOrder = lazy(() => import('../pages/productOrder/EditOrder'));
 const PageNotFound = lazy(() => import('../pages/PageNotFound'));
 
 export const AppRoutes: React.FC = () => {
@@ -147,6 +147,14 @@ export const AppRoutes: React.FC = () => {
           element: (
             <AuthRoute path="/order/new">
               <CreateOrder />
+            </AuthRoute>
+          ),
+        },
+        {
+          path: '/orders/:id/edit',
+          element: (
+            <AuthRoute path="/orders/:id/edit">
+              <EditOrder />
             </AuthRoute>
           ),
         },

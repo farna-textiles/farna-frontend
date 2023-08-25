@@ -95,6 +95,25 @@ export interface ProductData extends Product {
   endUses: EndUse[];
 }
 
+export interface OrderUpdateData {
+  id: string;
+  quantity: number;
+  rate: number;
+  product: ProductData;
+  salesReceiptDate?: string;
+  validity?: string;
+  orderProducts?: {
+    productId: number;
+    quantity: number;
+    rate: number;
+  }[];
+  shipmentType?: string;
+  PI_number?: string;
+  paymentTypeId?: number;
+  currencyUnitId?: number;
+  customerId?: number;
+}
+
 export interface ProductUpdateData extends Product {
   endUses: number[];
 }

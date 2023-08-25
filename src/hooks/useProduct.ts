@@ -1,15 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import { updateCustomer } from '../api';
 import { notifyError, notifySuccess } from '../lib/utils';
-import {
-  Customer,
-  ErrorResponse,
-  Product,
-  ProductData,
-  ProductUpdateData,
-} from '../interfaces';
+import { ErrorResponse, Product, ProductUpdateData } from '../interfaces';
 import {
   createProduct,
   deleteProduct,
