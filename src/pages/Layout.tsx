@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './navbar/Sidebar';
 
@@ -19,12 +19,16 @@ const Layout: React.FC = () => {
     };
   }, []);
 
-  const mainDivClassName = isMobile ? 'flex-fill' : 'flex';
+  const mainDivClassName = useMemo(() => {
+    return isMobile ? 'flex-fill' : 'flex';
+  }, [isMobile]);
 
-  const containerStyle = {
-    marginTop: isMobile ? '1px' : '0',
-    marginBottom: isMobile ? '90px' : '0',
-  };
+  const containerStyle = useMemo(() => {
+    return {
+      marginTop: isMobile ? '1px' : '0',
+      marginBottom: isMobile ? '90px' : '0',
+    };
+  }, [isMobile]);
 
   return (
     <div className={mainDivClassName}>

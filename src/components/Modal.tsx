@@ -49,7 +49,6 @@ const CustomModal = <T extends Record<string, unknown>>({
                 const [parent, child] = (field.name as string).split('.');
                 const fieldName = isNestedField ? child : field.name;
 
-                // Assert the type of the touched and errors objects
                 const touchedWithShape = touched as FormikTouched<T>;
                 const errorsWithShape = errors as FormikErrors<T>;
 
