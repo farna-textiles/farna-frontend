@@ -18,10 +18,13 @@ import {
 } from '@mui/material';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import { useParams } from 'react-router';
 import CustomButton from '../../components/elements/CustomButton';
 import {
   CurrencyUnit,
   Customer,
+  Order,
+  OrderUpdateData,
   PaymentMethod,
   ProductOrderType,
 } from '../../interfaces';
@@ -32,7 +35,7 @@ import ProductRow from '../../components/table/productRow';
 import useCurrencyUnits from '../../hooks/useCurrencyUnits';
 import usePaymentMethods from '../../hooks/usePaymentMethods';
 import { notifyError } from '../../lib/utils';
-import { useCraeteOrder } from '../../hooks/useOrder';
+import { useOrder, useUpdateOrder } from '../../hooks/useOrder';
 
 const headerCellStyle = {
   backgroundColor: '#3F9FEB',
@@ -56,12 +59,25 @@ const validationSchema = yup.object({
   customerId: yup.number().required('Customer is required'),
 });
 
-const CreateOrder: React.FC = () => {
+const EditOrder: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const { data: orderData } = useOrder(
+    parseInt(id as string, 10) as number
+  ) as { data: Order };
+
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
-    null
+    orderData.customer
   );
   const [selectedProducts, setSelectedProducts] = useState<ProductOrderType[]>(
-    []
+    orderData.orderProducts.map((orderProduct) => {
+      const { id: productOrderId, quantity, rate, product } = orderProduct;
+      return {
+        id: productOrderId,
+        quantity,
+        rate,
+        ...product,
+      } as ProductOrderType;
+    })
   );
   const handleSelectCustomer = (customer: Customer | null) => {
     setSelectedCustomer(customer);
@@ -69,35 +85,40 @@ const CreateOrder: React.FC = () => {
 
   const { data: currencyUnits } = useCurrencyUnits();
   const { data: paymentMethods } = usePaymentMethods();
-  const useCreateOrderMutation = useCraeteOrder();
+  const useUpdateProductMutation = useUpdateOrder();
 
   const formik = useFormik({
     initialValues: {
-      salesReceiptDate: new Date().toISOString().split('T')[0],
-      validity: new Date().toISOString().split('T')[0],
-      shipmentType: '',
-      PI_number: '',
-      paymentTypeId: null,
-      currencyUnitId: null,
-      customerId: null,
+      salesReceiptDate: orderData.salesReceiptDate,
+      validity: orderData.validity,
+      shipmentType: orderData.shipmentType,
+      PI_number: orderData.PI_number,
+      paymentTypeId: orderData.paymentType.id,
+      currencyUnitId: orderData.currencyUnit.id,
+      customerId: orderData.customer.id,
     },
     validationSchema,
     onSubmit: (values) => {
       if (selectedProducts.length === 0) {
         notifyError('There must be at least one product in the order.');
       } else {
-        useCreateOrderMutation.mutateAsync({
-          ...values,
-          salesReceiptDate: new Date(values.salesReceiptDate).toISOString(),
-          validity: new Date(values.validity).toISOString(),
-          orderProducts: selectedProducts.map((product: ProductOrderType) => {
-            return {
-              productId: product.id,
-              quantity: product.quantity,
-              rate: product.rate,
-            };
-          }),
-        });
+        if (!id) return;
+        useUpdateProductMutation.mutateAsync([
+          +id,
+          {
+            id,
+            ...values,
+            salesReceiptDate: new Date(values.salesReceiptDate).toISOString(),
+            validity: new Date(values.validity).toISOString(),
+            orderProducts: selectedProducts.map((product: ProductOrderType) => {
+              return {
+                productId: product.id,
+                quantity: product.quantity,
+                rate: product.rate,
+              };
+            }),
+          } as OrderUpdateData,
+        ]);
       }
     },
   });
@@ -165,7 +186,9 @@ const CreateOrder: React.FC = () => {
           <CustomButton>Add New Product</CustomButton>
         </div>
 
-        <h2 className="text-xl font-semibold mb-4">Sales Receipt</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          Sales Receipt # {orderData.id}
+        </h2>
         <div className="grid md:grid-cols-2 gap-4 md:gap-8">
           <div>
             <FormControl fullWidth variant="outlined" margin="dense">
@@ -178,6 +201,7 @@ const CreateOrder: React.FC = () => {
                 }}
                 handleOnChange={() => formik.setFieldValue('customerId', null)}
                 placeholder="Search for a customer..."
+                defaultValue={orderData.customer.businessName}
                 itemToString={(customer: Customer) => customer.businessName}
               />
               {formik.touched.customerId && formik.errors.customerId && (
@@ -399,18 +423,10 @@ const CreateOrder: React.FC = () => {
         >
           <Grid item>
             <CustomButton
-              isLoading={useCreateOrderMutation.isLoading}
+              isLoading={useUpdateProductMutation.isLoading}
               onClick={formik.handleSubmit}
             >
-              Save
-            </CustomButton>
-          </Grid>
-          <Grid item>
-            <CustomButton
-              isLoading={useCreateOrderMutation.isLoading}
-              onClick={formik.handleSubmit}
-            >
-              Save and Email
+              Update
             </CustomButton>
           </Grid>
         </Grid>
@@ -419,4 +435,4 @@ const CreateOrder: React.FC = () => {
   );
 };
 
-export default CreateOrder;
+export default EditOrder;
