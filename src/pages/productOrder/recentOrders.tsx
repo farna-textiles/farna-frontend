@@ -30,17 +30,17 @@ const Products = () => {
       {
         icon: <Edit />,
         title: 'Edit',
-        onClick: (id: number) => navigate(`/products/${id}/edit`),
+        onClick: (id: number) => navigate(`/orders/${id}/edit`),
         disabled: deleteProductMutation.isLoading,
       },
-      {
-        icon: <DeleteIcon />,
-        onClick: (id: number) => {
-          deleteProductMutation.mutateAsync(id);
-        },
-        title: 'Delete',
-        disabled: deleteProductMutation.isLoading,
-      },
+      // {
+      //   icon: <DeleteIcon />,
+      //   onClick: (id: number) => {
+      //     deleteProductMutation.mutateAsync(id);
+      //   },
+      //   title: 'Delete',
+      //   disabled: deleteProductMutation.isLoading,
+      // },
     ],
     [deleteProductMutation, navigate]
   );
@@ -57,7 +57,7 @@ const Products = () => {
             tableName="Orders"
             columns={columns}
             fetchData={getAllOrders}
-            // actionButtons={actionButtons}
+            actionButtons={actionButtons}
             addButtonLink="/order/new"
             addButtonLabel="Create Product Order"
             loadInProgress={deleteProductMutation.isLoading}

@@ -16,7 +16,9 @@ interface SearchDropdownProps<T> {
   onSelect: (item: T | null) => void;
   placeholder?: string;
   itemToString: (item: T) => string;
+  handleOnChange?: () => void;
   type: string;
+  defaultValue?: string;
 }
 
 const SearchDropdown = <T extends { id: number }>({
@@ -24,9 +26,11 @@ const SearchDropdown = <T extends { id: number }>({
   onSelect,
   placeholder = 'Search...',
   itemToString,
+  defaultValue,
+  handleOnChange,
   type,
 }: SearchDropdownProps<T>) => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState<string>(defaultValue ?? '');
   const [isFocused, setIsFocused] = useState(false);
   const listRef = useRef<HTMLUListElement | null>(null);
 
@@ -83,6 +87,7 @@ const SearchDropdown = <T extends { id: number }>({
           placeholder={placeholder}
           autoComplete="off"
           onClick={() => {
+            if (handleOnChange) handleOnChange();
             setInputValue('');
           }}
         />
@@ -130,6 +135,8 @@ const SearchDropdown = <T extends { id: number }>({
 
 SearchDropdown.defaultProps = {
   placeholder: 'Search...',
+  defaultValue: '',
+  handleOnChange: () => {},
 };
 
 export default SearchDropdown;
