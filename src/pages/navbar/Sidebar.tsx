@@ -1,9 +1,5 @@
 /* eslint-disable import/order */
 /* eslint-disable react/self-closing-comp */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable prettier/prettier */
 
 import { Navbar, createStyles, rem } from '@mantine/core';
 import {
@@ -20,48 +16,7 @@ import logo from '../../../public/farna-logo.png';
 import LinksGroup from './LinksGroup';
 import UserButton from './UserButton';
 import { User } from '../../interfaces';
-import { useEffect, useState } from 'react';
-
-const mockdata = [
-  { label: 'Dashboard', icon: IconGauge, link: '/' },
-  {
-    label: 'Customers',
-    icon: IconAddressBook,
-    initiallyOpened: false,
-    links: [
-      { label: 'All Customers', link: '/customers' },
-      { label: 'Create Customer', link: '/customer' },
-    ],
-  },
-  {
-    label: 'Products',
-    icon: IconCalendarStats,
-    links: [
-      { label: 'Create Product', link: '/product/new' },
-      { label: 'View Products', link: '/products' },
-    ],
-  },
-  {
-    label: 'Product Orders',
-    icon: IconCalendarStats,
-    links: [
-      { label: 'Create Orders', link: '/order/new' },
-      { label: 'Recent Orders', link: '/orders' },
-    ],
-  },
-  { label: 'Analytics', icon: IconPresentationAnalytics },
-  { label: 'Users', icon: IconFileAnalytics, link: '/users' },
-  { label: 'Settings', icon: IconAdjustments },
-  {
-    label: 'Security',
-    icon: IconLock,
-    links: [
-      { label: 'Enable 2FA', link: '/' },
-      { label: 'Change password', link: '/' },
-      { label: 'Recovery codes', link: '/' },
-    ],
-  },
-];
+import { useEffect, useMemo, useState } from 'react';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -107,6 +62,50 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const Sidebar = () => {
+  const SideLinks = useMemo(
+    () => [
+      { label: 'Dashboard', icon: IconGauge, link: '/' },
+      {
+        label: 'Customers',
+        icon: IconAddressBook,
+        initiallyOpened: false,
+        links: [
+          { label: 'All Customers', link: '/customers' },
+          { label: 'Create Customer', link: '/customer' },
+        ],
+      },
+      {
+        label: 'Products',
+        icon: IconCalendarStats,
+        links: [
+          { label: 'Create Product', link: '/product/new' },
+          { label: 'View Products', link: '/products' },
+        ],
+      },
+      {
+        label: 'Product Orders',
+        icon: IconCalendarStats,
+        links: [
+          { label: 'Create Orders', link: '/order/new' },
+          { label: 'Recent Orders', link: '/orders' },
+        ],
+      },
+      { label: 'Analytics', icon: IconPresentationAnalytics },
+      { label: 'Users', icon: IconFileAnalytics, link: '/users' },
+      { label: 'Settings', icon: IconAdjustments },
+      {
+        label: 'Security',
+        icon: IconLock,
+        links: [
+          { label: 'Enable 2FA', link: '/' },
+          { label: 'Change password', link: '/' },
+          { label: 'Recovery codes', link: '/' },
+        ],
+      },
+    ],
+    []
+  );
+
   const userInfoString = localStorage.getItem('userInfo');
   const userInfo: User = userInfoString ? JSON.parse(userInfoString) : null;
   const [isMobile, setIsMobile] = useState(false);
@@ -144,7 +143,8 @@ const Sidebar = () => {
 
       {!isMobile && (
         <Navbar.Section className={`md:block ${classes.linksInner}`}>
-          {mockdata.map((item) => (
+          {SideLinks.map((item) => (
+            // eslint-disable-next-line react/jsx-props-no-spreading
             <LinksGroup {...item} key={item.label} />
           ))}
         </Navbar.Section>

@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/function-component-definition */
 import * as React from 'react';
-// import Box from '@mui/material/Box';
 import { Box } from '@mui/material';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
@@ -21,27 +20,26 @@ import {
   IconLock,
   IconAddressBook,
 } from '@tabler/icons-react';
+import { useMemo, useState } from 'react';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
-// Your mockdata
-const mockdata = [
-  { label: 'Dashboard', Icon: IconGauge, link: '/' },
-  { label: 'All Customers', Icon: IconAddressBook, link: '/customers' },
-  { label: ' View Products', Icon: IconCalendarStats, link: '/products' },
-  {
-    label: 'All Orders',
-    Icon: IconCalendarStats,
-    link: '/recent-order',
-  },
-  { label: 'Analytics', Icon: IconPresentationAnalytics },
-  { label: 'Users', Icon: IconFileAnalytics, link: '/users' },
-  { label: 'Security', Icon: IconLock },
-  { label: 'Settings', Icon: IconAdjustments },
-];
-
-export default function SwipeableTemporaryDrawer() {
-  const [state, setState] = React.useState({
+const SwipeableTemporaryDrawer = () => {
+  const menuLinks = useMemo(
+    () => [
+      { label: 'Dashboard', Icon: IconGauge, link: '/' },
+      { label: 'All Customers', Icon: IconAddressBook, link: '/customers' },
+      { label: 'View Products', Icon: IconCalendarStats, link: '/products' },
+      { label: 'All Orders', Icon: IconCalendarStats, link: '/recent-order' },
+      { label: 'Create Orders', Icon: IconCalendarStats, link: '/order' },
+      { label: 'Analytics', Icon: IconPresentationAnalytics },
+      { label: 'Users', Icon: IconFileAnalytics, link: '/users' },
+      { label: 'Security', Icon: IconLock },
+      { label: 'Settings', Icon: IconAdjustments },
+    ],
+    []
+  );
+  const [state, setState] = useState({
     left: false,
   });
 
@@ -68,7 +66,7 @@ export default function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {mockdata.map((link, index) => (
+        {menuLinks.map((link, index) => (
           <ListItemButton component="a" href={link.link} key={index}>
             <ListItemIcon sx={{ color: 'primary.main' }}>
               {link.Icon ? <link.Icon /> : null}
@@ -108,4 +106,6 @@ export default function SwipeableTemporaryDrawer() {
       ))}
     </div>
   );
-}
+};
+
+export default SwipeableTemporaryDrawer;

@@ -208,8 +208,13 @@ const CreateCustomer = () => {
   };
 
   return (
-    <Box sx={{ m: 4 }}>
-      <Typography variant="h4" component="div" gutterBottom>
+    <Box className="m-4">
+      <Typography
+        className="text-xl font-semibold mb-4"
+        variant="h4"
+        component="div"
+        gutterBottom
+      >
         Create Customer
       </Typography>
       <TextField
@@ -218,9 +223,11 @@ const CreateCustomer = () => {
         onChange={handleBusinessNameChange}
         variant="outlined"
         size="small"
+        className="w-modal"
       />
 
-      <hr className="my-12" />
+      <hr className="my-6" />
+
       {(selectedContact || selectedContactIndex) && (
         <CustomModal<Contact & Record<string, any>>
           data={selectedContact as Contact}
@@ -232,7 +239,8 @@ const CreateCustomer = () => {
           title={selectedContact ? 'Edit Contact' : 'Add Contact'}
         />
       )}
-      <Box sx={{ my: 2 }}>
+
+      <div className="my-4 overflow-x-auto">
         <DataTable<Contact>
           data={newCustomer.contacts}
           columns={columns}
@@ -241,12 +249,15 @@ const CreateCustomer = () => {
           additionalColumn={mainContactRadioColumn}
           onCustomButtonClick={handleAddContact}
           isLoading={craeteCustomerMutation.isLoading}
+          className="min-w-full"
         />
-      </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+      </div>
+
+      <Box className="flex justify-end mt-4">
         <CustomButton
           onClick={handleSaveButtonClick}
           disabled={craeteCustomerMutation.isLoading}
+          className="relative py-2 px-4 border rounded bg-primary text-white hover:bg-primary-dark"
         >
           Save and Exit
         </CustomButton>
