@@ -24,7 +24,9 @@ const ProductRow: React.FC<ProductRowProps> = ({
   const [localProduct, setLocalProduct] = useState(product);
 
   const handleValueChange = (key: EditableFields, value: number) => {
-    const updatedProduct = { ...localProduct, [key]: value };
+    const sanitizedValue = Number(value).toString();
+
+    const updatedProduct = { ...localProduct, [key]: sanitizedValue };
     setLocalProduct(updatedProduct);
     onProductUpdate(updatedProduct);
   };
