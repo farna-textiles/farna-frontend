@@ -50,6 +50,14 @@ const Products = () => {
         title: 'Delete',
         disabled: deleteOrderMutation.isLoading,
       },
+      // {
+      //   icon: <DeleteIcon />,
+      //   onClick: (id: number) => {
+      //     deleteProductMutation.mutateAsync(id);
+      //   },
+      //   title: 'Delete',
+      //   disabled: deleteProductMutation.isLoading,
+      // },
     ],
     [deleteOrderMutation, navigate]
   );
