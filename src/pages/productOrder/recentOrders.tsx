@@ -1,15 +1,16 @@
 import { useMemo } from 'react';
 import Edit from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import { Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { ActionButton, TableColumn, Order } from '../../interfaces';
 import GenericTable from '../../components/table/GenericTable';
-import { useDeleteProduct } from '../../hooks/useProduct';
 import { getAllOrders } from '../../api';
+import { useDeleteOrder } from '../../hooks/useOrder';
 
 const Products = () => {
-  const deleteProductMutation = useDeleteProduct();
+  const deleteOrderMutation = useDeleteOrder();
 
   const navigate = useNavigate();
 
@@ -28,21 +29,28 @@ const Products = () => {
   const actionButtons: ActionButton[] = useMemo(
     () => [
       {
+        icon: <FullscreenIcon />,
+        onClick: (id: number) => {
+          navigate(`/orders/${id}/invoice`);
+        },
+        title: 'View',
+      },
+      {
         icon: <Edit />,
         title: 'Edit',
         onClick: (id: number) => navigate(`/orders/${id}/edit`),
-        disabled: deleteProductMutation.isLoading,
+        disabled: deleteOrderMutation.isLoading,
       },
-      // {
-      //   icon: <DeleteIcon />,
-      //   onClick: (id: number) => {
-      //     deleteProductMutation.mutateAsync(id);
-      //   },
-      //   title: 'Delete',
-      //   disabled: deleteProductMutation.isLoading,
-      // },
+      {
+        icon: <DeleteIcon />,
+        onClick: (id: number) => {
+          deleteOrderMutation.mutateAsync(id);
+        },
+        title: 'Delete',
+        disabled: deleteOrderMutation.isLoading,
+      },
     ],
-    [deleteProductMutation, navigate]
+    [deleteOrderMutation, navigate]
   );
 
   return (
@@ -60,7 +68,7 @@ const Products = () => {
             actionButtons={actionButtons}
             addButtonLink="/order/new"
             addButtonLabel="Create Product Order"
-            loadInProgress={deleteProductMutation.isLoading}
+            loadInProgress={deleteOrderMutation.isLoading}
           />
         </Box>
       </>
