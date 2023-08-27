@@ -14,6 +14,7 @@ import ShowCustomer from '../pages/customer/ShowCustomer';
 import Products from '../pages/product/Products';
 import RecentOrders from '../pages/productOrder/recentOrders';
 import CreateOrder from '../pages/productOrder/CreateOrder';
+import ShowOrder from '../pages/productOrder/ShowOrder';
 
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
@@ -155,6 +156,14 @@ export const AppRoutes: React.FC = () => {
           element: (
             <AuthRoute path="/orders/:id/edit">
               <EditOrder />
+            </AuthRoute>
+          ),
+        },
+        {
+          path: '/orders/:id/invoice',
+          element: (
+            <AuthRoute path="/orders/:id/invoice">
+              <ShowOrder />
             </AuthRoute>
           ),
         },

@@ -32,5 +32,6 @@ export const API_URLS = {
     ALL: '/orders',
     GET: '/orders/:id',
     UPDATE: '/orders/:id',
+    DELETE: '/orders/:id',
   },
 };

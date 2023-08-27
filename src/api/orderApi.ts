@@ -43,3 +43,9 @@ export const updateOrder: MutationFunction<
 
   return handleApiCall(api.put, apiUrl, data);
 };
+
+export const deleteOrder = async (id: number, data = {}) => {
+  const apiUrl = API_URLS.ORDER_METHODS.DELETE.replace(':id', String(id));
+
+  return handleApiCall(api.delete, apiUrl, data);
+};
