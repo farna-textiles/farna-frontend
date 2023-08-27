@@ -1,9 +1,22 @@
 import React from 'react';
 import { Order } from '../interfaces';
 
-const Invoice = React.forwardRef(
-  ({ order }: { order: Order }, ref: React.Ref<HTMLDivElement>) => {
-    const totalAmount = order.orderProducts.reduce(
+const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
+  (
+    {
+      order: {
+        orderProducts,
+        customer,
+        salesReceiptDate,
+        paymentType,
+        validity,
+        shipmentType,
+        PI_number,
+      },
+    },
+    ref
+  ) => {
+    const totalAmount = orderProducts.reduce(
       (total, product) => total + product.quantity * product.rate,
       0
     );
@@ -11,11 +24,11 @@ const Invoice = React.forwardRef(
     return (
       <div
         ref={ref}
-        className="bg-white  w-full h-auto font-serif overflow-y-auto"
+        className="bg-white w-full h-auto font-serif overflow-y-auto"
         id="pdf-invoice"
       >
-        <div className="flex items-center mb-12" style={{ lineHeight: '1.2' }}>
-          <div className="text-3xl font-bold mb-5" style={{ fontSize: '32pt' }}>
+        <div className="flex items-center mb-12 leading-[1.2]">
+          <div className="text-3xl font-bold mb-5 text-[32pt]">
             FARNA TEXTILES
           </div>
           <img
@@ -28,34 +41,32 @@ const Invoice = React.forwardRef(
         <div className="flex justify-between mb-8">
           <div>
             <div className="text-2xs text-gray-400">BILL TO</div>
-            <div className="text-base"> {order.customer.businessName}</div>
+            <div className="text-base">{customer.businessName}</div>
           </div>
           <div>
             <div className="text-left mb-6 flex">
               <div className="text-2xs text-gray-400">DATE</div>
-              <div className="text-base ml-3">{order.salesReceiptDate}</div>
+              <div className="text-base ml-3">{salesReceiptDate}</div>
             </div>
             <div className="text-2xs text-gray-400">PAYMENT METHOD</div>
-            <div className="text-base">{order.paymentType.name}</div>
+            <div className="text-base">{paymentType.name}</div>
           </div>
         </div>
         <div className="flex justify-between mb-8">
           <div>
             <div className="text-2xs text-gray-400">VALIDITY</div>
-            <div className="text-base uppercase text-black-500">
-              {order.validity}
-            </div>
+            <div className="text-base uppercase text-black-500">{validity}</div>
           </div>
           <div>
             <div className="text-2xs text-gray-400">SHIPMENT</div>
             <div className="text-base uppercase text-black-500">
-              {order.shipmentType}
+              {shipmentType}
             </div>
           </div>
           <div>
             <div className="text-2xs text-gray-400">P.I NUMBER</div>
             <div className="text-base uppercase text-black-500">
-              {order.PI_number}
+              {PI_number}
             </div>
           </div>
         </div>
@@ -67,15 +78,23 @@ const Invoice = React.forwardRef(
           <div className="w-1/6 font-medium">AMOUNT</div>
         </div>
         {/* Table Content */}
-        {order.orderProducts.map((product) => (
-          <div key={product.id} className="flex justify-between mb-4">
+        {orderProducts.map(({ id, product, quantity, rate }) => (
+          <div key={id} className="flex justify-between mb-4">
             <div className="w-1/6">
               {product.denier} Lot #{product.lotNo}
             </div>
-            <div className="w-1/6">Product Description</div>
-            <div className="w-1/6">{product.quantity}</div>
-            <div className="w-1/6">{product.rate}</div>
-            <div className="w-1/6">{product.quantity * product.rate}</div>
+            <div className="w-1/6">
+              {`${product.luster} | ${product.denier} | ${product.noOfFilaments} `}
+              {product.endUses.map((endUse, index) => (
+                <span key={endUse.name}>
+                  {endUse.name}
+                  {index !== product.endUses.length - 1 && ' | '}
+                </span>
+              ))}
+            </div>
+            <div className="w-1/6">{quantity}</div>
+            <div className="w-1/6">{rate}</div>
+            <div className="w-1/6">{quantity * rate}</div>
           </div>
         ))}
         <hr className="mt-6 border-t border-dashed border-gray-400 w-full" />
@@ -95,6 +114,7 @@ const Invoice = React.forwardRef(
     );
   }
 );
+
 Invoice.displayName = 'Invoice';
 
 export default Invoice;
