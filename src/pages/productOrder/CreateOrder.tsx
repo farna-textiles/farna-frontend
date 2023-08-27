@@ -405,14 +405,6 @@ const CreateOrder: React.FC = () => {
               Save
             </CustomButton>
           </Grid>
-          <Grid item>
-            <CustomButton
-              isLoading={useCreateOrderMutation.isLoading}
-              onClick={formik.handleSubmit}
-            >
-              Save and Email
-            </CustomButton>
-          </Grid>
         </Grid>
       </div>
     </form>
