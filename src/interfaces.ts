@@ -91,6 +91,13 @@ export type ProductOrderType = Omit<Product, 'id'> & {
   [key: string]: any;
 };
 
+export interface ProductOrder {
+  id: number;
+  quantity: number;
+  rate: number;
+  product: ProductData;
+}
+
 export interface ProductData extends Product {
   endUses: EndUse[];
 }
@@ -298,5 +305,5 @@ export interface Order {
   paymentType: PaymentMethod;
   currencyUnit: CurrencyUnit;
   customer: Customer;
-  orderProducts: ProductOrderType[];
+  orderProducts: ProductOrder[];
 }
