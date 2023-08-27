@@ -34,6 +34,7 @@ const Products = () => {
           navigate(`/orders/${id}/invoice`);
         },
         title: 'View',
+        disabled: deleteOrderMutation.isLoading,
       },
       {
         icon: <Edit />,
