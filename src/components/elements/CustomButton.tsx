@@ -2,12 +2,14 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import { Theme, styled } from '@mui/material/styles';
 import { Loader } from '@mantine/core';
+import { Link } from 'react-router-dom'; // Import Link
 
 interface CustomButtonProps {
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   isLoading?: boolean;
   onClick?: () => void;
+  to?: string;
   children: React.ReactNode;
 }
 
@@ -57,9 +59,10 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   disabled = false,
   isLoading = false,
   onClick,
+  to, // Add this line
   children,
 }) => {
-  return (
+  const ButtonContent = (
     <StyledButton
       type={type}
       disabled={disabled || isLoading}
@@ -73,6 +76,8 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       {children}
     </StyledButton>
   );
+
+  return to ? <Link to={to}>{ButtonContent}</Link> : ButtonContent;
 };
 
 CustomButton.defaultProps = {
@@ -80,6 +85,7 @@ CustomButton.defaultProps = {
   disabled: false,
   isLoading: false,
   onClick: () => {},
+  to: '',
 };
 
 export default CustomButton;

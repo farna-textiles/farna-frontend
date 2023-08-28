@@ -183,7 +183,7 @@ const EditOrder: React.FC = () => {
     >
       <div className="bg-white shadow-md p-4 md:p-8 rounded-lg w-full max-w">
         <div className="flex justify-end">
-          <CustomButton>Add New Product</CustomButton>
+          <CustomButton to="/product/new">Add New Product</CustomButton>
         </div>
 
         <h2 className="text-xl font-semibold mb-4">
