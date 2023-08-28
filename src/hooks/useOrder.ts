@@ -32,6 +32,7 @@ export const useOrder = (orderId: number, initialData?: Order) => {
 
 export const useUpdateOrder = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   return useMutation<any, ErrorResponse, [number, OrderUpdateData]>(
     updateOrder,
@@ -39,6 +40,7 @@ export const useUpdateOrder = () => {
       onSuccess: async (data) => {
         await queryClient.invalidateQueries(['Orders']);
         await queryClient.invalidateQueries(['order']);
+        navigate(`/orders/${data.id}/invoice`);
 
         notifySuccess('Order updated successfully');
       },
