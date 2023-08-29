@@ -24,11 +24,11 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
     return (
       <div
         ref={ref}
-        className="bg-white w-full h-auto font-serif overflow-y-auto"
+        className="bg-white w-full h-auto font-serif overflow-y-auto p-4"
         id="pdf-invoice"
       >
         <div className="flex items-center mb-12 leading-[1.2]">
-          <div className="text-3xl font-bold mb-5 text-[32pt]">
+          <div className="text-3xl font-bold mb-[6rem] text-[32pt]">
             FARNA TEXTILES
           </div>
           <img
@@ -77,8 +77,7 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
           <div className="w-1/6 font-medium">RATE</div>
           <div className="w-1/6 font-medium">AMOUNT</div>
         </div>
-        {/* Table Content */}
-        {orderProducts.map(({ id, product, quantity, rate }) => (
+        {orderProducts.map(({ id, product, quantity, rate }, index) => (
           <div key={id} className="flex justify-between mb-4">
             <div className="w-1/6">
               {product.denier} Lot #{product.lotNo}
@@ -92,14 +91,16 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
                 </span>
               ))}
             </div>
+
             <div className="w-1/6">{quantity}</div>
             <div className="w-1/6">{rate}</div>
             <div className="w-1/6">{quantity * rate}</div>
           </div>
         ))}
+
         <hr className="mt-6 border-t border-dashed border-gray-400 w-full" />
         <div className="mt-4 flex justify-end">
-          <div className="text-lg text-gray-400 pr-[19rem]">TOTAL</div>
+          <div className="text-lg text-gray-400 pr-[16rem]">TOTAL</div>
           <div className="text-1xl">{totalAmount.toFixed(2)}</div>
         </div>
         <hr className="mt-2 border-t border-dashed border-gray-400 w-[25rem] ml-auto" />
@@ -107,14 +108,13 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
           <div className="text-lg text-gray-400 pr-[9rem]">BALANCE DUE</div>
           <div className="text-2xl font-semibold pr-2">USD 0.00</div>
         </div>
-        <div className="text-xs text-gray-400 text-center mt-12">
+        <div className="text-xs text-gray-400 text-center mt-4 pb-4">
           Page 1 of 1
         </div>
       </div>
     );
   }
 );
-
 Invoice.displayName = 'Invoice';
 
 export default Invoice;
