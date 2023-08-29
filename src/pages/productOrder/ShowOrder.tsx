@@ -27,7 +27,7 @@ const ShowOrder: React.FC = () => {
 
     invoiceDiv?.setAttribute(
       'style',
-      'background-color: white; padding: 8px; width: 575pt; height: 842pt; font-family: serif; overflow-y: auto;'
+      'background-color: white; padding: 4px; width: 575pt; height: auto; font-family: serif; overflow-y: auto;'
     );
 
     // eslint-disable-next-line new-cap
@@ -52,7 +52,7 @@ const ShowOrder: React.FC = () => {
         <Invoice ref={componentRef} order={orderData} />
       </div>
 
-      <div className="flex justify-end mt-6 space-x-4">
+      <div className="flex justify-end mt-6  space-x-4">
         <ReactToPrint
           // eslint-disable-next-line react/no-unstable-nested-components
           trigger={() => (
@@ -67,18 +67,18 @@ const ShowOrder: React.FC = () => {
         />
 
         {/* <button
-          type="button"
-          onClick={() => {
-            const emailPrompt = prompt('Enter email to send the invoice');
-            if (emailPrompt) {
-              setEmail(emailPrompt);
-              sendEmail();
-            }
-          }}
-          className="px-4 py-2 bg-green-500 text-white rounded-md"
-        >
-          Send as Email
-        </button> */}
+            type="button"
+            onClick={() => {
+              const emailPrompt = prompt('Enter email to send the invoice');
+              if (emailPrompt) {
+                setEmail(emailPrompt);
+                sendEmail();
+              }
+            }}
+            className="px-4 py-2 bg-green-500 text-white rounded-md"
+          >
+            Send as Email
+          </button> */}
         <button
           type="button"
           onClick={generatePDF}
