@@ -92,6 +92,7 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
                 </span>
               ))}
             </div>
+
             <div className="w-1/6">{quantity}</div>
             <div className="w-1/6">{rate}</div>
             <div className="w-1/6">{quantity * rate}</div>
@@ -114,7 +115,6 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
     );
   }
 );
-
 Invoice.displayName = 'Invoice';
 
 export default Invoice;
