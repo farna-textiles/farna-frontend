@@ -11,6 +11,7 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
         paymentType,
         validity,
         shipmentType,
+        currencyUnit,
         PI_number,
       },
     },
@@ -40,7 +41,7 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
         <div className="text-2xl text-green-600 mb-8">REQUEST FOR P.I</div>
         <div className="flex justify-between mb-8">
           <div>
-            <div className="text-2xs text-gray-400">BILL TO</div>
+            <div className="text-2xs text-gray-400">Bill TO </div>
             <div className="text-base">{customer.businessName}</div>
           </div>
           <div>
@@ -71,7 +72,7 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
           </div>
         </div>
         <div className="flex items-center justify-between  mb-2 text-green-600 bg-gray-200 p-2 ">
-          <div className="w-1/6 ml-1   font-medium">ACTIVITY</div>
+          <div className="w-1/6 ml-1   font-medium">PRODUCTS</div>
           <div className="w-1/6  font-medium">DESCRIPTION</div>
           <div className="w-1/6  font-medium">QTY</div>
           <div className="w-1/6  font-medium">RATE</div>
@@ -93,21 +94,24 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
             </div>
 
             <div className="w-1/6">{quantity}</div>
-            <div className="w-1/6">{rate}</div>
-            <div className="w-1/6">{quantity * rate}</div>
+            <div className="w-1/6">
+              {rate} {currencyUnit.symbol}
+            </div>
+            <div className="w-1/6">
+              {quantity * rate} {currencyUnit.symbol}
+            </div>
           </div>
         ))}
 
         <hr className="mt-6 border-t border-dashed border-gray-400 w-full" />
         <div className="mt-4 flex justify-end">
           <div className="text-lg text-gray-400 pr-[16rem]">TOTAL</div>
-          <div className="text-1xl">{totalAmount.toFixed(2)}</div>
+          <div className="text-1xl">
+            {currencyUnit.symbol} {totalAmount.toFixed(2)}
+          </div>
         </div>
         <hr className="mt-2 border-t border-dashed border-gray-400 w-[25rem] ml-auto" />
-        <div className="mt-4 flex justify-end">
-          <div className="text-lg text-gray-400 pr-[9rem]">BALANCE DUE</div>
-          <div className="text-2xl font-semibold pr-2">USD 0.00</div>
-        </div>
+
         <div className="text-xs text-gray-400 text-center mt-4 pb-4">
           Page 1 of 1
         </div>
