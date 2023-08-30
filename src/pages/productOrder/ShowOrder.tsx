@@ -13,6 +13,7 @@ const ShowOrder: React.FC = () => {
     data: Order;
   };
   const componentRef = useRef(null);
+  console.log(orderData);
 
   const [email, setEmail] = useState<string>('');
 
