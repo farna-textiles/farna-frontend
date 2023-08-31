@@ -94,12 +94,8 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
             </div>
 
             <div className="w-1/6">{quantity}</div>
-            <div className="w-1/6">
-              {rate} {currencyUnit.symbol}
-            </div>
-            <div className="w-1/6">
-              {quantity * rate} {currencyUnit.symbol}
-            </div>
+            <div className="w-1/6">{rate}</div>
+            <div className="w-1/6">{quantity * rate}</div>
           </div>
         ))}
 
