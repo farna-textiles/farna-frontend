@@ -37,4 +37,7 @@ export const API_URLS = {
     DELETE: '/orders/:id',
   },
   REACTIVATION_REQUEST: '/auth/reactivation',
+  DASHBOARD_METHODS: {
+    STATISTICS: 'dashboard/statistics',
+  },
 };
