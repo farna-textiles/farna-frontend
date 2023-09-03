@@ -18,7 +18,7 @@ import ShowOrder from '../pages/productOrder/ShowOrder';
 
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
-const Dashboard = lazy(() => import('../pages/Dashboard'));
+const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
 const Profile = lazy(() => import('../pages/Profile'));
 const CreateProduct = lazy(() => import('../pages/product/CreateProduct'));
 const EditProduct = lazy(() => import('../pages/product/EditProduct'));
