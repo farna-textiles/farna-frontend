@@ -37,7 +37,7 @@ import usePaymentMethods from '../../hooks/usePaymentMethods';
 import { notifyError } from '../../lib/utils';
 import { useOrder, useUpdateOrder } from '../../hooks/useOrder';
 import CreateProduct from '../product/CreateProduct'; // Import your CreateProduct component
-import Overlay from './OverlayProduct';
+import Overlay from '../../components/modal/ModalOverlay';
 
 const headerCellStyle = {
   backgroundColor: '#3F9FEB',

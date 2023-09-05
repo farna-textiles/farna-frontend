@@ -29,7 +29,6 @@ import {
   ProductOrderType,
 } from '../../interfaces';
 import SearchDropdown from '../../components/elements/SearchableDropdown';
-import Overlay from './OverlayProduct';
 import { getCustomers } from '../../api';
 import { getProducts } from '../../api/productApi';
 import ProductRow from '../../components/table/productRow';
@@ -38,6 +37,7 @@ import usePaymentMethods from '../../hooks/usePaymentMethods';
 import { notifyError } from '../../lib/utils';
 import { useCraeteOrder } from '../../hooks/useOrder';
 import CreateProduct from '../product/CreateProduct';
+import ModalOverlay from '../../components/modal/ModalOverlay';
 
 const headerCellStyle = {
   backgroundColor: '#3F9FEB',
@@ -72,7 +72,6 @@ const CreateOrder: React.FC = () => {
 
     window.addEventListener('resize', handleResize);
 
-    // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -182,9 +181,7 @@ const CreateOrder: React.FC = () => {
     );
     setSelectedProducts(updatedProducts);
   };
-  const createProductComponent = (
-    <CreateProduct showAddButton={false} onClose={closeCreateProductModal} />
-  );
+
   return (
     <form
       onSubmit={formik.handleSubmit}
@@ -445,13 +442,12 @@ const CreateOrder: React.FC = () => {
           </Grid>
         </Grid>
       </div>
-      {isCreateProductOpen && (
-        <Overlay
-          isCreateProductOpen={isCreateProductOpen}
-          createProductComponent={createProductComponent}
-          onClose={closeCreateProductModal}
-        />
-      )}
+      <ModalOverlay
+        isOpen={isCreateProductOpen}
+        onClose={closeCreateProductModal}
+      >
+        <CreateProduct showAddButton={false} />
+      </ModalOverlay>
     </form>
   );
 };

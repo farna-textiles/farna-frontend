@@ -29,7 +29,10 @@ const validationSchema = Yup.object().shape({
   luster: Yup.string().required('Luster is required'),
 });
 
-const CreateProduct = ({ showAddButton = true }) => {
+const CreateProduct: React.FC<{ showAddButton?: boolean }> = ({
+  // eslint-disable-next-line react/prop-types
+  showAddButton = true,
+}) => {
   const initialValue: Product = {
     lotNo: '',
     denier: '',

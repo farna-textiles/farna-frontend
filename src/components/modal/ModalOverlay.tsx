@@ -1,21 +1,23 @@
-import React from 'react';
-import { Fragment } from 'react';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable import/no-extraneous-dependencies */
+import React, { Fragment, ReactNode } from 'react';
 import { Transition } from '@headlessui/react';
 import CloseIcon from '@mui/icons-material/Close';
 
-interface ProductModalOverlayProps {
-  isCreateProductOpen: boolean;
+interface ModalOverlayProps {
+  isOpen: boolean;
   onClose: () => void;
-  createProductComponent: ReactNode;
+  children: ReactNode;
 }
 
-const Overlay: React.FC<ProductModalOverlayProps> = ({
-  isCreateProductOpen,
+const ModalOverlay: React.FC<ModalOverlayProps> = ({
+  isOpen,
   onClose,
-  createProductComponent,
+  children,
 }) => {
   return (
-    <Transition.Root show={isCreateProductOpen} as={Fragment}>
+    <Transition.Root show={isOpen} as={Fragment}>
       <div className="fixed inset-0 overflow-y-auto">
         <div className="flex items-center justify-center min-h-screen">
           <Transition.Child
@@ -43,12 +45,13 @@ const Overlay: React.FC<ProductModalOverlayProps> = ({
           >
             <div className="absolute right-0 top-0 h-full max-w-md w-[90%] bg-white p-4 rounded-lg shadow-xl">
               <button
+                type="button"
                 className="absolute top-2 left-2 text-gray-600 hover:text-gray-900"
                 onClick={onClose}
               >
                 <CloseIcon />
               </button>
-              {createProductComponent}
+              {children}
             </div>
           </Transition.Child>
         </div>
@@ -57,4 +60,4 @@ const Overlay: React.FC<ProductModalOverlayProps> = ({
   );
 };
 
-export default Overlay;
+export default ModalOverlay;
