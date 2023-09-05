@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   TextField,
   Select,
@@ -36,6 +36,8 @@ import useCurrencyUnits from '../../hooks/useCurrencyUnits';
 import usePaymentMethods from '../../hooks/usePaymentMethods';
 import { notifyError } from '../../lib/utils';
 import { useOrder, useUpdateOrder } from '../../hooks/useOrder';
+import CreateProduct from '../product/CreateProduct'; // Import your CreateProduct component
+import Overlay from './OverlayProduct';
 
 const headerCellStyle = {
   backgroundColor: '#3F9FEB',
@@ -60,6 +62,28 @@ const validationSchema = yup.object({
 });
 
 const EditOrder: React.FC = () => {
+  const [isCreateProductOpen, setIsCreateProductOpen] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const openCreateProductModal = () => {
+    setIsCreateProductOpen(true);
+  };
+
+  const closeCreateProductModal = () => {
+    setIsCreateProductOpen(false);
+  };
   const { id } = useParams<{ id: string }>();
   const { data: orderData } = useOrder(
     parseInt(id as string, 10) as number
@@ -175,6 +199,9 @@ const EditOrder: React.FC = () => {
     );
     setSelectedProducts(updatedProducts);
   };
+  const createProductComponent = (
+    <CreateProduct showAddButton={false} onClose={closeCreateProductModal} />
+  );
 
   return (
     <form
@@ -183,7 +210,13 @@ const EditOrder: React.FC = () => {
     >
       <div className="bg-white shadow-md p-4 md:p-8 rounded-lg w-full max-w">
         <div className="flex justify-end">
-          <CustomButton to="/product/new">Add New Product</CustomButton>
+          {windowWidth > 812 ? (
+            <CustomButton onClick={openCreateProductModal}>
+              Add New Product
+            </CustomButton>
+          ) : (
+            <CustomButton to="/product/new">Add New Product</CustomButton>
+          )}
         </div>
 
         <h2 className="text-xl font-semibold mb-4">
@@ -431,6 +464,11 @@ const EditOrder: React.FC = () => {
           </Grid>
         </Grid>
       </div>
+      <Overlay
+        isCreateProductOpen={isCreateProductOpen}
+        createProductComponent={createProductComponent}
+        onClose={closeCreateProductModal}
+      />
     </form>
   );
 };

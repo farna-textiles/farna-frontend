@@ -29,7 +29,7 @@ const validationSchema = Yup.object().shape({
   luster: Yup.string().required('Luster is required'),
 });
 
-const CreateProduct = () => {
+const CreateProduct = ({ showAddButton = true }) => {
   const initialValue: Product = {
     lotNo: '',
     denier: '',
@@ -241,13 +241,16 @@ const CreateProduct = () => {
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:border-primary"
                     />
                   </div>
-                  <button
-                    type="button"
-                    onClick={handleOpen}
-                    className="w-[8%] flex justify-center items-center border border-gray-300 cursor-pointer hover:border-none hover:bg-gray-300 rounded-md h-full px-2"
-                  >
-                    <AddIcon />
-                  </button>
+
+                  {showAddButton && (
+                    <button
+                      type="button"
+                      onClick={handleOpen}
+                      className="w-[8%] flex justify-center items-center border border-gray-300 cursor-pointer hover:border-none hover:bg-gray-300 rounded-md h-full px-2"
+                    >
+                      <AddIcon />
+                    </button>
+                  )}
                 </div>
               </div>
             </Grid>

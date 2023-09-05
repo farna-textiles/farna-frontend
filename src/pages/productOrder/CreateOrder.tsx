@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   TextField,
   Select,
@@ -16,8 +16,11 @@ import {
   TableCell,
   FormHelperText,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
+
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import debounce from 'lodash/debounce';
 import CustomButton from '../../components/elements/CustomButton';
 import {
   CurrencyUnit,
@@ -26,6 +29,7 @@ import {
   ProductOrderType,
 } from '../../interfaces';
 import SearchDropdown from '../../components/elements/SearchableDropdown';
+import Overlay from './OverlayProduct';
 import { getCustomers } from '../../api';
 import { getProducts } from '../../api/productApi';
 import ProductRow from '../../components/table/productRow';
@@ -33,6 +37,7 @@ import useCurrencyUnits from '../../hooks/useCurrencyUnits';
 import usePaymentMethods from '../../hooks/usePaymentMethods';
 import { notifyError } from '../../lib/utils';
 import { useCraeteOrder } from '../../hooks/useOrder';
+import CreateProduct from '../product/CreateProduct';
 
 const headerCellStyle = {
   backgroundColor: '#3F9FEB',
@@ -57,6 +62,29 @@ const validationSchema = yup.object({
 });
 
 const CreateOrder: React.FC = () => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isCreateProductOpen, setIsCreateProductOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = debounce(() => {
+      setWindowWidth(window.innerWidth);
+    }, 100);
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const openCreateProductModal = () => {
+    setIsCreateProductOpen(true);
+  };
+
+  const closeCreateProductModal = () => {
+    setIsCreateProductOpen(false);
+  };
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null
   );
@@ -154,15 +182,25 @@ const CreateOrder: React.FC = () => {
     );
     setSelectedProducts(updatedProducts);
   };
-
+  const createProductComponent = (
+    <CreateProduct showAddButton={false} onClose={closeCreateProductModal} />
+  );
   return (
     <form
       onSubmit={formik.handleSubmit}
       className="bg-gray-100 min-h-screen flex flex-col justify-center items-center p-4 md:p-8"
     >
-      <div className="bg-white shadow-md p-4 md:p-8 rounded-lg w-full max-w">
+      <div className="bg-white shadow-md  p-4 md:p-8 rounded-lg w-full max-w">
         <div className="flex justify-end">
-          <CustomButton to="/product/new">Add New Product</CustomButton>
+          {windowWidth > 812 ? (
+            <CustomButton onClick={openCreateProductModal}>
+              Add New Product
+            </CustomButton>
+          ) : (
+            <Link to="/product/new">
+              <CustomButton>Add New Product</CustomButton>
+            </Link>
+          )}
         </div>
 
         <h2 className="text-xl font-semibold mb-4">Sales Receipt</h2>
@@ -407,6 +445,13 @@ const CreateOrder: React.FC = () => {
           </Grid>
         </Grid>
       </div>
+      {isCreateProductOpen && (
+        <Overlay
+          isCreateProductOpen={isCreateProductOpen}
+          createProductComponent={createProductComponent}
+          onClose={closeCreateProductModal}
+        />
+      )}
     </form>
   );
 };
