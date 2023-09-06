@@ -53,6 +53,7 @@ export interface AuthRouteProps {
   path: string;
   children: ReactNode;
   redirect?: boolean;
+  useErrorBoundaryAndSuspense?: boolean;
 }
 
 export interface ErrorBoundaryRouteProps {

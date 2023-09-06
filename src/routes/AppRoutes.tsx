@@ -67,7 +67,7 @@ export const AppRoutes: React.FC = () => {
         {
           path: '/dashboard',
           element: (
-            <AuthRoute path="/dashboard">
+            <AuthRoute path="/dashboard" useErrorBoundaryAndSuspense={false}>
               <Dashboard />
             </AuthRoute>
           ),

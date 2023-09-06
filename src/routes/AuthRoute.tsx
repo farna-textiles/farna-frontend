@@ -18,13 +18,18 @@ const AuthRoute: React.FC<AuthRouteProps> = ({
   path,
   children,
   redirect = false,
+  useErrorBoundaryAndSuspense = true,
 }) => {
   if (isAuthenticated() && userHasPermission(path)) {
-    return (
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <Suspense fallback={Fallback}>{children}</Suspense>
-      </ErrorBoundary>
-    );
+    if (useErrorBoundaryAndSuspense) {
+      return (
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Suspense fallback={Fallback}>{children}</Suspense>
+        </ErrorBoundary>
+      );
+    }
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <>{children}</>;
   }
   if (redirect) {
     notifyError('Login required');
