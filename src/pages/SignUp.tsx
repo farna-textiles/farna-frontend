@@ -75,12 +75,12 @@ const SignUp: React.FC = () => {
       >
         <div className="w-full max-w-md space-y-8 px-4 bg-transparent text-gray-600 sm:px-0">
           <div className="">
-            <img
+            {/* <img
               src="/farna-logo.png"
               width={150}
               className="lg:hidden"
               alt="farna logo"
-            />
+            /> */}
             <div className="mt-5 space-y-2">
               <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
                 Sign up

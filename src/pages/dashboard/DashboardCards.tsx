@@ -63,8 +63,8 @@ const DashboardCards: React.FC = () => {
   }, [timeRange, data]);
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-4">
-      <div className="flex justify-end items-center mb-4 border-b pb-2">
+    <div className="w-full bg-white dark:bg-gray-900 rounded-lg shadow-lg p-4 col-span-full">
+      <div className="flex justify-end items-center mb-4 border-b pb-2 w-full">
         <label
           htmlFor="timeRange"
           className="text-sm font-medium text-gray-600 dark:text-gray-300 mr-2"
