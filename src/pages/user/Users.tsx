@@ -11,8 +11,10 @@ import {
 } from '../../interfaces';
 import GenericTable from '../../components/table/GenericTable';
 import { getAllUsers } from '../../api/userApi';
+import { useNavigate } from 'react-router-dom';
 
 const Users = () => {
+  const navigate = useNavigate();
   const columns: TableColumn<User>[] = useMemo(
     () => [
       { field: 'id', label: 'ID' },
@@ -28,8 +30,8 @@ const Users = () => {
       {
         icon: <Edit />,
         onClick: (id: number) => {
+          navigate(`/edit/${id}`);
           console.log(`Edit button clicked for item with ID: ${id}`);
-          // Perform edit logic
         },
       },
       {

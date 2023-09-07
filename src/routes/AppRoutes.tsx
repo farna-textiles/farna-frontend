@@ -23,6 +23,7 @@ const Profile = lazy(() => import('../pages/Profile'));
 const CreateProduct = lazy(() => import('../pages/product/CreateProduct'));
 const EditProduct = lazy(() => import('../pages/product/EditProduct'));
 const EditOrder = lazy(() => import('../pages/productOrder/EditOrder'));
+const EditUser = lazy(() => import('../pages/user/EditUser'));
 const PageNotFound = lazy(() => import('../pages/PageNotFound'));
 
 export const AppRoutes: React.FC = () => {
@@ -87,6 +88,15 @@ export const AppRoutes: React.FC = () => {
             </AuthRoute>
           ),
         },
+        {
+          path: '/edit/:id',
+          element: (
+            <AuthRoute path="/edit/:id">
+              <EditUser />
+            </AuthRoute>
+          ),
+        },
+
         {
           path: '/customers',
           element: (
