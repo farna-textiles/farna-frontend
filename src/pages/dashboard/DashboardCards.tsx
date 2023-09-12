@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState, ReactElement } from 'react';
 import Card from '../../components/elements/Card';
-import useDashboardCards from '../../hooks/useDashboard';
 import UpArrowIcon from '../../lib/icons/UpArrowIcon';
 import DownArrowIcon from '../../lib/icons/DownArrowIcon';
 import HorizontalLineIcon from '../../lib/icons/HorizontalLineIcon';
+import { useDashboardCards } from '../../hooks/useDashboard';
 
 const DashboardCards: React.FC = () => {
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'year'>(
@@ -108,7 +108,7 @@ const DashboardCards: React.FC = () => {
         />
         <Card
           title="Customers"
-          value={data.customers.total}
+          value={parseInt(data.customers.total as string, 10).toString()}
           percentage={data.customers.percentageChange}
           icon={
             <svg
@@ -129,7 +129,7 @@ const DashboardCards: React.FC = () => {
         />
         <Card
           title="Orders"
-          value={data.orders.total}
+          value={parseInt(data.orders.total as string, 10).toString()}
           percentage={data.orders.percentageChange}
           icon={
             <svg

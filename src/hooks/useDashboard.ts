@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import getStatistics from '../api/dashboardApi';
+import { compareTwoYears, getStatistics } from '../api/dashboardApi';
 
-const useDashboardCards = (timeFilter: 'week' | 'month' | 'year') => {
+export const useDashboardCards = (timeFilter: 'week' | 'month' | 'year') => {
   return useQuery(['dashboardCards', timeFilter], () =>
     getStatistics(timeFilter)
   );
 };
 
-export default useDashboardCards;
+export const useCompareTwoYears = (years: { year1: string; year2: string }) => {
+  return useQuery(['dashboardCards', years], () => compareTwoYears(years));
+};
