@@ -39,5 +39,6 @@ export const API_URLS = {
   REACTIVATION_REQUEST: '/auth/reactivation',
   DASHBOARD_METHODS: {
     STATISTICS: 'dashboard/statistics',
+    COMPARE_TWO_YEARS: 'dashboard/compare',
   },
 };
