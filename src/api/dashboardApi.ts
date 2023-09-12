@@ -18,3 +18,13 @@ export const compareTwoYears = async (years: {
     years
   );
 };
+
+export const getDmographic = async (sortBy: string, filterBy: string) => {
+  const url = API_URLS.DASHBOARD_METHODS.DEMOGRAPHICS;
+  const data = {
+    sortBy,
+    filterBy,
+  };
+
+  return handleApiCall(api.post, url, data);
+};

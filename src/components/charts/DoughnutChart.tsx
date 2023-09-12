@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactEcharts from 'echarts-for-react';
+import { useDashboardDmographic } from '../../hooks/useDashboard';
+import ToggleSwitch from '../elements/ToggleSwitch';
 
 const DoughnutChart: React.FC = () => {
+  const sortBy = 'orders';
+  const [isDoughnutChartOn, setDoughnutChartOn] = useState(false);
+  const { data } = useDashboardDmographic(
+    sortBy,
+    isDoughnutChartOn ? 'city' : 'country'
+  );
+
   const option = {
     title: {
       left: 'center',
@@ -17,14 +26,8 @@ const DoughnutChart: React.FC = () => {
       {
         name: 'Orders',
         type: 'pie',
-        radius: ['50%', '70%'], // This makes it a doughnut chart
-        data: [
-          { value: 335, name: 'New York' },
-          { value: 310, name: 'San Francisco' },
-          { value: 234, name: 'London' },
-          { value: 135, name: 'Tokyo' },
-          { value: 1548, name: 'Sydney' },
-        ],
+        radius: ['50%', '70%'],
+        data,
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -40,12 +43,12 @@ const DoughnutChart: React.FC = () => {
     <div className="bg-white rounded-md dark:bg-darker">
       <div className="flex items-center justify-between p-4 border-b dark:border-primary">
         <h4 className="text-lg font-semibold text-gray-500 dark:text-light">
-          Order Statistics by City/Country
+          Order Statistics by {isDoughnutChartOn ? 'City' : 'Country'}
         </h4>
-        {/* <ToggleSwitch
+        <ToggleSwitch
           isOn={isDoughnutChartOn}
           onToggle={() => setDoughnutChartOn(!isDoughnutChartOn)}
-        /> */}
+        />
       </div>
       <div className="relative p-4 h-72">
         <ReactEcharts option={option} />

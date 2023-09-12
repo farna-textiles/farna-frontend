@@ -35,6 +35,21 @@ const LoadingBarChart: React.FC = () => {
   );
 };
 
+const LoadingDoughnutChart: React.FC = () => {
+  return (
+    <div className="col-span-1 bg-white rounded-md dark:bg-darker shadow-lg">
+      <div className="p-4 border-b dark:border-primary">
+        <h4 className="text-lg font-semibold text-gray-500 dark:text-light">
+          Loading Doughnut Chart...
+        </h4>
+      </div>
+      <div className="p-4">
+        <div className="animate-pulse bg-gray-200 dark:bg-gray-800 rounded-md h-52" />
+      </div>
+    </div>
+  );
+};
+
 const Dashboard: React.FC = () => {
   return (
     <main className="bg-slate-200">
@@ -49,7 +64,11 @@ const Dashboard: React.FC = () => {
             <BarChart />
           </Suspense>
         </ErrorBoundary>
-        <DoughnutChart />
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Suspense fallback={<LoadingDoughnutChart />}>
+            <DoughnutChart />
+          </Suspense>
+        </ErrorBoundary>
         <div className="col-span-1 bg-white rounded-md dark:bg-darker">
           <div className="p-4 border-b dark:border-primary">
             <h4 className="text-lg font-semibold text-gray-500 dark:text-light">

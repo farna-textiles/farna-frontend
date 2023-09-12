@@ -40,5 +40,6 @@ export const API_URLS = {
   DASHBOARD_METHODS: {
     STATISTICS: 'dashboard/statistics',
     COMPARE_TWO_YEARS: 'dashboard/compare',
+    DEMOGRAPHICS: 'dashboard/demographic',
   },
 };
