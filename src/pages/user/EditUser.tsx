@@ -1,16 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { updateUser, UpdateUserRequest } from '../../api/userApi';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { updateUser, getUserById } from '../../api/userApi';
+import { UpdateUserRequest } from '../../interfaces';
 
 const EditUser = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  // const [usersData, setUserData] = useState(null);
+
   const [showPasswordFields, setShowPasswordFields] = useState(false);
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required('Username is required'),
+    username: Yup.string()
+      .required('Username is required')
+      .min(3, 'Username must be at least 3 characters long')
+      .max(20, 'Username cannot be more than 20 characters long'),
     role: Yup.string().required('Role is required'),
     email: Yup.string()
       .email('Invalid email address')
@@ -20,14 +28,24 @@ const EditUser = () => {
     ...(showPasswordFields
       ? {
           password: Yup.string()
-            .min(6, 'Password must be at least 6 characters')
-            .required('Password is required'),
+            .required('Password is required')
+            .min(8, 'Password must be at least 8 characters long')
+            .max(20, 'Password cannot be more than 20 characters long')
+            .matches(
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/,
+              'Password must contain at least 1 special character, 1 lowercase and 1 uppercase letter, and 1 number, and must be at least 8 characters long'
+            ),
           confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], 'Passwords must match')
             .required('Confirm Password is required'),
         }
       : {}),
   });
+  const { data: userData } = useQuery(['user', id], () => getUserById(id));
+
+  const updateUserMutation = useMutation((updatedUserData) =>
+    updateUser(id, updatedUserData)
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -55,6 +73,9 @@ const EditUser = () => {
         updatedUserData.isActive = values.isActive;
         const updatedUser = await updateUser(id, updatedUserData);
 
+        await updateUserMutation.mutateAsync(updatedUserData);
+        queryClient.invalidateQueries(['user', id]);
+
         console.log('User updated successfully', updatedUser);
         navigate('/users');
       } catch (error) {
@@ -64,7 +85,26 @@ const EditUser = () => {
   });
   const togglePasswordFields = () => {
     setShowPasswordFields(!showPasswordFields);
+
+    if (!showPasswordFields) {
+      formik.setValues({
+        ...formik.values,
+        password: '',
+        confirmPassword: '',
+      });
+    }
   };
+
+  useEffect(() => {
+    if (userData) {
+      formik.setValues({
+        username: userData.username || '',
+        role: userData.role || '',
+        email: userData.email || '',
+        isActive: userData.isActive || false,
+      });
+    }
+  }, [userData]);
 
   return (
     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -141,7 +181,7 @@ const EditUser = () => {
                 onBlur={formik.handleBlur}
                 value={formik.values.role}
                 autoComplete="off"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               >
                 <option value="">Select Role</option>
                 <option value="admin">Admin</option>

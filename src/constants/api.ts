@@ -6,6 +6,7 @@ export const API_URLS = {
   AUTH_CONFIRM_EMAIL: '/auth/confirm-email',
   ALL_USERS: '/users',
   UPDATE_USER: '/users/:id',
+  GET_USER_BY_ID: '/users/:id',
   ALL_CUSTOMERS: '/customers',
   DELETE_CUSTOMER: '/customers/:id',
   GET_CUSTOMER: '/customers/:id',

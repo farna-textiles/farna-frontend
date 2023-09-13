@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
 import {
   UnstyledButton,
   UnstyledButtonProps,
   Group,
   Avatar,
-  Popover,
   Text,
   createStyles,
 } from '@mantine/core';
-import Button from '@mui/material/Button';
+
 import { IconChevronRight } from '@tabler/icons-react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -66,9 +64,17 @@ const UserButton = ({
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleLogout = () => {
-    localStorage.clear();
-    window.location.href = '/signin';
+  const handleLogout = async () => {
+    try {
+      localStorage.clear();
+      document.cookie =
+        'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie =
+        'refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      window.location.href = '/signin';
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
 
   const handleClose = () => {
