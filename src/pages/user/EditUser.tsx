@@ -1,44 +1,67 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
-const validationSchema = Yup.object().shape({
-  username: Yup.string().required('Username is required'),
-  role: Yup.string().required('Role is required'),
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required'),
-  password: Yup.string().when('showPasswordFields', {
-    is: true,
-    then: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
-  }),
-  confirmPassword: Yup.string().when('showPasswordFields', {
-    is: true,
-    then: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Confirm Password is required'),
-  }),
-});
+import { updateUser, UpdateUserRequest } from '../../api/userApi';
 
 const EditUser = () => {
-  const { userId } = useParams();
-  const [user, setUser] = useState({});
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [showPasswordFields, setShowPasswordFields] = useState(false);
+
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required('Username is required'),
+    role: Yup.string().required('Role is required'),
+    email: Yup.string()
+      .email('Invalid email address')
+      .required('Email is required'),
+    isActive: Yup.boolean().required('Account Status is required'),
+
+    ...(showPasswordFields
+      ? {
+          password: Yup.string()
+            .min(6, 'Password must be at least 6 characters')
+            .required('Password is required'),
+          confirmPassword: Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Passwords must match')
+            .required('Confirm Password is required'),
+        }
+      : {}),
+  });
+
   const formik = useFormik({
     initialValues: {
       username: '',
       role: '',
-      email: '',
+      email: 'huraira@gmail.com',
       password: '',
       confirmPassword: '',
+      isActive: false,
     },
     validationSchema,
-    onSubmit: (values) => {},
-  });
+    onSubmit: async (values) => {
+      try {
+        const updatedUserData: UpdateUserRequest = {
+          id: values.id,
+          username: values.username,
+          role: values.role,
+          email: values.email,
+        };
 
+        if (showPasswordFields) {
+          updatedUserData.password = values.password;
+          updatedUserData.confirmPassword = values.confirmPassword;
+        }
+        updatedUserData.isActive = values.isActive;
+        const updatedUser = await updateUser(id, updatedUserData);
+
+        console.log('User updated successfully', updatedUser);
+        navigate('/users');
+      } catch (error) {
+        console.error('Error updating user', error);
+      }
+    },
+  });
   const togglePasswordFields = () => {
     setShowPasswordFields(!showPasswordFields);
   };
@@ -65,14 +88,14 @@ const EditUser = () => {
             <div className="mt-2">
               <input
                 id="email"
+                disabled
                 name="email"
                 type="text"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
                 autoComplete="off"
-                disabled
-                className="block w-full rounded-md border-0 py-1.5  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
               {formik.touched.email && formik.errors.email && (
                 <div className="text-red-500">{formik.errors.email}</div>
@@ -129,19 +152,21 @@ const EditUser = () => {
               )}
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium leading-6 text-gray-900">
-              Account Status
+
+          <label className="block text-sm font-medium leading-6 text-gray-900">
+            Account Status
+          </label>
+          <div className="mt-2">
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                name="isActive"
+                onChange={formik.handleChange}
+                checked={formik.values.isActive}
+                className="form-checkbox text-indigo-600 border-indigo-600 rounded shadow-sm ring-1 ring-inset ring-indigo-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+              />
+              <span className="ml-2 text-gray-900">Activate Account</span>
             </label>
-            <div className="mt-2">
-              <label className="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  className="form-checkbox text-indigo-600 border-indigo-600 rounded shadow-sm ring-1 ring-inset ring-indigo-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                />
-                <span className="ml-2 text-gray-900">Activate Account</span>
-              </label>
-            </div>
           </div>
           <div>
             <div className="flex items-center justify-between">

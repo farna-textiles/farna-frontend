@@ -131,20 +131,6 @@ const ForgetPassword = () => {
                   required
                 />
               </div>
-              <div className="ml-3 text-sm">
-                <label
-                  htmlFor="newsletter"
-                  className="font-light text-gray-500"
-                >
-                  I accept the{' '}
-                  <a
-                    className="font-medium text-primary-600 hover:underline"
-                    href="#"
-                  >
-                    Terms and Conditions
-                  </a>
-                </label>
-              </div>
             </div>
             <button
               type="submit"
