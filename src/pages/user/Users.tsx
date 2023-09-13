@@ -38,7 +38,6 @@ const Users = () => {
         icon: <DeleteIcon />,
         onClick: (id: number) => {
           console.log(`Delete button clicked for item with ID: ${id}`);
-          // Perform delete logic
         },
       },
     ],

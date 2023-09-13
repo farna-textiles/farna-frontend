@@ -77,10 +77,13 @@ const UserButton = ({
 
   return (
     <div className="relative">
-      <UnstyledButton className={classes.user} {...others}>
+      <UnstyledButton
+        className={classes.user}
+        {...others}
+        onClick={handleClick}
+      >
         <Group>
           <IconButton
-            onClick={handleClick}
             size="small"
             sx={{ ml: 2 }}
             aria-controls={open ? 'account-menu' : undefined}
