@@ -78,6 +78,16 @@ export interface User {
   updatedAt: string;
 }
 
+export interface UpdateUserRequest {
+  id: number;
+  username: string;
+  role: string;
+  email: string;
+  password?: string;
+  confirmPassword?: string;
+  isActive: boolean;
+}
+
 export interface Product {
   id?: string;
   lotNo: string;
