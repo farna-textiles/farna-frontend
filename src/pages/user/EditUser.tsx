@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { updateUser, getUserById } from '../../api/userApi';
+import { useQuery } from '@tanstack/react-query';
+import { Loader } from '@mantine/core';
+import { getUserById } from '../../api/userApi';
 import { UpdateUserRequest } from '../../interfaces';
+import useUpdateUser from '../../hooks/useUser';
 
 const EditUser = () => {
-  const { id } = useParams();
+  const { id: userId } = useParams();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  // const [usersData, setUserData] = useState(null);
-
   const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const updateUserMutation = useUpdateUser();
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -41,46 +42,37 @@ const EditUser = () => {
         }
       : {}),
   });
-  const { data: userData } = useQuery(['user', id], () => getUserById(id));
-
-  const updateUserMutation = useMutation((updatedUserData) =>
-    updateUser(id, updatedUserData)
+  const { data: userData } = useQuery(['user', userId], () =>
+    getUserById(+userId!)
   );
 
   const formik = useFormik({
     initialValues: {
-      username: '',
-      role: '',
-      email: 'huraira@gmail.com',
+      username: userData.username,
+      role: userData.role,
+      email: userData.email,
       password: '',
       confirmPassword: '',
-      isActive: false,
+      isActive: userData.isActive,
     },
     validationSchema,
     onSubmit: async (values) => {
-      try {
-        const updatedUserData: UpdateUserRequest = {
-          id: values.id,
-          username: values.username,
-          role: values.role,
-          email: values.email,
-        };
+      if (!userId) return;
+      const updatedUserData: UpdateUserRequest = {
+        id: +userId,
+        username: values.username,
+        role: values.role,
+        email: values.email,
+        isActive: values.isActive,
+      };
 
-        if (showPasswordFields) {
-          updatedUserData.password = values.password;
-          updatedUserData.confirmPassword = values.confirmPassword;
-        }
-        updatedUserData.isActive = values.isActive;
-        const updatedUser = await updateUser(id, updatedUserData);
-
-        await updateUserMutation.mutateAsync(updatedUserData);
-        queryClient.invalidateQueries(['user', id]);
-
-        console.log('User updated successfully', updatedUser);
-        navigate('/users');
-      } catch (error) {
-        console.error('Error updating user', error);
+      if (showPasswordFields) {
+        updatedUserData.password = values.password;
       }
+
+      await updateUserMutation.mutateAsync([+userId, updatedUserData]);
+
+      navigate('/users');
     },
   });
   const togglePasswordFields = () => {
@@ -95,115 +87,93 @@ const EditUser = () => {
     }
   };
 
-  useEffect(() => {
-    if (userData) {
-      formik.setValues({
-        username: userData.username || '',
-        role: userData.role || '',
-        email: userData.email || '',
-        isActive: userData.isActive || false,
-      });
-    }
-  }, [userData]);
-
   return (
-    <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-      <div className="w-full p-6 bg-white rounded-lg shadow border md:mt-0 sm:max-w-md text-black">
+    <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto h-full">
+      <div className="w-full p-6 bg-white rounded-lg shadow-md border text-gray-800 max-w-md">
         <div className="text-center">
-          <h2 className="mt-6 text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="mt-6 text-2xl font-bold leading-9 text-gray-900">
             Edit User
           </h2>
         </div>
-        <form
-          className="mt-4 space-y-2 lg:mt-5 md:space-y-5"
-          onSubmit={formik.handleSubmit}
-        >
-          <div>
+        <form className="mt-4 space-y-4" onSubmit={formik.handleSubmit}>
+          <div className="space-y-2">
             <label
               htmlFor="email"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium text-gray-900"
             >
               Email
             </label>
-            <div className="mt-2">
-              <input
-                id="email"
-                disabled
-                name="email"
-                type="text"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.email}
-                autoComplete="off"
-                className="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-              {formik.touched.email && formik.errors.email && (
-                <div className="text-red-500">{formik.errors.email}</div>
-              )}
-            </div>
+            <input
+              id="email"
+              disabled
+              name="email"
+              type="text"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+              autoComplete="off"
+              className="w-full px-4 py-2 rounded-md border text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600"
+            />
+            {formik.touched.email && formik.errors.email && (
+              <div className="text-red-500">{formik.errors.email}</div>
+            )}
           </div>
-          <div>
+          <div className="space-y-2">
             <label
               htmlFor="username"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium text-gray-900"
             >
               Username
             </label>
-            <div className="mt-2">
-              <input
-                id="username"
-                name="username"
-                type="text"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.username}
-                autoComplete="off"
-                className="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-              {formik.touched.username && formik.errors.username && (
-                <div className="text-red-500">{formik.errors.username}</div>
-              )}
-            </div>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.username}
+              autoComplete="off"
+              className="w-full px-4 py-2 rounded-md border text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600"
+            />
+            {formik.touched.username && formik.errors.username && (
+              <div className="text-red-500">{formik.errors.username}</div>
+            )}
           </div>
-
-          <div>
+          <div className="space-y-2">
             <label
               htmlFor="role"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium text-gray-900"
             >
               Role
             </label>
-            <div className="mt-2">
-              <select
-                id="role"
-                name="role"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.role}
-                autoComplete="off"
-                className="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              >
-                <option value="">Select Role</option>
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
-              </select>
-              {formik.touched.role && formik.errors.role && (
-                <div className="text-red-500">{formik.errors.role}</div>
-              )}
-            </div>
+            <select
+              id="role"
+              name="role"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.role}
+              autoComplete="off"
+              className="w-full px-4 py-2 rounded-md border text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600"
+            >
+              <option value="admin">Admin</option>
+              <option value="editor">Editor</option>
+              <option value="viewer">Viewer</option>
+            </select>
+            {formik.touched.role && formik.errors.role && (
+              <div className="text-red-500">{formik.errors.role}</div>
+            )}
           </div>
-
-          <label className="block text-sm font-medium leading-6 text-gray-900">
-            Account Status
-          </label>
-          <div className="mt-2">
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-900">
+              Account Status
+            </label>
             <label className="inline-flex items-center">
               <input
                 type="checkbox"
                 name="isActive"
                 onChange={formik.handleChange}
                 checked={formik.values.isActive}
-                className="form-checkbox text-indigo-600 border-indigo-600 rounded shadow-sm ring-1 ring-inset ring-indigo-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                className="form-checkbox text-indigo-600 border-indigo-600 rounded focus:ring-2 focus:ring-indigo-600"
               />
               <span className="ml-2 text-gray-900">Activate Account</span>
             </label>
@@ -211,15 +181,15 @@ const EditUser = () => {
           <div>
             <div className="flex items-center justify-between">
               <div className="text-sm">
-                <a
-                  href="#"
+                <button
+                  type="button"
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
                   onClick={togglePasswordFields}
                 >
                   {showPasswordFields
                     ? 'Hide Password Fields'
                     : 'Change Password'}
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -279,7 +249,12 @@ const EditUser = () => {
           <div>
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className={`w-full px-4 py-2 text-white font-medium rounded-lg transition duration-150 ${
+                updateUserMutation.isLoading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700'
+              }`}
+              disabled={updateUserMutation.isLoading}
             >
               Update
             </button>

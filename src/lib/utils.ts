@@ -18,8 +18,8 @@ export const handleApiCall = async <T>(
     return response.data;
   } catch (error: any) {
     if (error.code === 'ERR_BAD_REQUEST' && !userInfo()) {
-      // redirect to sign in
+      window.location.href = '/signin';
     }
-    throw error.response.data;
+    throw error?.response?.data;
   }
 };

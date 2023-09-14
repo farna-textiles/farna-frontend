@@ -79,13 +79,13 @@ export interface User {
 }
 
 export interface UpdateUserRequest {
-  id: number;
-  username: string;
-  role: string;
-  email: string;
+  id?: number;
+  username?: string;
+  role?: string;
+  email?: string;
   password?: string;
   confirmPassword?: string;
-  isActive: boolean;
+  isActive?: boolean;
 }
 
 export interface Product {

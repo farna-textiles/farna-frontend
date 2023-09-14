@@ -1,8 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ActionButton,
   AdditionalColumn,
@@ -11,10 +12,12 @@ import {
 } from '../../interfaces';
 import GenericTable from '../../components/table/GenericTable';
 import { getAllUsers } from '../../api/userApi';
-import { useNavigate } from 'react-router-dom';
+import useUpdateUser from '../../hooks/useUser';
 
 const Users = () => {
   const navigate = useNavigate();
+  const updateUserMutation = useUpdateUser();
+
   const columns: TableColumn<User>[] = useMemo(
     () => [
       { field: 'id', label: 'ID' },
@@ -31,7 +34,6 @@ const Users = () => {
         icon: <Edit />,
         onClick: (id: number) => {
           navigate(`/edit/${id}`);
-          console.log(`Edit button clicked for item with ID: ${id}`);
         },
       },
       {
@@ -45,9 +47,9 @@ const Users = () => {
   );
 
   const additionalColumn: AdditionalColumn<User> = {
-    type: 'radio',
+    type: 'checkbox',
     onChange: (itemId: number, checked: boolean) => {
-      console.log(`Item with ID ${itemId} has been checked: ${checked}`);
+      updateUserMutation.mutateAsync([itemId, { isActive: checked }]);
     },
     valueGetter: (item: User) => {
       return item.isActive;
