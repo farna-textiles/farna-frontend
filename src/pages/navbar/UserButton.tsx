@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import {
   UnstyledButton,
   UnstyledButtonProps,
@@ -12,6 +13,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { IconButton, ListItemIcon } from '@mui/material';
+import { ReactNode, useState } from 'react';
+import { logout } from '../../services/authService';
+import { useNavigate } from 'react-router';
 
 const useStyles = createStyles((theme) => ({
   user: {
@@ -48,7 +52,7 @@ interface UserButtonProps extends UnstyledButtonProps {
   image: string;
   name: string;
   email: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
 }
 
 const UserButton = ({
@@ -59,22 +63,16 @@ const UserButton = ({
   ...others
 }: UserButtonProps) => {
   const { classes } = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const navigate = useNavigate();
   const handleLogout = async () => {
-    try {
-      localStorage.clear();
-      document.cookie =
-        'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      document.cookie =
-        'refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      window.location.href = '/signin';
-    } catch (error) {
-      console.error('Error during logout:', error);
-    }
+    logout();
+    navigate('/signin');
   };
 
   const handleClose = () => {
@@ -99,7 +97,7 @@ const UserButton = ({
             <Avatar
               sx={{ width: 32, height: 32, borderRadius: '50%' }}
               src={image}
-            ></Avatar>
+            />
           </IconButton>
           <div style={{ flex: 1 }}>
             <Text sx={{ fontSize: '14px', fontWeight: 500 }}>{name}</Text>

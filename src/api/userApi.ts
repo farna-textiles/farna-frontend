@@ -1,3 +1,4 @@
+import { MutationFunction } from '@tanstack/react-query';
 import { API_URLS } from '../constants';
 import { PaginatedResponse, User, UpdateUserRequest } from '../interfaces';
 import { handleApiCall } from '../lib/utils';
@@ -22,56 +23,18 @@ export const getAllUser = async (data: { confirmationToken: string }) => {
   return handleApiCall(api.post, API_URLS.AUTH_CONFIRM_EMAIL, data);
 };
 
-export const updateUser = async (
-  userId: string,
-  userData: UpdateUserRequest
-): Promise<User> => {
-  const url = API_URLS.UPDATE_USER.replace(':id', userId);
-  try {
-    const response = await api.put(url, userData, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    });
-    if (response.status === 200) {
-      return response.data;
-    }
-    throw new Error('Failed to update user');
-  } catch (error: any) {
-    throw error.response.data;
-  }
+export const updateUser: MutationFunction<
+  any,
+  [number, UpdateUserRequest]
+> = async (params) => {
+  const [id, data] = params;
+  const apiUrl = API_URLS.UPDATE_USER.replace(':id', String(id));
+
+  return handleApiCall(api.put, apiUrl, data);
 };
 
-export const getUserById = async (userId) => {
-  try {
-    const response = await api.get(
-      API_URLS.GET_USER_BY_ID.replace(':id', userId),
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      }
-    );
+export const getUserById = async (id: number, data = {}) => {
+  const apiUrl = API_URLS.GET_USER_BY_ID.replace(':id', String(id));
 
-    if (response.status === 200) {
-      return response.data;
-    }
-
-    throw new Error('Failed to fetch user data');
-  } catch (error) {
-    throw new Error(`Error fetching user data by ID: ${error.message}`);
-  }
+  return handleApiCall(api.get, apiUrl, data);
 };
-
-// export const handleTheLogout = async () => {
-//   try {
-//     localStorage.clear();
-//     const response = await api.post(API_URLS.LOGOUT);
-//     if (response.status === 200) {
-//     } else {
-//       console.error('Logout failed');
-//     }
-//   } catch (error) {
-//     console.error('Error during logout:', error);
-//   }
-// };
