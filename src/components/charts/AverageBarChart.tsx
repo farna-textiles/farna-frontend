@@ -1,11 +1,10 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import { YearPickerInput } from '@mantine/dates';
-import { useCompareYears } from '../../hooks/useDashboard';
+import { useCompareAverage } from '../../hooks/useDashboard';
 import { CompareRangeType } from '../../interfaces';
 
-const LineChart: React.FC = () => {
+const AverageBarChart: React.FC = () => {
   const currentDate = new Date();
   const fiveYearsAgo = new Date();
   fiveYearsAgo.setFullYear(currentDate.getFullYear() - 5);
@@ -14,29 +13,14 @@ const LineChart: React.FC = () => {
     currentDate,
   ]);
 
-  const { data } = useCompareYears({
+  const { data } = useCompareAverage({
     startYear: value[0]?.getFullYear() ?? 2018,
     endYear: value[1]?.getFullYear() ?? 2023,
   }) as { data: CompareRangeType[] };
 
   const option = {
-    title: {
-      text: 'Earnings Comparison Over Multiple Years',
-      left: 'center',
-    },
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-      },
-    },
-    legend: {
-      data: data.map((res: CompareRangeType) => res.name),
-      top: 30,
-    },
     xAxis: {
       type: 'category',
-      boundaryGap: false,
       data: [
         'Jan',
         'Feb',
@@ -54,13 +38,39 @@ const LineChart: React.FC = () => {
     },
     yAxis: {
       type: 'value',
-      name: 'Earnings',
     },
-    series: data,
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow',
+      },
+      formatter: (params: any[]) => {
+        const year1Data = params[0]?.data as number;
+        const year2Data = params[1]?.data as number;
+
+        const tooltipLines: string[] = [];
+
+        if (year1Data) {
+          tooltipLines.push(`${params[0]?.seriesName}: ${year1Data}`);
+        }
+        if (year2Data) {
+          tooltipLines.push(`${params[1]?.seriesName}: ${year2Data}`);
+        }
+
+        return tooltipLines.join('<br/>');
+      },
+    },
+    series: [
+      {
+        name: `Year`,
+        data,
+        type: 'bar',
+      },
+    ],
   };
 
   return (
-    <div className="col-span-2 bg-white rounded-md dark:bg-darker">
+    <div className="col-span-1 bg-white rounded-md dark:bg-darker">
       <div className="flex items-center justify-between p-4 border-b dark:border-primary">
         <h4 className="text-lg font-semibold text-gray-500 dark:text-light">
           Comparison Over Multiple Years
@@ -80,4 +90,4 @@ const LineChart: React.FC = () => {
   );
 };
 
-export default LineChart;
+export default AverageBarChart;

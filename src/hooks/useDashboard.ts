@@ -3,6 +3,8 @@ import {
   compareTwoYears,
   getStatistics,
   getDmographic,
+  compareYearInRange,
+  averageInRange,
 } from '../api/dashboardApi';
 
 export const useDashboardCards = (timeFilter: 'week' | 'month' | 'year') => {
@@ -12,11 +14,25 @@ export const useDashboardCards = (timeFilter: 'week' | 'month' | 'year') => {
 };
 
 export const useCompareTwoYears = (years: { year1: string; year2: string }) => {
-  return useQuery(['dashboardCards', years], () => compareTwoYears(years));
+  return useQuery(['dashboardTwoYears', years], () => compareTwoYears(years));
 };
 
 export const useDashboardDmographic = (sortBy: string, filterBy: string) => {
   return useQuery(['dashboardDmographic', sortBy, filterBy], () =>
     getDmographic(sortBy, filterBy)
   );
+};
+
+export const useCompareYears = (years: {
+  startYear: number;
+  endYear: number;
+}) => {
+  return useQuery(['dashboardYears', years], () => compareYearInRange(years));
+};
+
+export const useCompareAverage = (years: {
+  startYear: number;
+  endYear: number;
+}) => {
+  return useQuery(['dashboardAverage', years], () => averageInRange(years));
 };
