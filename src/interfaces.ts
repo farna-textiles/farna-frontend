@@ -329,3 +329,9 @@ export interface Order {
   orderProducts: ProductOrder[];
   [key: string]: any;
 }
+
+export interface CompareRangeType {
+  name: string;
+  type: string;
+  data: number[];
+}

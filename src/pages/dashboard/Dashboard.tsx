@@ -1,4 +1,3 @@
-// Dashboard.js
 import React, { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import DashboardCards from './DashboardCards';
@@ -6,6 +5,7 @@ import BarChart from '../../components/charts/BarChart';
 import DoughnutChart from '../../components/charts/DoughnutChart';
 import LineChart from '../../components/charts/LineChart';
 import DummyDashboardCards from './DummyDashboardCards';
+import AverageBarChart from '../../components/charts/AverageBarChart';
 
 interface ErrorFallbackProps {
   error: Error;
@@ -69,14 +69,16 @@ const Dashboard: React.FC = () => {
             <DoughnutChart />
           </Suspense>
         </ErrorBoundary>
-        <div className="col-span-1 bg-white rounded-md dark:bg-darker">
-          <div className="p-4 border-b dark:border-primary">
-            <h4 className="text-lg font-semibold text-gray-500 dark:text-light">
-              Active users right now
-            </h4>
-          </div>
-        </div>
-        <LineChart />
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Suspense fallback={<LoadingDoughnutChart />}>
+            <AverageBarChart />
+          </Suspense>
+        </ErrorBoundary>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Suspense fallback={<LoadingBarChart />}>
+            <LineChart />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </main>
   );

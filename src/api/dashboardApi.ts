@@ -28,3 +28,25 @@ export const getDmographic = async (sortBy: string, filterBy: string) => {
 
   return handleApiCall(api.post, url, data);
 };
+
+export const compareYearInRange = async (years: {
+  startYear: number;
+  endYear: number;
+}) => {
+  return handleApiCall(
+    api.post,
+    API_URLS.DASHBOARD_METHODS.COMPARE_YEARS_IN_RANGE,
+    years
+  );
+};
+
+export const averageInRange = async (years: {
+  startYear: number;
+  endYear: number;
+}) => {
+  return handleApiCall(
+    api.post,
+    API_URLS.DASHBOARD_METHODS.AVERAGE_IN_RANGE,
+    years
+  );
+};

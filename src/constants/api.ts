@@ -41,5 +41,7 @@ export const API_URLS = {
     STATISTICS: 'dashboard/statistics',
     COMPARE_TWO_YEARS: 'dashboard/compare',
     DEMOGRAPHICS: 'dashboard/demographic',
+    COMPARE_YEARS_IN_RANGE: 'dashboard/compare-range',
+    AVERAGE_IN_RANGE: 'dashboard/average',
   },
 };
