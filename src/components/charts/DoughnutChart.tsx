@@ -3,12 +3,13 @@ import ReactEcharts from 'echarts-for-react';
 import { useDashboardDmographic } from '../../hooks/useDashboard';
 import ToggleSwitch from '../elements/ToggleSwitch';
 
-const DoughnutChart: React.FC = () => {
+const DoughnutChart: React.FC<{ currency: number }> = ({ currency }) => {
   const sortBy = 'orders';
   const [isDoughnutChartOn, setDoughnutChartOn] = useState(false);
   const { data } = useDashboardDmographic(
     sortBy,
-    isDoughnutChartOn ? 'city' : 'country'
+    isDoughnutChartOn ? 'city' : 'country',
+    currency
   );
 
   const option = {

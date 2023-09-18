@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import { useCompareTwoYears } from '../../hooks/useDashboard';
 
-const BarChart: React.FC = () => {
+const BarChart: React.FC<{ currency: number }> = ({ currency }) => {
   const [selectedYear1, setSelectedYear1] = useState<string>('2022');
   const [selectedYear2, setSelectedYear2] = useState<string>('2023');
 
-  const { data } = useCompareTwoYears({
-    year1: selectedYear1,
-    year2: selectedYear2,
-  });
+  const { data } = useCompareTwoYears(
+    {
+      year1: selectedYear1,
+      year2: selectedYear2,
+    },
+    currency
+  );
 
   const currentYear = new Date().getFullYear();
   const yearsList = Array.from({ length: currentYear - 2021 }, (_, index) =>
