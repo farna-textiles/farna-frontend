@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import DashboardCards from './DashboardCards';
 import BarChart from '../../components/charts/BarChart';
@@ -6,10 +6,12 @@ import DoughnutChart from '../../components/charts/DoughnutChart';
 import LineChart from '../../components/charts/LineChart';
 import DummyDashboardCards from './DummyDashboardCards';
 import AverageBarChart from '../../components/charts/AverageBarChart';
+import CurrencyFilter from '../../components/filters/CurrencyFilter';
 
 interface ErrorFallbackProps {
   error: Error;
 }
+
 const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error }) => {
   return (
     <div>
@@ -51,34 +53,46 @@ const LoadingDoughnutChart: React.FC = () => {
 };
 
 const Dashboard: React.FC = () => {
+  const [selectedCurrency, setSelectedCurrency] = useState<number>(1);
+  const handleCurrencyChange = (newCurrency: number) => {
+    setSelectedCurrency(newCurrency);
+  };
   return (
     <main className="bg-slate-200">
-      <div className="grid grid-cols-1 p-4 space-y-8 lg:gap-8 lg:space-y-0 lg:grid-cols-3">
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Suspense fallback={<DummyDashboardCards />}>
-            <DashboardCards />
-          </Suspense>
-        </ErrorBoundary>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Suspense fallback={<LoadingBarChart />}>
-            <BarChart />
-          </Suspense>
-        </ErrorBoundary>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Suspense fallback={<LoadingDoughnutChart />}>
-            <DoughnutChart />
-          </Suspense>
-        </ErrorBoundary>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Suspense fallback={<LoadingDoughnutChart />}>
-            <AverageBarChart />
-          </Suspense>
-        </ErrorBoundary>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Suspense fallback={<LoadingBarChart />}>
-            <LineChart />
-          </Suspense>
-        </ErrorBoundary>
+      <div className="w-full bg-slate-300 dark:bg-gray-900 rounded-lg shadow-lg p-4 col-span-full">
+        <div className="flex justify-end w-full">
+          <CurrencyFilter
+            selectedCurrency={selectedCurrency}
+            onCurrencyChange={handleCurrencyChange}
+          />
+        </div>
+        <div className="grid grid-cols-1 p-4 space-y-8 lg:gap-8 lg:space-y-0 lg:grid-cols-3">
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<DummyDashboardCards />}>
+              <DashboardCards currency={+selectedCurrency} />
+            </Suspense>
+          </ErrorBoundary>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<LoadingBarChart />}>
+              <BarChart currency={+selectedCurrency} />
+            </Suspense>
+          </ErrorBoundary>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<LoadingDoughnutChart />}>
+              <DoughnutChart currency={+selectedCurrency} />
+            </Suspense>
+          </ErrorBoundary>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<LoadingDoughnutChart />}>
+              <AverageBarChart currency={+selectedCurrency} />
+            </Suspense>
+          </ErrorBoundary>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<LoadingBarChart />}>
+              <LineChart currency={+selectedCurrency} />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
       </div>
     </main>
   );

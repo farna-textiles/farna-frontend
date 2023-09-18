@@ -7,32 +7,59 @@ import {
   averageInRange,
 } from '../api/dashboardApi';
 
-export const useDashboardCards = (timeFilter: 'week' | 'month' | 'year') => {
-  return useQuery(['dashboardCards', timeFilter], () =>
-    getStatistics(timeFilter)
+export const useDashboardCards = (
+  timeFilter: 'week' | 'month' | 'year',
+  currencyUnitId: number
+) => {
+  return useQuery(['dashboardCards', timeFilter, currencyUnitId], () =>
+    getStatistics(timeFilter, currencyUnitId)
   );
 };
 
-export const useCompareTwoYears = (years: { year1: string; year2: string }) => {
-  return useQuery(['dashboardTwoYears', years], () => compareTwoYears(years));
-};
-
-export const useDashboardDmographic = (sortBy: string, filterBy: string) => {
-  return useQuery(['dashboardDmographic', sortBy, filterBy], () =>
-    getDmographic(sortBy, filterBy)
+export const useCompareTwoYears = (
+  years: { year1: string; year2: string },
+  currencyUnitId: number
+) => {
+  return useQuery(['dashboardTwoYears', years, currencyUnitId], () =>
+    compareTwoYears(years, currencyUnitId)
   );
 };
 
-export const useCompareYears = (years: {
-  startYear: number;
-  endYear: number;
-}) => {
-  return useQuery(['dashboardYears', years], () => compareYearInRange(years));
+export const useDashboardDmographic = (
+  dataFilter: string,
+  locationFilter: string,
+  currencyUnitId: number
+) => {
+  return useQuery(
+    ['dashboardDmographic', dataFilter, locationFilter, currencyUnitId],
+    () => getDmographic(dataFilter, locationFilter, currencyUnitId)
+  );
 };
 
-export const useCompareAverage = (years: {
-  startYear: number;
-  endYear: number;
-}) => {
-  return useQuery(['dashboardAverage', years], () => averageInRange(years));
+export const useCompareYears = (
+  yearRange: {
+    startYear: number;
+    endYear: number;
+  },
+  dataFilter: string,
+  currencyUnitId: number
+) => {
+  return useQuery(
+    ['dashboardYears', yearRange, currencyUnitId, dataFilter],
+    () => compareYearInRange(yearRange, dataFilter, currencyUnitId)
+  );
+};
+
+export const useCompareAverage = (
+  yearRange: {
+    startYear: number;
+    endYear: number;
+  },
+  dataFilter: string,
+  currencyUnitId: number
+) => {
+  return useQuery(
+    ['dashboardAverage', yearRange, dataFilter, currencyUnitId],
+    () => averageInRange(yearRange, dataFilter, currencyUnitId)
+  );
 };

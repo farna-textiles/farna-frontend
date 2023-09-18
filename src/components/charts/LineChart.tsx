@@ -5,7 +5,7 @@ import { YearPickerInput } from '@mantine/dates';
 import { useCompareYears } from '../../hooks/useDashboard';
 import { CompareRangeType } from '../../interfaces';
 
-const LineChart: React.FC = () => {
+const LineChart: React.FC<{ currency: number }> = ({ currency }) => {
   const currentDate = new Date();
   const fiveYearsAgo = new Date();
   fiveYearsAgo.setFullYear(currentDate.getFullYear() - 5);
@@ -14,10 +14,16 @@ const LineChart: React.FC = () => {
     currentDate,
   ]);
 
-  const { data } = useCompareYears({
-    startYear: value[0]?.getFullYear() ?? 2018,
-    endYear: value[1]?.getFullYear() ?? 2023,
-  }) as { data: CompareRangeType[] };
+  const dataFilter = 'order';
+
+  const { data } = useCompareYears(
+    {
+      startYear: value[0]?.getFullYear() ?? 2018,
+      endYear: value[1]?.getFullYear() ?? 2023,
+    },
+    dataFilter,
+    currency
+  ) as { data: CompareRangeType[] };
 
   const option = {
     title: {

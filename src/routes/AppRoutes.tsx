@@ -185,7 +185,7 @@ export const AppRoutes: React.FC = () => {
             </AuthRoute>
           ),
         },
-        { path: '*', element: <PageNotFound /> },
+        // { path: '*', element: <PageNotFound /> },
       ],
     },
     {

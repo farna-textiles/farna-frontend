@@ -6,11 +6,11 @@ import DownArrowIcon from '../../lib/icons/DownArrowIcon';
 import HorizontalLineIcon from '../../lib/icons/HorizontalLineIcon';
 import { useDashboardCards } from '../../hooks/useDashboard';
 
-const DashboardCards: React.FC = () => {
+const DashboardCards: React.FC<{ currency: number }> = ({ currency }) => {
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'year'>(
     'month'
   );
-  const { data } = useDashboardCards(timeRange);
+  const { data } = useDashboardCards(timeRange, currency);
   const [growthType, setGrowthType] = useState<string>('Sales Growth');
   const [growthValue, setGrowthValue] = useState<string>(
     data.growth.salesGrowth
