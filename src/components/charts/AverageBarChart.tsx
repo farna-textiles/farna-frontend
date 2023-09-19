@@ -3,9 +3,17 @@ import ReactEcharts from 'echarts-for-react';
 import { YearPickerInput } from '@mantine/dates';
 import { useCompareAverage } from '../../hooks/useDashboard';
 import { CompareRangeType } from '../../interfaces';
+import { notifyError } from '../../lib/utils';
 
-const AverageBarChart: React.FC<{ currency: number }> = ({ currency }) => {
-  const dataFilter = 'order';
+type AverageBarChartProps = {
+  currency: number;
+  dataFilter?: 'orders' | 'earnings';
+};
+
+const AverageBarChart: React.FC<AverageBarChartProps> = ({
+  currency,
+  dataFilter = 'orders',
+}) => {
   const currentDate = new Date();
   const fiveYearsAgo = new Date();
   fiveYearsAgo.setFullYear(currentDate.getFullYear() - 5);
@@ -16,8 +24,8 @@ const AverageBarChart: React.FC<{ currency: number }> = ({ currency }) => {
 
   const { data } = useCompareAverage(
     {
-      startYear: value[0]?.getFullYear() ?? 2018,
-      endYear: value[1]?.getFullYear() ?? 2023,
+      startYear: value[0]?.getFullYear(),
+      endYear: value[1]?.getFullYear(),
     },
     dataFilter,
     currency
@@ -75,16 +83,30 @@ const AverageBarChart: React.FC<{ currency: number }> = ({ currency }) => {
   };
 
   return (
-    <div className="col-span-1 bg-white rounded-md dark:bg-darker">
+    <div className="col-span-2 bg-gray-100 xl:col-span-1 rounded-md shadow-lg dark:bg-gray-900 hover:bg-gray-50">
       <div className="flex items-center justify-between p-4 border-b dark:border-primary">
         <h4 className="text-lg font-semibold text-gray-500 dark:text-light">
-          Comparison Over Multiple Years
+          Averages Over Multiple Years
         </h4>
         <YearPickerInput
           type="range"
           placeholder="Pick dates range"
           value={value}
-          onChange={setValue}
+          onChange={(dateRange) => {
+            const [start, end] = dateRange;
+            if (start && !end) setValue([start, null]);
+            if (start && end) {
+              const futureDate = new Date(start);
+              futureDate.setFullYear(start.getFullYear() + 5);
+              const diffInYears = end.getFullYear() - start.getFullYear();
+              if (diffInYears >= 5) {
+                notifyError('Year range must be 5 years or less.');
+                setValue([start, futureDate]);
+              } else {
+                setValue([start, end]);
+              }
+            }
+          }}
           maw={400}
         />
       </div>
@@ -93,6 +115,10 @@ const AverageBarChart: React.FC<{ currency: number }> = ({ currency }) => {
       </div>
     </div>
   );
+};
+
+AverageBarChart.defaultProps = {
+  dataFilter: 'orders',
 };
 
 export default AverageBarChart;

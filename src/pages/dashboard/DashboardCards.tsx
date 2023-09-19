@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useEffect, useState, ReactElement } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import Card from '../../components/elements/Card';
 import UpArrowIcon from '../../lib/icons/UpArrowIcon';
 import DownArrowIcon from '../../lib/icons/DownArrowIcon';
@@ -23,19 +23,13 @@ const DashboardCards: React.FC<{ currency: number }> = ({ currency }) => {
       const numericGrowth = parseFloat(growthValue);
       if (numericGrowth > 0) {
         setValueLabel('High');
-        setIcon(
-          <UpArrowIcon className="w-12 h-12 text-gray-300 dark:text-primary-dark" />
-        );
+        setIcon(<UpArrowIcon className="w-12 h-12 text-green-600" />);
       } else if (numericGrowth < 0) {
         setValueLabel('Low');
-        setIcon(
-          <DownArrowIcon className="w-12 h-12 text-red-300 dark:text-primary-dark" />
-        );
+        setIcon(<DownArrowIcon className="w-12 h-12 text-red-600" />);
       } else {
         setValueLabel('Neutral');
-        setIcon(
-          <HorizontalLineIcon className="w-12 h-12 text-gray-300 dark:text-primary-dark" />
-        );
+        setIcon(<HorizontalLineIcon className="w-12 h-12 text-gray-600" />);
       }
     };
 
@@ -63,14 +57,11 @@ const DashboardCards: React.FC<{ currency: number }> = ({ currency }) => {
   }, [timeRange, data]);
 
   return (
-    <div className="w-full bg-white dark:bg-gray-900 rounded-lg shadow-lg p-4 col-span-full">
-      <div className="flex justify-end items-center mb-4 border-b pb-2 w-full">
-        <label
-          htmlFor="timeRange"
-          className="text-sm font-medium text-gray-600 dark:text-gray-300 mr-2"
-        >
-          Time Range:
-        </label>
+    <div className="w-full bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg p-4 col-span-full my-3">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-2xl font-semibold text-gray-800 dark:text-white">
+          Data Insights
+        </h3>
         <select
           id="timeRange"
           onChange={(e) =>
@@ -84,14 +75,15 @@ const DashboardCards: React.FC<{ currency: number }> = ({ currency }) => {
           <option value="year">Year</option>
         </select>
       </div>
+
       <div className="grid grid-cols-1 gap-8 mt-4 lg:grid-cols-2 xl:grid-cols-4">
         <Card
-          title="Amount"
+          title="Earnings"
           value={data.earnings.total}
           percentage={data.earnings.percentageChange}
           icon={
             <svg
-              className="w-12 h-12 text-gray-300 dark:text-primary-dark"
+              className="w-12 h-12 text-gray-300 dark:text-primary-light"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -112,7 +104,7 @@ const DashboardCards: React.FC<{ currency: number }> = ({ currency }) => {
           percentage={data.customers.percentageChange}
           icon={
             <svg
-              className="w-12 h-12 text-gray-300 dark:text-primary-dark"
+              className="w-12 h-12 text-gray-300 dark:text-primary-light"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -133,7 +125,7 @@ const DashboardCards: React.FC<{ currency: number }> = ({ currency }) => {
           percentage={data.orders.percentageChange}
           icon={
             <svg
-              className="w-12 h-12 text-gray-300 dark:text-primary-dark"
+              className="w-12 h-12 text-gray-300 dark:text-primary-light"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"

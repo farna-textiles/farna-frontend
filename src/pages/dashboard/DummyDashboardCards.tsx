@@ -13,7 +13,7 @@ const LoadingCard: React.FC = () => {
 
 const DummyDashboardCards: React.FC = () => {
   return (
-    <div className="w-full bg-white dark:bg-gray-900 rounded-lg shadow-lg p-4 col-span-full">
+    <div className="w-full bg-white dark:bg-gray-900 rounded-lg shadow-lg p-4 col-span-full my-3">
       <div className="flex justify-end items-center mb-4 border-b pb-2 w-full">
         <label
           htmlFor="timeRange"

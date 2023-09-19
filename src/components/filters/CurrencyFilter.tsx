@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable import/no-extraneous-dependencies */
 import { useQuery } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
@@ -19,10 +18,10 @@ const CurrencyFilter: React.FC<CurrencyFilterProps> = ({
   };
 
   return (
-    <div className="">
-      <label className="text-gray-600 dark:text-light pr-2">Currency:</label>
+    <div className="flex items-center">
       <select
-        className="border rounded-md p-2"
+        id="currency"
+        className="p-2 rounded-md border-2 bg-gray-100 border-gray-300 dark:border-gray-700 text-sm"
         value={selectedCurrency}
         onChange={(e) => onCurrencyChange(+e.target.value)}
       >

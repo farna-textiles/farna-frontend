@@ -1,13 +1,20 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import { useDashboardDmographic } from '../../hooks/useDashboard';
-import ToggleSwitch from '../elements/ToggleSwitch';
 
-const DoughnutChart: React.FC<{ currency: number }> = ({ currency }) => {
-  const sortBy = 'orders';
+type DoughnutChartProps = {
+  currency: number;
+  dataFilter?: 'orders' | 'earnings';
+};
+
+const DoughnutChart: React.FC<DoughnutChartProps> = ({
+  currency,
+  dataFilter = 'orders',
+}) => {
   const [isDoughnutChartOn, setDoughnutChartOn] = useState(false);
   const { data } = useDashboardDmographic(
-    sortBy,
+    dataFilter,
     isDoughnutChartOn ? 'city' : 'country',
     currency
   );
@@ -40,22 +47,50 @@ const DoughnutChart: React.FC<{ currency: number }> = ({ currency }) => {
     ],
   };
 
+  const handleCountryClick = () => {
+    setDoughnutChartOn(false);
+  };
+
+  const handleCityClick = () => {
+    setDoughnutChartOn(true);
+  };
+
   return (
-    <div className="bg-white rounded-md dark:bg-darker">
+    <div className="col-span-2 bg-gray-100 xl:col-span-1 rounded-md shadow-lg dark:bg-gray-900 hover:bg-gray-50">
       <div className="flex items-center justify-between p-4 border-b dark:border-primary">
         <h4 className="text-lg font-semibold text-gray-500 dark:text-light">
-          Order Statistics by {isDoughnutChartOn ? 'City' : 'Country'}
+          Demographics
         </h4>
-        <ToggleSwitch
-          isOn={isDoughnutChartOn}
-          onToggle={() => setDoughnutChartOn(!isDoughnutChartOn)}
-        />
+        <div className="flex items-center">
+          <button
+            type="button"
+            className={`text-gray-500 pr-2 focus:outline-none ${
+              !isDoughnutChartOn ? 'font-semibold' : ''
+            }`}
+            onClick={handleCountryClick}
+          >
+            Country
+          </button>
+          <button
+            type="button"
+            className={`text-gray-500 pl-2 focus:outline-none ${
+              isDoughnutChartOn ? 'font-semibold' : ''
+            }`}
+            onClick={handleCityClick}
+          >
+            City
+          </button>
+        </div>
       </div>
-      <div className="relative p-4 h-72">
-        <ReactEcharts option={option} />
+      <div className="p-4">
+        <ReactEcharts option={option} style={{ height: '300px' }} />
       </div>
     </div>
   );
+};
+
+DoughnutChart.defaultProps = {
+  dataFilter: 'orders',
 };
 
 export default DoughnutChart;
