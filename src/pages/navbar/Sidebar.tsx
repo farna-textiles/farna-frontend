@@ -22,7 +22,7 @@ const useStyles = createStyles((theme) => ({
   navbar: {
     backgroundColor:
       theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
-    padding: '1rem',
+    padding: '1rem 1rem 0 1rem',
     fontSize: '16px',
   },
 
@@ -127,9 +127,8 @@ const Sidebar = () => {
 
   return (
     <Navbar
-      p="md"
       className={classes.navbar}
-      style={{ height: isMobile ? '100px' : '100vh' }}
+      style={{ height: isMobile ? 'fit-content' : '100vh' }}
     >
       <Navbar.Section className={classes.header}>
         {isMobile && <SwipeableTemporaryDrawer />}
@@ -137,7 +136,7 @@ const Sidebar = () => {
           className={`${classes.logo} md:flex`}
           style={{ justifyContent: isMobile ? 'flex-end' : 'flex-start' }}
         >
-          <img src={logo} alt="farna logo" width={isMobile ? '68' : ''} />
+          {/* <img src={logo} alt="farna log  o" width={isMobile ? '68' : ''} /> */}
         </div>
       </Navbar.Section>
 

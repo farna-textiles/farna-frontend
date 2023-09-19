@@ -38,8 +38,8 @@ export const useDashboardDmographic = (
 
 export const useCompareYears = (
   yearRange: {
-    startYear: number;
-    endYear: number;
+    startYear: number | undefined;
+    endYear: number | undefined;
   },
   dataFilter: string,
   currencyUnitId: number
@@ -52,8 +52,8 @@ export const useCompareYears = (
 
 export const useCompareAverage = (
   yearRange: {
-    startYear: number;
-    endYear: number;
+    startYear: number | undefined;
+    endYear: number | undefined;
   },
   dataFilter: string,
   currencyUnitId: number

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { FC, ReactElement } from 'react';
 
 interface CardProps {
@@ -8,25 +9,26 @@ interface CardProps {
 }
 
 const Card: FC<CardProps> = ({ title, value, percentage, icon }) => {
-  let formattedPercentage = `${percentage}%`;
-  let percentageBgClass = 'bg-green-100';
-  let percentageTextColor = 'text-green-600';
-
   const numericPercentage = parseFloat(percentage);
-  if (numericPercentage > 0) {
-    formattedPercentage = `+${formattedPercentage}`;
-    percentageBgClass = 'bg-green-100';
-    percentageTextColor = 'text-green-600';
-  } else if (numericPercentage < 0) {
-    percentageBgClass = 'bg-red-100';
-    percentageTextColor = 'text-red-600';
-  } else {
-    percentageBgClass = 'bg-gray-200';
-    percentageTextColor = 'text-gray-600';
-  }
+  const isPositive = numericPercentage > 0;
+  const isNegative = numericPercentage < 0;
+
+  const percentageBgClass = isPositive
+    ? 'bg-green-100'
+    : isNegative
+    ? 'bg-red-100'
+    : 'bg-gray-200';
+
+  const percentageTextColor = isPositive
+    ? 'text-green-600'
+    : isNegative
+    ? 'text-red-600'
+    : 'text-gray-600';
+
+  const formattedPercentage = isPositive ? `+${percentage}%` : `${percentage}%`;
 
   return (
-    <div className="card flex items-center justify-between p-4 bg-white rounded-md shadow-md dark:bg-darker">
+    <div className="card flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-50 rounded-md shadow-md dark:bg-darker">
       <div className="card__info">
         <h6 className="card__title text-xs font-medium leading-none tracking-wider text-gray-500 uppercase dark:text-primary-light">
           {title}

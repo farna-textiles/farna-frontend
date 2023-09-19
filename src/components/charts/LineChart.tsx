@@ -4,8 +4,17 @@ import ReactEcharts from 'echarts-for-react';
 import { YearPickerInput } from '@mantine/dates';
 import { useCompareYears } from '../../hooks/useDashboard';
 import { CompareRangeType } from '../../interfaces';
+import { notifyError } from '../../lib/utils';
 
-const LineChart: React.FC<{ currency: number }> = ({ currency }) => {
+type LineChartProps = {
+  currency: number;
+  dataFilter?: 'orders' | 'earnings';
+};
+
+const LineChart: React.FC<LineChartProps> = ({
+  currency,
+  dataFilter = 'orders',
+}) => {
   const currentDate = new Date();
   const fiveYearsAgo = new Date();
   fiveYearsAgo.setFullYear(currentDate.getFullYear() - 5);
@@ -14,12 +23,10 @@ const LineChart: React.FC<{ currency: number }> = ({ currency }) => {
     currentDate,
   ]);
 
-  const dataFilter = 'order';
-
   const { data } = useCompareYears(
     {
-      startYear: value[0]?.getFullYear() ?? 2018,
-      endYear: value[1]?.getFullYear() ?? 2023,
+      startYear: value[0]?.getFullYear(),
+      endYear: value[1]?.getFullYear(),
     },
     dataFilter,
     currency
@@ -66,7 +73,7 @@ const LineChart: React.FC<{ currency: number }> = ({ currency }) => {
   };
 
   return (
-    <div className="col-span-2 bg-white rounded-md dark:bg-darker">
+    <div className="col-span-2 bg-gray-100 rounded-md shadow-lg dark:bg-gray-900 hover:bg-gray-50">
       <div className="flex items-center justify-between p-4 border-b dark:border-primary">
         <h4 className="text-lg font-semibold text-gray-500 dark:text-light">
           Comparison Over Multiple Years
@@ -75,15 +82,33 @@ const LineChart: React.FC<{ currency: number }> = ({ currency }) => {
           type="range"
           placeholder="Pick dates range"
           value={value}
-          onChange={setValue}
+          onChange={(dateRange) => {
+            const [start, end] = dateRange;
+            if (start && !end) setValue([start, null]);
+            if (start && end) {
+              const futureDate = new Date(start);
+              futureDate.setFullYear(start.getFullYear() + 5);
+              const diffInYears = end.getFullYear() - start.getFullYear();
+              if (diffInYears >= 5) {
+                notifyError('Year range must be 5 years or less.');
+                setValue([start, futureDate]);
+              } else {
+                setValue([start, end]);
+              }
+            }
+          }}
           maw={400}
         />
       </div>
-      <div className="relative p-4 h-72">
+      <div className="p-4 h-72">
         <ReactEcharts option={option} />
       </div>
     </div>
   );
+};
+
+LineChart.defaultProps = {
+  dataFilter: 'orders',
 };
 
 export default LineChart;

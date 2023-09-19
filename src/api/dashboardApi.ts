@@ -40,12 +40,14 @@ export const getDmographic = async (
 
 export const compareYearInRange = async (
   yearRange: {
-    startYear: number;
-    endYear: number;
+    startYear: number | undefined;
+    endYear: number | undefined;
   },
   dataFilter: string,
   currencyUnitId: number
 ) => {
+  if (yearRange.startYear === undefined || yearRange.endYear === undefined)
+    return [];
   return handleApiCall(
     api.get,
     API_URLS.DASHBOARD_METHODS.COMPARE_YEARS_IN_RANGE,
@@ -62,12 +64,15 @@ export const compareYearInRange = async (
 
 export const averageInRange = async (
   yearRange: {
-    startYear: number;
-    endYear: number;
+    startYear: number | undefined;
+    endYear: number | undefined;
   },
   dataFilter: string,
   currencyUnitId: number
 ) => {
+  if (yearRange.startYear === undefined || yearRange.endYear === undefined)
+    return [];
+
   return handleApiCall(api.get, API_URLS.DASHBOARD_METHODS.AVERAGE_IN_RANGE, {
     params: {
       startYear: yearRange.startYear,
