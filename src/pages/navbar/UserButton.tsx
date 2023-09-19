@@ -12,10 +12,10 @@ import { IconChevronRight } from '@tabler/icons-react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { IconButton, ListItemIcon } from '@mui/material';
+import { ListItemIcon } from '@mui/material';
 import { ReactNode, useState } from 'react';
-import { logout } from '../../services/authService';
 import { useNavigate } from 'react-router';
+import { logout } from '../../services/authService';
 
 const useStyles = createStyles((theme) => ({
   user: {
@@ -87,9 +87,8 @@ const UserButton = ({
         onClick={handleClick}
       >
         <Group>
-          <IconButton
-            size="small"
-            sx={{ ml: 2 }}
+          <div
+            className="icon-button"
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
@@ -98,7 +97,8 @@ const UserButton = ({
               sx={{ width: 32, height: 32, borderRadius: '50%' }}
               src={image}
             />
-          </IconButton>
+          </div>
+
           <div style={{ flex: 1 }}>
             <Text sx={{ fontSize: '14px', fontWeight: 500 }}>{name}</Text>
             <Text sx={{ color: 'dimmed', fontSize: '12px' }}>{email}</Text>
