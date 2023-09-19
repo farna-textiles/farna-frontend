@@ -6,6 +6,7 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -13,7 +14,6 @@ import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import {
   IconCalendarStats,
   IconGauge,
-  IconPresentationAnalytics,
   IconFileAnalytics,
   IconAdjustments,
   IconLogout,
@@ -30,12 +30,11 @@ const SwipeableTemporaryDrawer = () => {
       { label: 'Dashboard', Icon: IconGauge, link: '/' },
       { label: 'All Customers', Icon: IconAddressBook, link: '/customers' },
       { label: 'View Products', Icon: IconCalendarStats, link: '/products' },
-      { label: 'All Orders', Icon: IconCalendarStats, link: '/recent-order' },
-      { label: 'Create Orders', Icon: IconCalendarStats, link: '/order' },
-      { label: 'Analytics', Icon: IconPresentationAnalytics },
+      { label: 'All Orders', Icon: IconCalendarStats, link: '/orders' },
+      { label: 'Create Orders', Icon: IconCalendarStats, link: '/order/new' },
       { label: 'Users', Icon: IconFileAnalytics, link: '/users' },
-      { label: 'Security', Icon: IconLock },
-      { label: 'Settings', Icon: IconAdjustments },
+      { label: 'Security', Icon: IconLock, link: '/' },
+      { label: 'Settings', Icon: IconAdjustments, link: '/' },
     ],
     []
   );
@@ -66,12 +65,18 @@ const SwipeableTemporaryDrawer = () => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {menuLinks.map((link, index) => (
-          <ListItemButton component="a" href={link.link} key={index}>
+        {menuLinks.map((link) => (
+          <ListItemButton key={link.label}>
             <ListItemIcon sx={{ color: 'primary.main' }}>
               {link.Icon ? <link.Icon /> : null}
             </ListItemIcon>
-            <ListItemText primary={link.label} />
+            <ListItemText
+              primary={
+                <Link to={link.link} style={{ textDecoration: 'none' }}>
+                  {link.label}
+                </Link>
+              }
+            />
           </ListItemButton>
         ))}
       </List>

@@ -95,9 +95,9 @@ const LinksGroup = ({
     );
   }
 
-  const items = links!.map((link) => (
-    <Link to={link.link} className={classes.link} key={link.label}>
-      {link.label}
+  const items = links.map((lnk) => (
+    <Link to={lnk.link} className={classes.link} key={lnk.label}>
+      {lnk.label}
     </Link>
   ));
 
