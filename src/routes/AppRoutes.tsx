@@ -15,7 +15,7 @@ import Products from '../pages/product/Products';
 import RecentOrders from '../pages/productOrder/recentOrders';
 import CreateOrder from '../pages/productOrder/CreateOrder';
 import ShowOrder from '../pages/productOrder/ShowOrder';
-
+import PaymentMethods from '../pages/payment/PaymentMethods';
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
@@ -185,7 +185,15 @@ export const AppRoutes: React.FC = () => {
             </AuthRoute>
           ),
         },
-        // { path: '*', element: <PageNotFound /> },
+        {
+          path: '/payment',
+          element: (
+            <AuthRoute path="/payment">
+              <PaymentMethods />
+            </AuthRoute>
+          ),
+        },
+        { path: '*', element: <PageNotFound /> },
       ],
     },
     {

@@ -6,11 +6,14 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
+import { logout } from '../../services/authService';
+import { useNavigate } from 'react-router';
+
 import {
   IconCalendarStats,
   IconGauge,
@@ -42,6 +45,11 @@ const SwipeableTemporaryDrawer = () => {
     left: false,
   });
 
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    logout();
+    navigate('/signin');
+  };
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -82,7 +90,7 @@ const SwipeableTemporaryDrawer = () => {
       </List>
       <Divider />
       <List sx={{ marginTop: '200px' }}>
-        <ListItemButton>
+        <ListItemButton onClick={handleLogout}>
           <ListItemIcon sx={{ color: 'error.main' }}>
             <IconLogout />
           </ListItemIcon>

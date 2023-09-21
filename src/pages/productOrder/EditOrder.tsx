@@ -33,7 +33,7 @@ import { getCustomers } from '../../api';
 import { getProducts } from '../../api/productApi';
 import ProductRow from '../../components/table/productRow';
 import useCurrencyUnits from '../../hooks/useCurrencyUnits';
-import usePaymentMethods from '../../hooks/usePaymentMethods';
+import {usePaymentMethods} from '../../hooks/usePaymentMethods';
 import { notifyError } from '../../lib/utils';
 import { useOrder, useUpdateOrder } from '../../hooks/useOrder';
 
