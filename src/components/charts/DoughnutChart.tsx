@@ -1,11 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
 import ReactEcharts from 'echarts-for-react';
+import _ from 'lodash';
 import { useDashboardDmographic } from '../../hooks/useDashboard';
+import { DashboardDataFilter } from '../../interfaces';
 
 type DoughnutChartProps = {
   currency: number;
-  dataFilter?: 'orders' | 'earnings';
+  dataFilter?: DashboardDataFilter;
 };
 
 const DoughnutChart: React.FC<DoughnutChartProps> = ({
@@ -32,7 +34,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
     },
     series: [
       {
-        name: 'Orders',
+        name: _.capitalize(dataFilter),
         type: 'pie',
         radius: ['50%', '70%'],
         data,

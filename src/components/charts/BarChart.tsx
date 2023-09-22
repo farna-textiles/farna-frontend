@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import { YearPickerInput } from '@mantine/dates';
 import { useCompareTwoYears } from '../../hooks/useDashboard';
+import { DashboardDataFilter } from '../../interfaces';
 
 type BarChartProps = {
   currency: number;
-  dataFilter?: 'orders' | 'earnings';
+  dataFilter: DashboardDataFilter;
 };
 
-const BarChart: React.FC<BarChartProps> = ({
-  currency,
-  dataFilter = 'orders',
-}) => {
+const BarChart: React.FC<BarChartProps> = ({ currency, dataFilter }) => {
   const currentYear = new Date().getFullYear();
   const [selectedYear1, setSelectedYear1] = useState<Date>(new Date());
   const [selectedYear2, setSelectedYear2] = useState<Date>(
@@ -23,7 +21,8 @@ const BarChart: React.FC<BarChartProps> = ({
       year1: selectedYear1.getFullYear().toString(),
       year2: selectedYear2.getFullYear().toString(),
     },
-    currency
+    currency,
+    dataFilter
   );
 
   const option = {
@@ -120,10 +119,6 @@ const BarChart: React.FC<BarChartProps> = ({
       </div>
     </div>
   );
-};
-
-BarChart.defaultProps = {
-  dataFilter: 'orders',
 };
 
 export default BarChart;

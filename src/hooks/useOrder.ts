@@ -63,11 +63,11 @@ export const useDeleteOrder = () => {
   return useMutation(deleteOrder, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['Orders']);
-      notifySuccess('Customer deleted successfully');
+      notifySuccess('Order deleted successfully');
     },
 
     onError() {
-      notifyError('Failed to delete customer');
+      notifyError('Failed to delete order');
     },
   });
 };

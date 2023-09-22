@@ -1,4 +1,5 @@
 import { API_URLS } from '../constants';
+import { DashboardDataFilter } from '../interfaces';
 import { handleApiCall } from '../lib/utils';
 import api from './axios';
 
@@ -16,15 +17,16 @@ export const compareTwoYears = async (
     year1: string;
     year2: string;
   },
+  dataFilter: DashboardDataFilter,
   currencyUnitId: number
 ) => {
   return handleApiCall(api.get, API_URLS.DASHBOARD_METHODS.COMPARE_TWO_YEARS, {
-    params: { years, currencyUnitId },
+    params: { years, currencyUnitId, dataFilter },
   });
 };
 
 export const getDmographic = async (
-  dataFilter: string,
+  dataFilter: DashboardDataFilter,
   locationFilter: string,
   currencyUnitId: number
 ) => {
@@ -43,7 +45,7 @@ export const compareYearInRange = async (
     startYear: number | undefined;
     endYear: number | undefined;
   },
-  dataFilter: string,
+  dataFilter: DashboardDataFilter,
   currencyUnitId: number
 ) => {
   if (yearRange.startYear === undefined || yearRange.endYear === undefined)
@@ -67,7 +69,7 @@ export const averageInRange = async (
     startYear: number | undefined;
     endYear: number | undefined;
   },
-  dataFilter: string,
+  dataFilter: DashboardDataFilter,
   currencyUnitId: number
 ) => {
   if (yearRange.startYear === undefined || yearRange.endYear === undefined)
