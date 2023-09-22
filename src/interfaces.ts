@@ -335,3 +335,5 @@ export interface CompareRangeType {
   type: string;
   data: number[];
 }
+
+export type DashboardDataFilter = 'orders' | 'earnings';

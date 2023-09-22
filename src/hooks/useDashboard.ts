@@ -6,6 +6,7 @@ import {
   compareYearInRange,
   averageInRange,
 } from '../api/dashboardApi';
+import { DashboardDataFilter } from '../interfaces';
 
 export const useDashboardCards = (
   timeFilter: 'week' | 'month' | 'year',
@@ -18,15 +19,17 @@ export const useDashboardCards = (
 
 export const useCompareTwoYears = (
   years: { year1: string; year2: string },
-  currencyUnitId: number
+  currencyUnitId: number,
+  dataFilter: DashboardDataFilter
 ) => {
-  return useQuery(['dashboardTwoYears', years, currencyUnitId], () =>
-    compareTwoYears(years, currencyUnitId)
+  return useQuery(
+    ['dashboardTwoYears', years, currencyUnitId, dataFilter],
+    () => compareTwoYears(years, dataFilter, currencyUnitId)
   );
 };
 
 export const useDashboardDmographic = (
-  dataFilter: string,
+  dataFilter: DashboardDataFilter,
   locationFilter: string,
   currencyUnitId: number
 ) => {
@@ -41,7 +44,7 @@ export const useCompareYears = (
     startYear: number | undefined;
     endYear: number | undefined;
   },
-  dataFilter: string,
+  dataFilter: DashboardDataFilter,
   currencyUnitId: number
 ) => {
   return useQuery(
@@ -55,7 +58,7 @@ export const useCompareAverage = (
     startYear: number | undefined;
     endYear: number | undefined;
   },
-  dataFilter: string,
+  dataFilter: DashboardDataFilter,
   currencyUnitId: number
 ) => {
   return useQuery(
