@@ -136,7 +136,7 @@ const Sidebar = () => {
           className={`${classes.logo} md:flex`}
           style={{ justifyContent: isMobile ? 'flex-end' : 'flex-start' }}
         >
-          {/* <img src={logo} alt="farna log  o" width={isMobile ? '68' : ''} /> */}
+          <img src={logo} alt="farna log  o" width={isMobile ? '68' : ''} />
         </div>
       </Navbar.Section>
 

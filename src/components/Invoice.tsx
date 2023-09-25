@@ -32,11 +32,11 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
           <div className="text-3xl font-bold mb-[6rem] text-[32pt]">
             FARNA TEXTILES
           </div>
-          {/* <img
+          <img
             src="../../public/farna-logo.png"
             alt="Farna Textiles Logo"
             className="h-15 w-auto ml-[12rem]"
-          /> */}
+          />
         </div>
         <div className="text-2xl text-green-600 mb-8">REQUEST FOR P.I</div>
         <div className="flex justify-between mb-8">

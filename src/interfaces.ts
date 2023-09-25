@@ -16,6 +16,10 @@ export interface FogetPassword {
   email: string;
 }
 
+export interface InviteUser {
+  email: string;
+}
+
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   type: string;
   name: string;
