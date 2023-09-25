@@ -1,7 +1,13 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import { confirmEmail, reactivation, signin, signup, verify } from '../api';
+import {
+  confirmEmail,
+  invite,
+  reactivation,
+  signin,
+  signup,
+  verify,
+} from '../api';
 import { notifyError, notifySuccess } from '../lib/utils';
 import { ErrorResponse } from '../interfaces';
 import statusCode from '../constants/codes';
@@ -89,6 +95,18 @@ export const useConfirm = () => {
       const errorKey: QueryKey = ['confirmEmailErrorMessage'];
       queryClient.setQueryData(errorKey, error.message);
       queryClient.removeQueries(['confirmEmailSuccessMessage']);
+    },
+  });
+};
+
+export const useInvite = () => {
+  return useMutation(invite, {
+    onSuccess: () => {
+      notifySuccess('User Invited Succesfully');
+    },
+
+    onError: (error: ErrorResponse) => {
+      notifyError(error.message ?? 'User invite failed');
     },
   });
 };

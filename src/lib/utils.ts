@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { toast } from 'react-toastify';
 import { ApiFunction } from '../interfaces';
-import { userInfo } from '../services/authService';
+import { isAuthenticated } from '../services/authService';
 
 export const notifySuccess = (text: string) =>
   toast.success(text, { theme: 'light' });
@@ -17,7 +17,11 @@ export const handleApiCall = async <T>(
     const response = await apiFunction(url, data);
     return response.data;
   } catch (error: any) {
-    if (error.code === 'ERR_BAD_REQUEST' && !userInfo()) {
+    if (
+      error.response.data.statusCode === 401 &&
+      error.response.data.message === 'Unauthorized' &&
+      !isAuthenticated()
+    ) {
       window.location.href = '/signin';
     }
     throw error?.response?.data;

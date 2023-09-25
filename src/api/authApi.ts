@@ -1,4 +1,5 @@
 import { API_URLS } from '../constants';
+import { InviteUser } from '../interfaces';
 import { handleApiCall } from '../lib/utils';
 import api from './axios';
 
@@ -20,6 +21,10 @@ export const signin = async (data: {
 
 export const verify = async (data: { verificationToken: string }) => {
   return handleApiCall(api.post, API_URLS.AUTH_VERIFY, data);
+};
+
+export const invite = async (data: InviteUser) => {
+  return handleApiCall(api.post, API_URLS.AUTH_INVITE, data);
 };
 
 export const confirmEmail = async (data: { confirmationToken: string }) => {

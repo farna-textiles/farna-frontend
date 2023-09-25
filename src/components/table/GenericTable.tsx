@@ -14,6 +14,7 @@ import {
   Checkbox,
   TableContainer,
   Theme,
+  ButtonBase,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Loader } from '@mantine/core';
@@ -84,6 +85,47 @@ const StyledTableRow = styled(TableRow)(() => ({
   },
 }));
 
+const AddButton = styled(ButtonBase)<{ disabled?: boolean }>(
+  ({ theme, disabled }: { theme: Theme; disabled?: boolean }) => ({
+    position: 'relative',
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    padding: theme.spacing(1),
+    border: `1px solid ${theme.palette.primary.main}`,
+    borderRadius: theme.shape.borderRadius,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.common.white,
+    },
+    ...(disabled && {
+      backgroundColor: theme.palette.grey[300],
+      color: theme.palette.text.primary,
+      pointerEvents: 'none',
+      '&:hover': {
+        backgroundColor: theme.palette.grey[300],
+        borderColor: theme.palette.grey[300],
+        color: theme.palette.text.primary,
+      },
+    }),
+    ...(disabled && {
+      pointerEvents: 'none',
+      '&::after': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'rgba(255, 255, 255, 0.7)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: theme.shape.borderRadius,
+      },
+    }),
+  })
+);
+
 const EnhancedTableHead = styled(TableHead)(({ theme }) => ({
   boxShadow: '0px 3px 10px rgba(0, 0, 0, 0.1)',
   backgroundColor: theme.palette.primary.light,
@@ -117,10 +159,12 @@ const GenericTable = <T extends Record<string, unknown>>({
   addButtonLabel,
   actionButtons,
   additionalColumn,
+  onAddBtnClick,
   loadInProgress = false,
 }: GenericTableProps<T> & {
   addButtonLink?: string;
   addButtonLabel?: string;
+  onAddBtnClick?: () => void;
   actionButtons?: ActionButton[];
   additionalColumn?: AdditionalColumn<T>;
   loadInProgress: boolean;
@@ -185,19 +229,34 @@ const GenericTable = <T extends Record<string, unknown>>({
         <Grid item>
           <SearchBar onSearch={setSearchTermThrottled} />
         </Grid>
-        {addButtonLabel && addButtonLink && (
+        {addButtonLabel && (
           <Grid item>
-            <AddButtonLink
-              to={addButtonLink}
-              disabled={isLoading || loadInProgress}
-            >
-              {(isLoading || loadInProgress) && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Loader color="blue" size={30} />
-                </div>
-              )}
-              {addButtonLabel}
-            </AddButtonLink>
+            {addButtonLink && (
+              <AddButtonLink
+                to={addButtonLink}
+                disabled={isLoading || loadInProgress}
+              >
+                {(isLoading || loadInProgress) && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Loader color="blue" size={30} />
+                  </div>
+                )}
+                {addButtonLabel}
+              </AddButtonLink>
+            )}
+            {onAddBtnClick && (
+              <AddButton
+                onClick={onAddBtnClick}
+                disabled={isLoading || loadInProgress}
+              >
+                {(isLoading || loadInProgress) && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Loader color="blue" size={30} />
+                  </div>
+                )}
+                {addButtonLabel}
+              </AddButton>
+            )}
           </Grid>
         )}
       </Grid>
@@ -305,6 +364,7 @@ GenericTable.defaultProps = {
   addButtonLabel: '',
   actionButtons: [],
   additionalColumn: null,
+  onAddBtnClick: null,
 };
 
 export default GenericTable;
