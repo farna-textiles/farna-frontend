@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { MutationFunction } from '@tanstack/query-core';
 import { API_URLS } from '../constants';
-import { Customer, PaginatedResponse, User } from '../interfaces';
+import { Customer, PaginatedResponse } from '../interfaces';
 import { handleApiCall } from '../lib/utils';
 import api from './axios';
 

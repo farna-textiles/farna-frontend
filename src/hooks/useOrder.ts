@@ -8,7 +8,7 @@ export const useCraeteOrder = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   return useMutation(createOrder, {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries(['Orders']);
       navigate(`/orders`);
       notifySuccess('Product Order created successfully');
@@ -34,6 +34,7 @@ export const useUpdateOrder = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return useMutation<any, ErrorResponse, [number, OrderUpdateData]>(
     updateOrder,
     {
@@ -60,12 +61,12 @@ export const useDeleteOrder = () => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteOrder, {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries(['Orders']);
       notifySuccess('Customer deleted successfully');
     },
 
-    onError(error, variables, context) {
+    onError() {
       notifyError('Failed to delete customer');
     },
   });

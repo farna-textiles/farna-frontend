@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { Box, Button, TextField, Typography, styled } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
@@ -140,8 +139,8 @@ const EditCustomer = () => {
       {
         field: 'address',
         label: 'Address',
-        format: (address: Address) => {
-          const { street, city, postalCode } = address;
+        format: (address) => {
+          const { street, city, postalCode } = address as Address;
           return `${street}, ${city} - ${postalCode}`;
         },
       },
@@ -244,6 +243,7 @@ const EditCustomer = () => {
 
       <hr className="my-12" />
       {(selectedContact || isAddingContact) && (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         <CustomModal<Contact & Record<string, any>>
           data={selectedContact as Contact}
           isOpen={isModalOpen}

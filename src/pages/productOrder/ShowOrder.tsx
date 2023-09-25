@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useParams } from 'react-router';
 import jsPDF from 'jspdf';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import ReactToPrint from 'react-to-print';
 import { useOrder } from '../../hooks/useOrder';
 import { Order } from '../../interfaces';
@@ -13,14 +12,6 @@ const ShowOrder: React.FC = () => {
     data: Order;
   };
   const componentRef = useRef(null);
-  console.log(orderData);
-
-  const [email, setEmail] = useState<string>('');
-
-  const sendEmail = () => {
-    // Send the PDF data to the backend here
-    console.log('Sending PDF to backend to be emailed to:', email);
-  };
 
   const generatePDF = () => {
     const invoiceDiv = document.getElementById('pdf-invoice');
@@ -38,6 +29,7 @@ const ShowOrder: React.FC = () => {
     report.html(invoice as HTMLElement, {
       callback(pdf) {
         pdf.save('report.pdf');
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         invoiceDiv?.setAttribute('style', originalStyle!);
       },
       x: 10,
@@ -66,20 +58,6 @@ const ShowOrder: React.FC = () => {
           )}
           content={() => componentRef.current}
         />
-
-        {/* <button
-            type="button"
-            onClick={() => {
-              const emailPrompt = prompt('Enter email to send the invoice');
-              if (emailPrompt) {
-                setEmail(emailPrompt);
-                sendEmail();
-              }
-            }}
-            className="px-4 py-2 bg-green-500 text-white rounded-md"
-          >
-            Send as Email
-          </button> */}
         <button
           type="button"
           onClick={generatePDF}

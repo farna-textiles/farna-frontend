@@ -33,6 +33,7 @@ describe('UserForm', () => {
         handleFormSubmit={handleFormSubmit}
         onChangeHandler={onChangeHandler}
         buttonLabel={buttonLabel}
+        isLoading={false}
       />
     );
 
@@ -65,6 +66,7 @@ describe('UserForm', () => {
         handleFormSubmit={handleFormSubmit}
         onChangeHandler={onChangeHandler}
         buttonLabel={buttonLabel}
+        isLoading={false}
       />
     );
 
@@ -95,6 +97,7 @@ describe('UserForm', () => {
         handleFormSubmit={handleFormSubmit}
         onChangeHandler={onChangeHandler}
         buttonLabel={buttonLabel}
+        isLoading={false}
       />
     );
 

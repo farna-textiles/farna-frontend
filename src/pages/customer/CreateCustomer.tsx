@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { Box, Button, TextField, Typography, styled } from '@mui/material';
 import { ChangeEvent, useMemo, useState } from 'react';
 import * as Yup from 'yup';
@@ -73,10 +72,11 @@ const CreateCustomer = () => {
       type: 'radio',
       valueGetter: (item) => !!item.isMainContact,
       onChange: (contactIndex) => {
-        const updatedContacts = newCustomer.contacts.map((contact, index) =>
-          index === contactIndex
-            ? { ...contact, isMainContact: true }
-            : { ...contact, isMainContact: false }
+        const updatedContacts = newCustomer.contacts.map(
+          (contact: Contact, index: number) =>
+            index === contactIndex
+              ? { ...contact, isMainContact: true }
+              : { ...contact, isMainContact: false }
         );
 
         setNewCustomer({ ...newCustomer, contacts: updatedContacts });
@@ -140,8 +140,8 @@ const CreateCustomer = () => {
       {
         field: 'address',
         label: 'Address',
-        format: (address: Address) => {
-          const { street, city, postalCode } = address;
+        format: (address) => {
+          const { street, city, postalCode } = address as Address;
           return `${street}, ${city} - ${postalCode}`;
         },
       },
@@ -181,8 +181,9 @@ const CreateCustomer = () => {
 
   const handleContactSave = (newContact: Contact) => {
     if (selectedContactIndex !== null) {
-      const updatedContacts = newCustomer.contacts.map((contact, index) =>
-        index === selectedContactIndex ? newContact : contact
+      const updatedContacts = newCustomer.contacts.map(
+        (contact: Contact, index: number) =>
+          index === selectedContactIndex ? newContact : contact
       );
       setNewCustomer({ ...newCustomer, contacts: updatedContacts });
     } else {
@@ -229,6 +230,7 @@ const CreateCustomer = () => {
       <hr className="my-6" />
 
       {(selectedContact || selectedContactIndex) && (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         <CustomModal<Contact & Record<string, any>>
           data={selectedContact as Contact}
           isOpen={isModalOpen}
@@ -249,7 +251,6 @@ const CreateCustomer = () => {
           additionalColumn={mainContactRadioColumn}
           onCustomButtonClick={handleAddContact}
           isLoading={craeteCustomerMutation.isLoading}
-          className="min-w-full"
         />
       </div>
 

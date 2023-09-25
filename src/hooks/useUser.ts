@@ -6,10 +6,11 @@ import { updateUser } from '../api/userApi';
 const useUpdateUser = () => {
   const queryClient = useQueryClient();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return useMutation<any, ErrorResponse, [number, UpdateUserRequest]>(
     updateUser,
     {
-      onSuccess: async (data) => {
+      onSuccess: async () => {
         await queryClient.invalidateQueries(['Users']);
         await queryClient.invalidateQueries(['user']);
 

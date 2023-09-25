@@ -1,4 +1,5 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { InputHTMLAttributes, ReactNode } from 'react';
 import { Schema } from 'yup';
 
@@ -65,7 +66,7 @@ export interface ErrorResponse {
   error: string | string[];
 }
 
-export type ApiFunction<T> = (url: string, config?: any) => Promise<any>;
+export type ApiFunction = (url: string, config?: any) => Promise<any>;
 
 export interface User {
   id: string;
@@ -102,7 +103,7 @@ export type ProductOrderType = Omit<Product, 'id'> & {
   id: number;
   quantity: number;
   rate: number;
-  endUses: EndUse[];
+  endUses: EndUseWithColor[];
   [key: string]: any;
 };
 
@@ -154,8 +155,12 @@ export interface EndUse {
   description?: string;
 }
 
+export interface EndUseWithColor extends EndUse {
+  color: string;
+}
+
 export interface EndUsesListProps {
-  endUses: EndUse[];
+  endUses: EndUseWithColor[];
 }
 
 export interface Contact {
@@ -172,6 +177,7 @@ export interface Customer {
   businessName: string;
   contacts: Contact[];
   mainContact?: Contact;
+  [key: string]: any;
 }
 
 export type UserObject = User & Record<string, any>;
@@ -207,9 +213,7 @@ export interface ThProps<T extends RowData> {
 export interface TableColumn<T> {
   field: keyof T;
   label: string;
-  format?:
-    | ((item: T[keyof T][keyof T[keyof T]]) => React.ReactNode)
-    | ((item: T[keyof T]) => React.ReactNode);
+  format?: (item: T[keyof T][keyof T[keyof T]] | T[keyof T]) => React.ReactNode;
 }
 
 export interface PaginatedResponse<T> {
@@ -322,4 +326,5 @@ export interface Order {
   currencyUnit: CurrencyUnit;
   customer: Customer;
   orderProducts: ProductOrder[];
+  [key: string]: any;
 }

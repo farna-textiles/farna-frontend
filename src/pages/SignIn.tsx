@@ -1,7 +1,4 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import * as Yup from 'yup';
@@ -20,7 +17,7 @@ const SignIn: React.FC = () => {
   const [userData, setUserData] = useState({ identifier: '', password: '' });
   const [animate, setAnimate] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [modalData, setModalData] = useState<FogetPassword>({
+  const [modalData] = useState<FogetPassword>({
     email: '',
   });
 
@@ -69,20 +66,36 @@ const SignIn: React.FC = () => {
     return (
       <div className="flex justify-end">
         {isError ? (
-          <p className="text-red-500 w-fit">
-            Click{' '}
-            <span
-              className="underline cursor-pointer text-black"
-              onClick={() => reactivateMutation.mutate(userData)}
-            >
-              here
-            </span>{' '}
-            to submit a reactivation request.
-          </p>
+          <div className="container mx-auto p-4">
+            <div className="bg-white rounded-lg shadow-md p-8">
+              <h2 className="text-2xl font-bold text-red-500 mb-4">
+                Reactivate Your Account
+              </h2>
+              <p className="text-gray-600 mb-4">
+                It looks like your account is currently inactive. To reactivate
+                it, please click the button below:
+              </p>
+              <button
+                type="button"
+                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-full cursor-pointer transition duration-300"
+                onClick={() => reactivateMutation.mutate(userData)}
+              >
+                Reactivate Account
+              </button>
+            </div>
+          </div>
         ) : (
           <p
             className="text-black w-fit cursor-pointer hover:underline"
             onClick={() => setIsModalOpen(true)}
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                setIsModalOpen(true);
+              }
+            }}
           >
             Forgot your password?
           </p>
@@ -100,7 +113,8 @@ const SignIn: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const handleModalSave = (data: FogetPassword) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleModalSave = (_data: FogetPassword) => {
     // api not available
     handleModalClose();
   };

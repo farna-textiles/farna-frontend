@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useQuery } from '@tanstack/react-query';
-import { Loader } from '@mantine/core';
 import { getUserById } from '../../api/userApi';
 import { UpdateUserRequest } from '../../interfaces';
 import useUpdateUser from '../../hooks/useUser';
@@ -37,12 +36,13 @@ const EditUser = () => {
               'Password must contain at least 1 special character, 1 lowercase and 1 uppercase letter, and 1 number, and must be at least 8 characters long'
             ),
           confirmPassword: Yup.string()
-            .oneOf([Yup.ref('password'), null], 'Passwords must match')
+            .oneOf([Yup.ref('password')], 'Passwords must match')
             .required('Confirm Password is required'),
         }
       : {}),
   });
   const { data: userData } = useQuery(['user', userId], () =>
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     getUserById(+userId!)
   );
 
@@ -115,7 +115,9 @@ const EditUser = () => {
               className="w-full px-4 py-2 rounded-md border text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600"
             />
             {formik.touched.email && formik.errors.email && (
-              <div className="text-red-500">{formik.errors.email}</div>
+              <div className="text-red-500">
+                {formik.errors.email as ReactNode}
+              </div>
             )}
           </div>
           <div className="space-y-2">
@@ -136,7 +138,9 @@ const EditUser = () => {
               className="w-full px-4 py-2 rounded-md border text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600"
             />
             {formik.touched.username && formik.errors.username && (
-              <div className="text-red-500">{formik.errors.username}</div>
+              <div className="text-red-500">
+                {formik.errors.username as ReactNode}
+              </div>
             )}
           </div>
           <div className="space-y-2">
@@ -160,7 +164,9 @@ const EditUser = () => {
               <option value="viewer">Viewer</option>
             </select>
             {formik.touched.role && formik.errors.role && (
-              <div className="text-red-500">{formik.errors.role}</div>
+              <div className="text-red-500">
+                {formik.errors.role as ReactNode}
+              </div>
             )}
           </div>
           <div className="space-y-2">

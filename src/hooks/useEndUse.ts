@@ -6,7 +6,7 @@ import { notifyError, notifySuccess } from '../lib/utils';
 const useCreateEndUse = () => {
   const queryClient = useQueryClient();
   return useMutation(createEndUse, {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries(['endUses']);
       notifySuccess('EndUse added successfully');
     },

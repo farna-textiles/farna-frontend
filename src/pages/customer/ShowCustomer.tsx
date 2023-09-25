@@ -84,8 +84,8 @@ const ShowCustomer = () => {
       {
         field: 'address',
         label: 'Address',
-        format: (address: Address) => {
-          const { street, city, postalCode } = address;
+        format: (address) => {
+          const { street, city, postalCode } = address as Address;
           return `${street}, ${city} - ${postalCode}`;
         },
       },

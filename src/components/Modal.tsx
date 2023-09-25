@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/no-extraneous-dependencies */
 import { Modal, TextField, Button, Box, Typography } from '@mui/material';
-import { Formik, Form, Field, FormikTouched, FormikErrors } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { EditContactModalProps } from '../interfaces';
 
 const CustomModal = <T extends Record<string, unknown>>({
@@ -49,8 +50,10 @@ const CustomModal = <T extends Record<string, unknown>>({
                 const [parent, child] = (field.name as string).split('.');
                 const fieldName = isNestedField ? child : field.name;
 
-                const touchedWithShape = touched as FormikTouched<T>;
-                const errorsWithShape = errors as FormikErrors<T>;
+                // Use type assertion to assert that touchedWithShape and errorsWithShape
+                // are objects of type 'any' temporarily
+                const touchedWithShape = touched as any;
+                const errorsWithShape = errors as any;
 
                 const touch = isNestedField
                   ? touchedWithShape[parent]?.[child]

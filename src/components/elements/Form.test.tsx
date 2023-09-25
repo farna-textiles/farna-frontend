@@ -31,6 +31,7 @@ describe('Form', () => {
         handleFormSubmit={handleFormSubmit}
         onChangeHandler={onChangeHandler}
         buttonLabel={buttonLabel}
+        isLoading={false}
       />
     );
 
@@ -61,6 +62,7 @@ describe('Form', () => {
         handleFormSubmit={handleFormSubmit}
         onChangeHandler={onChangeHandler}
         buttonLabel={buttonLabel}
+        isLoading={false}
       />
     );
 
@@ -88,6 +90,7 @@ describe('Form', () => {
         handleFormSubmit={handleFormSubmit}
         onChangeHandler={onChangeHandler}
         buttonLabel={buttonLabel}
+        isLoading={false}
       />
     );
 

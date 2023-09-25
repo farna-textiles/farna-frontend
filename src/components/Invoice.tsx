@@ -78,7 +78,7 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
           <div className="w-1/6  font-medium">RATE</div>
           <div className="w-1/6  font-medium">AMOUNT</div>
         </div>
-        {orderProducts.map(({ id, product, quantity, rate }, index) => (
+        {orderProducts.map(({ id, product, quantity, rate }) => (
           <div key={id} className="flex justify-between mb-4">
             <div className="w-1/6">
               {product.denier} Lot #{product.lotNo}

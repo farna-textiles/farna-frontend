@@ -9,7 +9,7 @@ export const notifyError = (text: string) =>
   toast.error(text, { theme: 'light' });
 
 export const handleApiCall = async <T>(
-  apiFunction: ApiFunction<T>,
+  apiFunction: ApiFunction,
   url: string,
   data: T
 ) => {

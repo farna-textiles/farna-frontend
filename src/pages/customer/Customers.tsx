@@ -5,11 +5,7 @@ import Edit from '@mui/icons-material/Edit';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import {
-  ActionButton,
-  TableColumn,
-  UserObject as User,
-} from '../../interfaces';
+import { ActionButton, Customer, TableColumn } from '../../interfaces';
 import GenericTable from '../../components/table/GenericTable';
 import { getAllCustomers } from '../../api/customerApi';
 import { useDeleteCustomer } from '../../hooks/useCustomer';
@@ -17,7 +13,7 @@ import { useDeleteCustomer } from '../../hooks/useCustomer';
 const Customers = () => {
   const deleteCustomerMutation = useDeleteCustomer();
   const navigate = useNavigate();
-  const columns: TableColumn<User>[] = useMemo(
+  const columns: TableColumn<Customer>[] = useMemo(
     () => [
       { field: 'id', label: 'ID' },
       { field: 'businessName', label: 'Business' },
@@ -65,7 +61,7 @@ const Customers = () => {
       </Typography>
       <hr className="mb-12" />
       <Box sx={{ my: 2 }}>
-        <GenericTable<User>
+        <GenericTable<Customer>
           tableName="Customers"
           columns={columns}
           fetchData={getAllCustomers}

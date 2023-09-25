@@ -14,12 +14,12 @@ export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteProduct, {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries(['Products']);
       notifySuccess('Product deleted successfully');
     },
 
-    onError(error, variables, context) {
+    onError() {
       notifyError('Failed to delete product');
     },
   });
@@ -34,10 +34,11 @@ export const useProduct = (productId: number, initialData?: Product) => {
 export const useUpdateProduct = () => {
   const queryClient = useQueryClient();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return useMutation<any, ErrorResponse, [number, ProductUpdateData]>(
     updateProduct,
     {
-      onSuccess: async (data) => {
+      onSuccess: async () => {
         await queryClient.invalidateQueries(['products']);
 
         notifySuccess('Product updated successfully');
@@ -58,7 +59,7 @@ export const useCreateProduct = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   return useMutation(createProduct, {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries(['product']);
       navigate(`/products`);
       notifySuccess('Product created successfully');

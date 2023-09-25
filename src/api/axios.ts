@@ -1,8 +1,7 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001/',
+  baseURL: import.meta.env.VITE_BE_URL,
   withCredentials: true,
 });
 

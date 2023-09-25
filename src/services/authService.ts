@@ -8,9 +8,10 @@ export const isAuthenticated = () => {
   return hasLocalStorageToken || hasCookieToken;
 };
 
-export const userHasPermission = (path: string) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const userHasPermission = (_path: string) => {
   // Replace with your actual implementation
-  const permissions = JSON.parse(localStorage.getItem('permissions') || '[]');
+  // const permissions = JSON.parse(localStorage.getItem('permissions') || '[]');
   return true;
   // return permissions.includes(path);
 };

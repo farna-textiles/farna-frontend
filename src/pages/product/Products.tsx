@@ -7,7 +7,7 @@ import {
   ActionButton,
   TableColumn,
   ProductObject as Product,
-  EndUse,
+  EndUseWithColor,
 } from '../../interfaces';
 import GenericTable from '../../components/table/GenericTable';
 import { getAllProducts } from '../../api/productApi';
@@ -18,7 +18,7 @@ const Products = () => {
   const deleteProductMutation = useDeleteProduct();
 
   const endUsesList = useCallback(
-    (endUses: EndUse[]) => <EndUsesList endUses={endUses} />,
+    (endUses: EndUseWithColor[]) => <EndUsesList endUses={endUses} />,
     []
   );
   const navigate = useNavigate();

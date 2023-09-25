@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -9,7 +11,7 @@ const resetPasswordSchema = Yup.object().shape({
     .min(6, 'Password must be at least 6 characters')
     .required('New password is required'),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .oneOf([Yup.ref('password')], 'Passwords must match')
     .required('Confirm password is required'),
 });
 
@@ -21,18 +23,15 @@ const ForgetPassword = () => {
       confirmPassword: '',
     },
     validationSchema: resetPasswordSchema,
-    onSubmit: (values) => {
-      console.log('Resetting password:', values);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onSubmit: (_values) => {
+      // console.log('Resetting password:', values);
     },
   });
 
   return (
     <section className="bg-gray-50">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a
-          href="#"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900"
-        ></a>
         <div className="w-full p-6 bg-white rounded-lg shadow border md:mt-0 sm:max-w-md text-black">
           <div className="text-center">
             <h2 className="mt-6 text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -52,7 +51,6 @@ const ForgetPassword = () => {
               </label>
               <input
                 type="email"
-                name="email"
                 id="email"
                 className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-gray-400 ${
                   formik.touched.email && formik.errors.email
@@ -76,7 +74,6 @@ const ForgetPassword = () => {
               </label>
               <input
                 type="password"
-                name="password"
                 id="password"
                 className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-gray-400 ${
                   formik.touched.password && formik.errors.password
@@ -102,7 +99,6 @@ const ForgetPassword = () => {
               </label>
               <input
                 type="password"
-                name="confirmPassword"
                 id="confirmPassword"
                 className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-gray-400 ${
                   formik.touched.confirmPassword &&

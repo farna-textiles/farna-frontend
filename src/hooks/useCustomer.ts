@@ -14,12 +14,12 @@ export const useDeleteCustomer = () => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteCustomer, {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries(['Customers']);
       notifySuccess('Customer deleted successfully');
     },
 
-    onError(error, variables, context) {
+    onError() {
       notifyError('Failed to delete customer');
     },
   });
@@ -32,8 +32,9 @@ export const useCustomer = (customerId: number) => {
 export const useUpdateCustomer = () => {
   const queryClient = useQueryClient();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return useMutation<any, ErrorResponse, [number, Customer]>(updateCustomer, {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries(['customer']);
       notifySuccess('Customer updated successfully');
     },

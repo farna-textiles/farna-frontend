@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { ReactNode, useCallback, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Table,
@@ -72,11 +72,16 @@ const AddButtonLink = styled(Link)<{ disabled?: boolean }>(
   })
 );
 
-const StyledTableRow = styled(TableRow)(({ theme, index }) => ({
+const StyledTableRow = styled(TableRow)(() => ({
+  '&:nth-child(even)': {
+    backgroundColor: 'white',
+  },
+  '&:nth-child(odd)': {
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+  },
   '&:hover': {
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
   },
-  backgroundColor: index % 2 === 0 ? 'white' : 'rgba(0, 0, 0, 0.04)',
 }));
 
 const EnhancedTableHead = styled(TableHead)(({ theme }) => ({
@@ -143,7 +148,7 @@ const GenericTable = <T extends Record<string, unknown>>({
   const total = responseData?.total;
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
@@ -164,7 +169,9 @@ const GenericTable = <T extends Record<string, unknown>>({
           item[firstKey as keyof T][secondKey as keyof T[keyof T]]
         );
       }
-      return item[firstKey as keyof T][secondKey as keyof T[keyof T]];
+      return item[firstKey as keyof T][
+        secondKey as keyof T[keyof T]
+      ] as ReactNode;
     }
     if (column.format) {
       return column.format(item[column.field]);
@@ -225,8 +232,8 @@ const GenericTable = <T extends Record<string, unknown>>({
                 </TableCell>
               </StyledTableRow>
             ) : (
-              data?.map((item, index) => (
-                <StyledTableRow key={String(item.id)} index={index}>
+              data?.map((item) => (
+                <StyledTableRow key={String(item.id)}>
                   {additionalColumn && (
                     <TableCell>
                       {additionalColumn.type === 'radio' && (

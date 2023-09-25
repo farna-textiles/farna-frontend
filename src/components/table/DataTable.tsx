@@ -67,7 +67,7 @@ const DataTable = <T extends { id: number }>({
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);

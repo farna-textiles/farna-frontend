@@ -48,7 +48,7 @@ export const useSignIn = () => {
 
 export const useReactivation = () => {
   return useMutation(reactivation, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       notifySuccess('Re-activation request sent successfully');
     },
     onError: (error: ErrorResponse) => {
@@ -61,7 +61,7 @@ export const useVerify = () => {
   const queryClient = useQueryClient();
 
   return useMutation(verify, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.setQueryData(
         ['userVerificationSuccessMessage'],
         'Account has been verified successfully.'
