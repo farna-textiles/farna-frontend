@@ -94,6 +94,7 @@ const Sidebar = () => {
       icon:   IconCreditCard,
       links: [
         { label: 'Payment Methdos', link: '/payment' },
+        { label: 'Add Currency ', link: '/currency' },
       ],
     },
       { label: 'Analytics', icon: IconPresentationAnalytics },

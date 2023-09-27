@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { useQuery } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
-import getCurrencyUnits from '../../api/currencyUnitApi';
+import {getCurrencyUnits} from '../../api/currencyUnitApi';
 import { CurrencyUnit } from '../../interfaces';
 
 interface CurrencyFilterProps {
