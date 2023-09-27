@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import * as Yup from 'yup';
 import Form from '../components/elements/Form';
@@ -12,8 +12,12 @@ import {
 import AuthBanner from '../components/auth/AuthBanner';
 import { useReactivation, useSignIn } from '../hooks/useAuth';
 import CustomModal from '../components/Modal';
+import { isAuthenticated } from '../services/authService';
 
 const SignIn: React.FC = () => {
+  const naviage = useNavigate();
+  if (isAuthenticated()) naviage('/');
+
   const [userData, setUserData] = useState({ identifier: '', password: '' });
   const [animate, setAnimate] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);

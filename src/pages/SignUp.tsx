@@ -1,14 +1,15 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ChangeEvent, UserFormInput } from '../interfaces';
 import AuthBanner from '../components/auth/AuthBanner';
 import Form from '../components/elements/Form';
 import { useSignUp } from '../hooks/useAuth';
+import { isAuthenticated } from '../services/authService';
 
 const SignUp: React.FC = () => {
+  const naviage = useNavigate();
+  if (isAuthenticated()) naviage('/');
+
   const [userData, setUserData] = useState({
     email: '',
     username: '',
@@ -75,12 +76,12 @@ const SignUp: React.FC = () => {
       >
         <div className="w-full max-w-md space-y-8 px-4 bg-transparent text-gray-600 sm:px-0">
           <div className="">
-            {/* <img
+            <img
               src="/farna-logo.png"
               width={150}
               className="lg:hidden"
               alt="farna logo"
-            /> */}
+            />
             <div className="mt-5 space-y-2">
               <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
                 Sign up
