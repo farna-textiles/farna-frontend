@@ -16,6 +16,7 @@ import RecentOrders from '../pages/productOrder/recentOrders';
 import CreateOrder from '../pages/productOrder/CreateOrder';
 import ShowOrder from '../pages/productOrder/ShowOrder';
 import PaymentMethods from '../pages/payment/PaymentMethods';
+import CurrencyUnit from '../pages/payment/CurrencyUnits';
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
@@ -24,6 +25,7 @@ const CreateProduct = lazy(() => import('../pages/product/CreateProduct'));
 const EditProduct = lazy(() => import('../pages/product/EditProduct'));
 const EditOrder = lazy(() => import('../pages/productOrder/EditOrder'));
 const EditUser = lazy(() => import('../pages/user/EditUser'));
+
 const PageNotFound = lazy(() => import('../pages/PageNotFound'));
 
 export const AppRoutes: React.FC = () => {
@@ -193,6 +195,15 @@ export const AppRoutes: React.FC = () => {
             </AuthRoute>
           ),
         },
+        {
+          path: '/currency',
+          element: (
+            <AuthRoute path="/currency">
+              <CurrencyUnit />
+            </AuthRoute>
+          ),
+        },
+        
         { path: '*', element: <PageNotFound /> },
       ],
     },
