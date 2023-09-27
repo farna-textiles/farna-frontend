@@ -4,12 +4,30 @@ import { notifyError, notifySuccess } from '../lib/utils';
 import { ErrorResponse, Order, OrderUpdateData } from '../interfaces';
 import { createOrder, deleteOrder, getOrder, updateOrder } from '../api';
 
+const extractLastErrorMessagePart = (errorMessage: string) => {
+  const parts = errorMessage.split('.');
+
+  const lastPart = parts[parts.length - 1].trim();
+
+  const capitalizedLastPart =
+    lastPart.charAt(0).toUpperCase() + lastPart.slice(1);
+
+  return capitalizedLastPart;
+};
+
 export const useCraeteOrder = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   return useMutation(createOrder, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['Orders']);
+      await queryClient.invalidateQueries([
+        'dashboardCards',
+        'Orders',
+        'dashboardTwoYears',
+        'dashboardDmographic',
+        'dashboardYears',
+        'dashboardAverage',
+      ]);
       navigate(`/orders`);
       notifySuccess('Product Order created successfully');
     },
@@ -18,7 +36,9 @@ export const useCraeteOrder = () => {
       await queryClient.invalidateQueries(['Orders']);
 
       notifyError(
-        typeof error.message === 'object' ? error.message[0] : error.message
+        typeof error.message === 'object'
+          ? extractLastErrorMessagePart(error.message[0])
+          : error.message
       );
     },
   });
@@ -39,8 +59,16 @@ export const useUpdateOrder = () => {
     updateOrder,
     {
       onSuccess: async (data) => {
-        await queryClient.invalidateQueries(['Orders']);
-        await queryClient.invalidateQueries(['order']);
+        await queryClient.invalidateQueries([
+          'dashboardCards',
+          'Orders',
+          'dashboardTwoYears',
+          'dashboardDmographic',
+          'dashboardYears',
+          'dashboardAverage',
+          'order',
+          'Orders',
+        ]);
         navigate(`/orders/${data.id}/invoice`);
 
         notifySuccess('Order updated successfully');
@@ -50,7 +78,9 @@ export const useUpdateOrder = () => {
         await queryClient.invalidateQueries(['Orders']);
 
         notifyError(
-          typeof error.message === 'object' ? error.message[0] : error.message
+          typeof error.message === 'object'
+            ? extractLastErrorMessagePart(error.message[0])
+            : error.message
         );
       },
     }
@@ -63,6 +93,15 @@ export const useDeleteOrder = () => {
   return useMutation(deleteOrder, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['Orders']);
+      await queryClient.invalidateQueries([
+        'dashboardCards',
+        'Orders',
+        'dashboardTwoYears',
+        'dashboardDmographic',
+        'dashboardYears',
+        'dashboardAverage',
+        'Orders',
+      ]);
       notifySuccess('Order deleted successfully');
     },
 

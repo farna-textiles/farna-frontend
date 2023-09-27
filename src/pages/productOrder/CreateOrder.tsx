@@ -93,8 +93,8 @@ const CreateOrder: React.FC = () => {
           orderProducts: selectedProducts.map((product: ProductOrderType) => {
             return {
               productId: product.id,
-              quantity: product.quantity,
-              rate: product.rate,
+              quantity: parseInt(product.quantity.toString(), 10),
+              rate: parseFloat(product.rate.toString()),
             };
           }),
         });

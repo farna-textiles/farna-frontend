@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { ReactElement, useEffect, useState } from 'react';
 import Card from '../../components/elements/Card';
 import UpArrowIcon from '../../lib/icons/UpArrowIcon';
