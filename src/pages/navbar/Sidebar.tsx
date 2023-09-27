@@ -1,5 +1,4 @@
-/* eslint-disable import/order */
-/* eslint-disable react/self-closing-comp */
+/* eslint-disable react/jsx-props-no-spreading */
 
 import { Navbar, createStyles, rem } from '@mantine/core';
 import {
@@ -11,12 +10,11 @@ import {
   IconLock,
   IconAddressBook,
 } from '@tabler/icons-react';
+import { useEffect, useMemo, useState } from 'react';
 import SwipeableTemporaryDrawer from './MobileSidebar';
-import logo from '../../../public/farna-logo.png';
 import LinksGroup from './LinksGroup';
 import UserButton from './UserButton';
 import { User } from '../../interfaces';
-import { useEffect, useMemo, useState } from 'react';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -64,7 +62,7 @@ const useStyles = createStyles((theme) => ({
 const Sidebar = () => {
   const SideLinks = useMemo(
     () => [
-      { label: 'Dashboard', icon: IconGauge, link: '/' },
+      { label: 'Dashboard', icon: IconGauge, link: '/dashboard' },
       {
         label: 'Customers',
         icon: IconAddressBook,
@@ -91,7 +89,12 @@ const Sidebar = () => {
         ],
       },
       { label: 'Analytics', icon: IconPresentationAnalytics },
-      { label: 'Users', icon: IconFileAnalytics, link: '/users' },
+      {
+        label: 'Users',
+        icon: IconFileAnalytics,
+        link: '/users',
+        isAdminRoute: true,
+      },
       { label: 'Settings', icon: IconAdjustments },
       {
         label: 'Security',
@@ -108,6 +111,8 @@ const Sidebar = () => {
 
   const userInfoString = localStorage.getItem('userInfo');
   const userInfo: User = userInfoString ? JSON.parse(userInfoString) : null;
+  const isAdminUser = useMemo(() => userInfo.role === 'admin', [userInfo.role]);
+
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -136,16 +141,21 @@ const Sidebar = () => {
           className={`${classes.logo} md:flex`}
           style={{ justifyContent: isMobile ? 'flex-end' : 'flex-start' }}
         >
-          <img src={logo} alt="farna log  o" width={isMobile ? '68' : ''} />
+          <img
+            src="/farna-logo.png"
+            alt="farna logo"
+            width={isMobile ? '68' : ''}
+          />
         </div>
       </Navbar.Section>
 
       {!isMobile && (
         <Navbar.Section className={`md:block ${classes.linksInner}`}>
-          {SideLinks.map((item) => (
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            <LinksGroup {...item} key={item.label} />
-          ))}
+          {SideLinks.filter((item) => isAdminUser || !item.isAdminRoute).map(
+            (item) => (
+              <LinksGroup {...item} key={item.label} />
+            )
+          )}
         </Navbar.Section>
       )}
 

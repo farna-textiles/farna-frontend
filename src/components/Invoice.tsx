@@ -33,7 +33,7 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
             FARNA TEXTILES
           </div>
           <img
-            src="../../public/farna-logo.png"
+            src="/farna-logo.png"
             alt="Farna Textiles Logo"
             className="h-15 w-auto ml-[12rem]"
           />

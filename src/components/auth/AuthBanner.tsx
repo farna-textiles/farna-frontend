@@ -7,7 +7,7 @@ const AuthBanner = ({ animate }: AuthBannerProp) => (
     }`}
   >
     <div className="relative z-10 w-full max-w-md">
-      <img src="/public/farna-logo.png" alt="farna logo" width={150} />
+      <img src="/farna-logo.png" alt="farna logo" width={150} />
       <div className=" mt-16 space-y-3">
         <h3 className="text-white text-3xl font-bold">WE ARE FARNA TEXTILES</h3>
         <p className="text-gray-300">

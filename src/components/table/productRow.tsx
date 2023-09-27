@@ -75,7 +75,9 @@ const ProductRow: React.FC<ProductRowProps> = ({
             <TableCell key={field.key} align="center">
               <Box fontWeight="bold">
                 {currency}
-                {localProduct.quantity * localProduct.rate}
+                {parseFloat(
+                  (localProduct.quantity * localProduct.rate).toFixed(2)
+                ).toString()}
               </Box>
             </TableCell>
           );

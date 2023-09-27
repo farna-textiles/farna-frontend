@@ -385,7 +385,8 @@ const CreateOrder: React.FC = () => {
           </Grid>
           <Grid>
             <Typography variant="subtitle1" ml={5}>
-              {selectedCurrencySymbol} {totalAmount}
+              {selectedCurrencySymbol}{' '}
+              {parseFloat(totalAmount.toFixed(2)).toString()}
             </Typography>
           </Grid>
         </Grid>
