@@ -11,14 +11,18 @@ export const usePaymentMethods = () => {
   return useQuery(['paymentMethods'], getPaymentMethods);
 };
 
+const updatePaymentMethodMutation = async ({ id, ...updatedPaymentMethodData }) => {
+  return updatePaymentMethod(id, updatedPaymentMethodData);
+};
+
 export const useCreatePaymentMethod = () => {
   const queryClient = useQueryClient();
   return useMutation(createPaymentMethod, {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries(['paymentMethods']);
       notifySuccess('Payment method created successfully');
     },
-    onError: (error) => {
+    onError: () => {
       notifyError('Failed to create payment method');
     },
   });
@@ -26,12 +30,17 @@ export const useCreatePaymentMethod = () => {
 
 export const useUpdatePaymentMethod = () => {
   const queryClient = useQueryClient();
-  return useMutation(updatePaymentMethod, {
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries(['paymentMethods']);
+  return useMutation(updatePaymentMethodMutation, {
+    onMutate: async (variables) => {
+      const { id } = variables;
+      await queryClient.invalidateQueries(['paymentMethods', id]);
+      return { id };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['paymentMethods']);
       notifySuccess('Payment method updated successfully');
     },
-    onError: (error) => {
+    onError: () => {
       notifyError('Failed to update payment method');
     },
   });
@@ -40,11 +49,11 @@ export const useUpdatePaymentMethod = () => {
 export const useDeletePaymentMethod = () => {
   const queryClient = useQueryClient();
   return useMutation(deletePaymentMethod, {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries(['paymentMethods']);
       notifySuccess('Payment method deleted successfully');
     },
-    onError: (error) => {
+    onError: () => {
       notifyError('Failed to delete payment method');
     },
   });
