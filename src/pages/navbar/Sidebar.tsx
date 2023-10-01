@@ -9,7 +9,7 @@ import {
   IconAdjustments,
   IconLock,
   IconAddressBook,
-  IconCreditCard
+  IconCreditCard,
 } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import SwipeableTemporaryDrawer from './MobileSidebar';
@@ -90,13 +90,13 @@ const Sidebar = () => {
         ],
       },
       {
-      label: 'Additions',
-      icon:   IconCreditCard,
-      links: [
-        { label: 'Payment Methdos', link: '/payment' },
-        { label: 'Add Currency ', link: '/currency' },
-      ],
-    },
+        label: 'Additions',
+        icon: IconCreditCard,
+        links: [
+          { label: 'Payment Methdos', link: '/payment' },
+          { label: 'Add Currency ', link: '/currency' },
+        ],
+      },
       { label: 'Analytics', icon: IconPresentationAnalytics },
       {
         label: 'Users',

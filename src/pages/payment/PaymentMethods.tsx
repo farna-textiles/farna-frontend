@@ -1,113 +1,79 @@
-import React, { useState, useEffect } from 'react';
-import CurrencyAndPayment from '../../components/CurrencyAndPayment';
+import React, { useMemo, useState } from 'react';
+import * as yup from 'yup';
+import CurrencyAndPayment from '../../components/additionals/GenericCRUD';
+import { getAllPaymentTypes } from '../../api/paymentMethodApi';
+import { PaymentMethod, PaymentType, TableColumn } from '../../interfaces';
 import {
-  getPaymentMethods,
-  createPaymentMethod,
-  updatePaymentMethod,
-  deletePaymentMethod,
-} from '../../api/paymentMethodApi';
+  useCreatePaymentMethod,
+  useDeletePaymentMethod,
+  useUpdatePaymentMethod,
+} from '../../hooks/usePaymentMethods';
+
+const validationSchema = yup.object().shape({
+  name: yup.string().required('Payment Method is required'),
+});
 
 const PaymentMethods: React.FC = () => {
-  const [paymentTypes, setPaymentTypes] = useState([]);
-  const [selectedPaymentType, setSelectedPaymentType] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [newPaymentMethod, setNewPaymentMethod] = useState('');
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [deletingPaymentType, setDeletingPaymentType] = useState(null);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  const fetchPaymentMethods = () => {
-    getPaymentMethods()
-      .then((data) => {
-        setPaymentTypes(data);
-      });
-  };
+  const usePaymentMethod = useCreatePaymentMethod();
+  const updatePaymentMethod = useUpdatePaymentMethod();
+  const deletePaymentMethod = useDeletePaymentMethod();
 
-  useEffect(() => {
-    fetchPaymentMethods();
-  }, []);
-
-  const handleEdit = (paymentType) => {
-    setSelectedPaymentType(paymentType);
-    setIsEditing(true);
-    setNewPaymentMethod(paymentType.name);
-  };
-  const handleCancelEdit = () => {
-    setSelectedPaymentType(null);
-    setIsEditing(false);
-    setNewPaymentMethod('');
-  };
-
-  const handleDelete = (id) => {
-    setIsDeleteDialogOpen(true);
-    setDeletingPaymentType(id);
-  };
-
-  const handleConfirmDelete = () => {
-    deletePaymentMethod(deletingPaymentType)
-      .then(() => {
-        setPaymentTypes((prevPaymentTypes) =>
-          prevPaymentTypes.filter((paymentType) => paymentType.id !== deletingPaymentType)
-        );
-        setIsDeleteDialogOpen(false);
-      })
-      .catch((error) => {
-        setIsDeleteDialogOpen(false);
-      });
-  };
-
-  const handleCancelDelete = () => {
-    setIsDeleteDialogOpen(false);
-    setSelectedPaymentType(null);
-  };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isEditing && selectedPaymentType) {
-      updatePaymentMethod(selectedPaymentType.id, { name: newPaymentMethod })
-        .then(() => {
-          setPaymentTypes((prevPaymentTypes) =>
-            prevPaymentTypes.map((paymentType) =>
-              paymentType.id === selectedPaymentType.id
-                ? { ...paymentType, name: newPaymentMethod }
-                : paymentType
-            )
-          );
-          setSelectedPaymentType(null);
-          setIsEditing(false);
-          setNewPaymentMethod('');
-        });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSubmit = (values: any) => {
+    if (isEdit && values) {
+      updatePaymentMethod.mutateAsync([
+        values.id as number,
+        values as PaymentMethod,
+      ]);
     } else {
-      createPaymentMethod({ name: newPaymentMethod })
-        .then((newPaymentType) => {
-          setPaymentTypes([...paymentTypes, newPaymentType]);
-          setNewPaymentMethod('');
-        });
+      usePaymentMethod.mutateAsync(values as PaymentMethod);
     }
   };
 
+  const handleEdit = (paymentMethod: PaymentMethod) => {
+    setIsEdit(!!paymentMethod);
+  };
+
+  const handleDelete = (paymentMethodId: number) => {
+    deletePaymentMethod.mutate(paymentMethodId);
+  };
+
+  const formConfig = [
+    {
+      label: 'Payment Method',
+      id: 'name',
+      value: newPaymentMethod,
+      required: true,
+      onChange: setNewPaymentMethod,
+    },
+  ];
+
+  const columns: TableColumn<PaymentType>[] = useMemo(
+    () => [
+      { field: 'id', label: 'ID' },
+      { field: 'name', label: 'Name' },
+    ],
+    []
+  );
+
   return (
     <CurrencyAndPayment
-    pageTitle="Payment Types"
-    pageType="Payment Type"
-    data={paymentTypes}
-    fetchData={fetchPaymentMethods}
-    handleEdit={handleEdit}
-    handleDelete={handleDelete}
-    handleSubmit={handleSubmit}
-    newItem={newPaymentMethod}
-    setNewItem={setNewPaymentMethod}
-    isEditing={isEditing}
-    setIsEditing={setIsEditing}
-    isDeleteDialogOpen={isDeleteDialogOpen}
-    setIsDeleteDialogOpen={setIsDeleteDialogOpen}
-    deletingItem={deletingPaymentType}
-    setDeletingItem={setDeletingPaymentType}
-    handleCancelDelete={handleCancelDelete} 
-    handleConfirmDelete={handleConfirmDelete}
-    isCurrency={false}
-    // fieldsToDisplay={{ code: false, symbol: false ,name:false}}
-    
-  />
+      pageTitle="Payment Methods"
+      pageType="Payment Method"
+      fetchData={getAllPaymentTypes}
+      tableColumns={columns}
+      validationSchema={validationSchema}
+      formConfig={formConfig}
+      handleFormSubmit={handleSubmit}
+      handleConfirmDelete={handleDelete}
+      handleEdit={handleEdit}
+      initialValues={{
+        paymentMethod: newPaymentMethod,
+      }}
+    />
   );
 };
 
