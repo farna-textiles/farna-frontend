@@ -11,7 +11,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
-import { logout } from '../../services/authService';
 import { useNavigate } from 'react-router';
 
 import {
@@ -24,6 +23,7 @@ import {
   IconAddressBook,
 } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
+import { logout } from '../../services/authService';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
