@@ -97,23 +97,23 @@ const Sidebar = () => {
           { label: 'Add Currency ', link: '/currency' },
         ],
       },
-      { label: 'Analytics', icon: IconPresentationAnalytics },
+      // { label: 'Analytics', icon: IconPresentationAnalytics },
       {
         label: 'Users',
         icon: IconFileAnalytics,
         link: '/users',
         isAdminRoute: true,
       },
-      { label: 'Settings', icon: IconAdjustments },
-      {
-        label: 'Security',
-        icon: IconLock,
-        links: [
-          { label: 'Enable 2FA', link: '/' },
-          { label: 'Change password', link: '/' },
-          { label: 'Recovery codes', link: '/' },
-        ],
-      },
+      // { label: 'Settings', icon: IconAdjustments },
+      // {
+      //   label: 'Security',
+      //   icon: IconLock,
+      //   links: [
+      //     { label: 'Enable 2FA', link: '/' },
+      //     { label: 'Change password', link: '/' },
+      //     { label: 'Recovery codes', link: '/' },
+      //   ],
+      // },
     ],
     []
   );

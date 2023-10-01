@@ -48,13 +48,6 @@ const Users = () => {
           navigate(`/edit/${id}`);
         },
       },
-      {
-        icon: <DeleteIcon />,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        onClick: (_id: number) => {
-          // delete not implemented yet
-        },
-      },
     ],
     []
   );
@@ -67,7 +60,7 @@ const Users = () => {
     valueGetter: (item: User) => {
       return item.isActive;
     },
-    columnName: '',
+    columnName: 'Status',
   };
 
   const userFields: FieldConfig<InviteUser>[] = useMemo(
