@@ -25,6 +25,7 @@ const Products = () => {
 
   const columns: TableColumn<Product>[] = useMemo(
     () => [
+      { field: 'id', label: 'ID' },
       { field: 'lotNo', label: 'Lot No' },
       { field: 'denier', label: 'Denier' },
       { field: 'type', label: 'Type' },
