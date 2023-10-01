@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
 import { ApiFunction } from '../interfaces';
 import { isAuthenticated } from '../services/authService';
@@ -18,8 +18,8 @@ export const handleApiCall = async <T>(
     return response.data;
   } catch (error: any) {
     if (
-      error.response.data.statusCode === 401 &&
-      error.response.data.message === 'Unauthorized' &&
+      error?.response?.data?.statusCode === 401 &&
+      error?.response?.data?.message === 'Unauthorized' &&
       !isAuthenticated()
     ) {
       window.location.href = '/signin';

@@ -261,7 +261,7 @@ const GenericTable = <T extends Record<string, unknown>>({
         )}
       </Grid>
       <StyledTableContainer className="mt-10">
-        <Table style={{ minWidth: '1000px' }}>
+        <Table style={{ minWidth: '50rem' }}>
           <EnhancedTableHead>
             <StyledTableRow>
               {additionalColumn && (
@@ -332,7 +332,9 @@ const GenericTable = <T extends Record<string, unknown>>({
                           // eslint-disable-next-line react/no-array-index-key
                           key={buttonsIndex}
                           disabled={button.disabled || isLoading}
-                          onClick={() => button.onClick(item.id as number)}
+                          onClick={() =>
+                            button.onClick(item.id as number, item)
+                          }
                         >
                           {button.icon}
                         </StyledIcon>

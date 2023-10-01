@@ -1,114 +1,105 @@
-import React, { useState, useEffect } from 'react';
-import CurrencyAndPayment from '../../components/CurrencyAndPayment';
+import React, { useMemo, useState } from 'react';
+import * as yup from 'yup';
+import CurrencyAndPayment from '../../components/additionals/GenericCRUD';
+import { getAllCurrencyUnits } from '../../api/currencyUnitApi';
+import { CurrencyUnit, TableColumn } from '../../interfaces';
 import {
-  getCurrencyUnits,
-  createCurrencyUnit,
-  updateCurrencyUnit,
-  deleteCurrencyUnit,
-} from '../../api/currencyUnitApi'; 
+  useCreateCurrencyUnit,
+  useDeleteCurrencyUnit,
+  useUpdateCurrencyUnit,
+} from '../../hooks/useCurrencyUnits';
+
+const validationSchema = yup.object().shape({
+  name: yup.string().required('Currency Name is required'),
+  code: yup.string().required('Currency Code is required'),
+  symbol: yup
+    .string()
+    .required('Currency Symbol is required')
+    .matches(/[^a-zA-Z0-9]/, 'Symbol must not be alphanumeric'),
+});
 
 const CurrencyUnits: React.FC = () => {
-  const [currencyUnits, setCurrencyUnits] = useState([]);
-  const [selectedCurrencyUnit, setSelectedCurrencyUnit] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [newCurrencyUnit, setNewCurrencyUnit] = useState('');
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [deletingCurrencyUnit, setDeletingCurrencyUnit] = useState(null);
+  const [newCurrencyName, setNewCurrencyName] = useState('');
+  const [newCurrencyCode, setNewCurrencyCode] = useState('');
+  const [newCurrencySymbol, setNewCurrencySymbol] = useState('');
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  const fetchCurrencyUnits = () => {
-    getCurrencyUnits()
-      .then((data) => {
-        setCurrencyUnits(data);
-      })
-      .catch((error) => {
-      });
-  };
+  const useCurrencyUnit = useCreateCurrencyUnit();
+  const updateCurrencyUnit = useUpdateCurrencyUnit();
+  const deleteCurrencyUnit = useDeleteCurrencyUnit();
 
-  useEffect(() => {
-    fetchCurrencyUnits();
-  }, []);
-
-  const handleEdit = (currencyUnit) => {
-    setSelectedCurrencyUnit(currencyUnit);
-    setIsEditing(true);
-    setNewCurrencyUnit(currencyUnit.name);
-  };
-
-  const handleDelete = (id) => {
-    setIsDeleteDialogOpen(true);
-    setDeletingCurrencyUnit(id);
-  };
-
-  const handleConfirmDelete = () => {
-    deleteCurrencyUnit(deletingCurrencyUnit)
-      .then(() => {
-        setCurrencyUnits((prevCurrencyUnits) =>
-          prevCurrencyUnits.filter((currencyUnit) => currencyUnit.id !== deletingCurrencyUnit)
-        );
-        setIsDeleteDialogOpen(false);
-      })
-      .catch((error) => {
-        setIsDeleteDialogOpen(false);
-      });
-  };
-
-  const handleCancelDelete = () => {
-    setIsDeleteDialogOpen(false);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isEditing && selectedCurrencyUnit) {
-      updateCurrencyUnit(selectedCurrencyUnit.id, { name: newCurrencyUnit })
-        .then(() => {
-          setCurrencyUnits((prevCurrencyUnits) =>
-            prevCurrencyUnits.map((currencyUnit) =>
-              currencyUnit.id === selectedCurrencyUnit.id
-                ? { ...currencyUnit, name: newCurrencyUnit }
-                : currencyUnit
-            )
-          );
-          setSelectedCurrencyUnit(null);
-          setIsEditing(false);
-          setNewCurrencyUnit('');
-        })
-        .catch((error) => {
-         
-        });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSubmit = (values: any) => {
+    if (isEdit && values) {
+      updateCurrencyUnit.mutateAsync([
+        values.id as number,
+        values as CurrencyUnit,
+      ]);
     } else {
-      createCurrencyUnit({ name: newCurrencyUnit })
-        .then((newCurrencyUnit) => {
-          setCurrencyUnits([...currencyUnits, newCurrencyUnit]);
-          setNewCurrencyUnit('');
-        })
-        .catch((error) => {
-        });
+      useCurrencyUnit.mutateAsync(values as CurrencyUnit);
     }
   };
+
+  const handleEdit = (currencyUnit: CurrencyUnit) => {
+    setIsEdit(!!currencyUnit);
+  };
+
+  const handleDelete = (currencyId: number) => {
+    deleteCurrencyUnit.mutate(currencyId);
+  };
+
+  const formConfig = [
+    {
+      label: 'Name',
+      id: 'name',
+      value: newCurrencyName,
+      required: true,
+      onChange: setNewCurrencyName,
+    },
+    {
+      label: 'Code',
+      id: 'code',
+      value: newCurrencyCode,
+      required: true,
+      onChange: setNewCurrencyCode,
+    },
+    {
+      label: 'Symbol',
+      id: 'symbol',
+      value: newCurrencySymbol,
+      required: true,
+      onChange: setNewCurrencySymbol,
+    },
+  ];
+
+  const columns: TableColumn<CurrencyUnit>[] = useMemo(
+    () => [
+      { field: 'id', label: 'ID' },
+      { field: 'name', label: 'Name' },
+      { field: 'code', label: 'Code' },
+      { field: 'symbol', label: 'Symbol' },
+    ],
+    []
+  );
 
   return (
     <CurrencyAndPayment
       pageTitle="Currency Units"
       pageType="Currency Unit"
-      data={currencyUnits}
-      fetchData={fetchCurrencyUnits}
+      fetchData={getAllCurrencyUnits}
+      validationSchema={validationSchema}
+      formConfig={formConfig}
+      handleFormSubmit={handleSubmit}
+      handleConfirmDelete={handleDelete}
       handleEdit={handleEdit}
-      handleDelete={handleDelete}
-      handleSubmit={handleSubmit}
-      newItem={newCurrencyUnit}
-      setNewItem={setNewCurrencyUnit}
-      isEditing={isEditing}
-      setIsEditing={setIsEditing}
-      isDeleteDialogOpen={isDeleteDialogOpen}
-      setIsDeleteDialogOpen={setIsDeleteDialogOpen}
-      deletingItem={deletingCurrencyUnit}
-      setDeletingItem={handleConfirmDelete}
-      handleCancelDelete={handleCancelDelete} 
-      handleConfirmDelete={handleConfirmDelete}
-      isCurrency={true}
+      tableColumns={columns}
+      initialValues={{
+        name: 'newCurrencyName',
+        code: newCurrencyCode,
+        symbol: newCurrencySymbol,
+      }}
     />
   );
-  
 };
 
 export default CurrencyUnits;

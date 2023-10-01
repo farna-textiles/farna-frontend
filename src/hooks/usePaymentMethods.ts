@@ -1,25 +1,40 @@
-import { useMutation, useQueryClient,useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  getPaymentMethods,
   createPaymentMethod,
-  updatePaymentMethod,
   deletePaymentMethod,
+  updatePaymentMethod,
 } from '../api/paymentMethodApi';
 import { notifyError, notifySuccess } from '../lib/utils';
+import { ErrorResponse, PaymentMethod } from '../interfaces';
 
-export const usePaymentMethods = () => {
-  return useQuery(['paymentMethods'], getPaymentMethods);
-};
+export const useUpdatePaymentMethod = () => {
+  const queryClient = useQueryClient();
 
-const updatePaymentMethodMutation = async ({ id, ...updatedPaymentMethodData }) => {
-  return updatePaymentMethod(id, updatedPaymentMethodData);
+  return useMutation<any, ErrorResponse, [number, PaymentMethod]>(
+    updatePaymentMethod,
+    {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(['Payment Methods']);
+
+        notifySuccess('Currency unit updated successfully');
+      },
+
+      onError: async (error: ErrorResponse) => {
+        await queryClient.invalidateQueries(['Payment Methods']);
+
+        notifyError(
+          typeof error.message === 'object' ? error.message[0] : error.message
+        );
+      },
+    }
+  );
 };
 
 export const useCreatePaymentMethod = () => {
   const queryClient = useQueryClient();
   return useMutation(createPaymentMethod, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['paymentMethods']);
+      await queryClient.invalidateQueries(['Payment Methods']);
       notifySuccess('Payment method created successfully');
     },
     onError: () => {
@@ -28,33 +43,17 @@ export const useCreatePaymentMethod = () => {
   });
 };
 
-export const useUpdatePaymentMethod = () => {
-  const queryClient = useQueryClient();
-  return useMutation(updatePaymentMethodMutation, {
-    onMutate: async (variables) => {
-      const { id } = variables;
-      await queryClient.invalidateQueries(['paymentMethods', id]);
-      return { id };
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['paymentMethods']);
-      notifySuccess('Payment method updated successfully');
-    },
-    onError: () => {
-      notifyError('Failed to update payment method');
-    },
-  });
-};
-
 export const useDeletePaymentMethod = () => {
   const queryClient = useQueryClient();
   return useMutation(deletePaymentMethod, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['paymentMethods']);
+      await queryClient.invalidateQueries(['Payment Methods']);
       notifySuccess('Payment method deleted successfully');
     },
-    onError: () => {
-      notifyError('Failed to delete payment method');
+    onError: (error: ErrorResponse) => {
+      notifyError(
+        typeof error.message === 'object' ? error.message[0] : error.message
+      );
     },
   });
 };

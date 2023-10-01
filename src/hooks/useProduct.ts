@@ -39,13 +39,13 @@ export const useUpdateProduct = () => {
     updateProduct,
     {
       onSuccess: async () => {
-        await queryClient.invalidateQueries(['products']);
+        await queryClient.invalidateQueries(['product', 'Products']);
 
         notifySuccess('Product updated successfully');
       },
 
       onError: async (error: ErrorResponse) => {
-        await queryClient.invalidateQueries(['products']);
+        await queryClient.invalidateQueries(['product']);
 
         notifyError(
           typeof error.message === 'object' ? error.message[0] : error.message

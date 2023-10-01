@@ -240,7 +240,7 @@ export interface GenericTableProps<T> {
 
 export interface ActionButton {
   icon: React.ReactNode;
-  onClick: (id: number) => void;
+  onClick: (id: number, item?: any) => void;
   title?: string;
   disabled?: boolean;
 }
@@ -268,6 +268,13 @@ export interface FieldConfig<T> {
   label: string;
   name: keyof T | string;
   type?: string;
+}
+
+export interface FormFieldConfig {
+  label: string;
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
 }
 
 export interface EditContactModalProps<T> {
@@ -341,3 +348,9 @@ export interface CompareRangeType {
 }
 
 export type DashboardDataFilter = 'orders' | 'earnings';
+
+export interface PaymentType {
+  id: number;
+  name: string;
+  [key: string]: any;
+}

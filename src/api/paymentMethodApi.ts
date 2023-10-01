@@ -1,39 +1,43 @@
+import { MutationFunction } from '@tanstack/react-query';
 import { API_URLS } from '../constants';
 import api from './axios';
+import { PaginatedResponse, PaymentMethod } from '../interfaces';
 import { handleApiCall } from '../lib/utils';
-import { PaymentMethod } from '../interfaces';
 
-
-
-const handlePaymentMethodApiCall = async <T>(
-  method: any, 
-  url: string,
-  data: Record<string, any> = {}
-): Promise<T> => {
-  return handleApiCall(method, url, data);
+export const getAllPaymentTypes = async (
+  page = -1,
+  pageSize?: number,
+  searchQuery?: string
+): Promise<PaginatedResponse<PaymentMethod>> => {
+  const response = await api.get(API_URLS.PAYMENT_METHODS.ALL, {
+    params: {
+      limit: pageSize,
+      page: page + 1,
+      searchTerm: searchQuery,
+    },
+  });
+  return response.data;
 };
 
-export const getPaymentMethods = async (): Promise<PaymentMethod[]> => {
-  const apiUrl = API_URLS.PAYMENT_METHODS.ALL;
-  return handlePaymentMethodApiCall(api.get, apiUrl);
+export const createPaymentMethod = async (paymentMethod: PaymentMethod) => {
+  return handleApiCall(
+    api.post,
+    API_URLS.PAYMENT_METHODS.CREATE,
+    paymentMethod
+  );
 };
 
-export const createPaymentMethod = async (
-  paymentMethodData: Partial<PaymentMethod>
-): Promise<PaymentMethod> => {
-  const apiUrl = API_URLS.PAYMENT_METHODS.ALL;
-  return handlePaymentMethodApiCall(api.post, apiUrl, paymentMethodData);
+export const updatePaymentMethod: MutationFunction<
+  any,
+  [number, PaymentMethod]
+> = async (params) => {
+  const [id, data] = params;
+  const apiUrl = API_URLS.PAYMENT_METHODS.UPDATE.replace(':id', String(id));
+
+  return handleApiCall(api.put, apiUrl, data);
 };
 
-export const updatePaymentMethod = async (
-  id: number,
-  updatedPaymentMethodData: Partial<PaymentMethod>
-): Promise<PaymentMethod> => {
-  const apiUrl = `${API_URLS.PAYMENT_METHODS.ALL}/${id}`;
-  return handlePaymentMethodApiCall(api.put, apiUrl, updatedPaymentMethodData);
-};
-
-export const deletePaymentMethod = async (id: number): Promise<void> => {
-  const apiUrl = `${API_URLS.PAYMENT_METHODS.ALL}/${id}`;
-  return handlePaymentMethodApiCall(api.delete, apiUrl);
+export const deletePaymentMethod = async (id: number, data = {}) => {
+  const apiUrl = API_URLS.PAYMENT_METHODS.DELETE.replace(':id', String(id));
+  return handleApiCall(api.delete, apiUrl, data);
 };

@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import { useQuery } from '@tanstack/react-query';
 import CustomButton from '../../components/elements/CustomButton';
 import {
   CurrencyUnit,
@@ -29,10 +30,10 @@ import SearchDropdown from '../../components/elements/SearchableDropdown';
 import { getCustomers } from '../../api';
 import { getProducts } from '../../api/productApi';
 import ProductRow from '../../components/table/productRow';
-import {useCurrencyUnits} from '../../hooks/useCurrencyUnits';
-import {usePaymentMethods} from '../../hooks/usePaymentMethods';
-import { notifyError } from '../../lib/utils';
 import { useCraeteOrder } from '../../hooks/useOrder';
+import { getAllCurrencyUnits } from '../../api/currencyUnitApi';
+import { getAllPaymentTypes } from '../../api/paymentMethodApi';
+import { notifyError } from '../../lib/utils';
 
 const headerCellStyle = {
   backgroundColor: '#3F9FEB',
@@ -66,9 +67,12 @@ const CreateOrder: React.FC = () => {
   const handleSelectCustomer = (customer: Customer | null) => {
     setSelectedCustomer(customer);
   };
-
-  const { data: currencyUnits } = useCurrencyUnits();
-  const { data: paymentMethods } = usePaymentMethods();
+  const { data: currencyUnits } = useQuery(['currencyUnits'], async () =>
+    getAllCurrencyUnits()
+  );
+  const { data: paymentMethods } = useQuery(['paymentMethods'], async () =>
+    getAllPaymentTypes()
+  );
   const useCreateOrderMutation = useCraeteOrder();
 
   const formik = useFormik({
@@ -110,7 +114,7 @@ const CreateOrder: React.FC = () => {
   };
 
   const selectedCurrencySymbol = useMemo(() => {
-    return currencyUnits.find(
+    return currencyUnits?.data?.find(
       (currency: CurrencyUnit) => currency.id === formik.values.currencyUnitId
     )?.symbol;
   }, [currencyUnits, formik.values.currencyUnitId]);
@@ -286,7 +290,7 @@ const CreateOrder: React.FC = () => {
                   Boolean(formik.errors.paymentTypeId)
                 }
               >
-                {paymentMethods.map((method: PaymentMethod) => (
+                {paymentMethods?.data?.map((method: PaymentMethod) => (
                   <MenuItem key={method.id} value={method.id}>
                     {method.name}
                   </MenuItem>
@@ -317,7 +321,7 @@ const CreateOrder: React.FC = () => {
                   Boolean(formik.errors.currencyUnitId)
                 }
               >
-                {currencyUnits.map((currency: CurrencyUnit) => (
+                {currencyUnits?.data?.map((currency: CurrencyUnit) => (
                   <MenuItem key={currency.id} value={currency.id}>
                     {currency.symbol}
                   </MenuItem>
@@ -368,7 +372,7 @@ const CreateOrder: React.FC = () => {
                   fields={fields}
                   key={product.lotNo}
                   product={product}
-                  currency={selectedCurrencySymbol}
+                  currency={selectedCurrencySymbol ?? ''}
                   onProductUpdate={handleProductUpdate}
                   onProductRemove={handleProductRemove}
                 />
