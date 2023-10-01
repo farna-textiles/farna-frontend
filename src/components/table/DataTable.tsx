@@ -27,30 +27,31 @@ interface DataTableProps<T> {
 }
 
 const Container = styled('div')(({ theme }) => ({
-  marginTop: theme.spacing(2),
-  marginBottom: theme.spacing(2),
+  margin: theme.spacing(2),
+  padding: theme.spacing(2),
+  boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.1)',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: '#fff',
 }));
 
 const CustomButton = styled(Button)(({ theme, disabled }) => ({
-  textDecoration: 'none',
-  color: theme.palette.primary.main,
-  padding: theme.spacing(1),
-  border: `1px solid ${theme.palette.primary.main}`,
+  backgroundColor: theme.palette.primary.main,
+  color: '#fff',
+  padding: theme.spacing(1, 2),
   borderRadius: theme.shape.borderRadius,
   '&:hover': {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
+    backgroundColor: theme.palette.primary.dark,
   },
   ...(disabled && {
     backgroundColor: theme.palette.grey[300],
     color: theme.palette.text.primary,
     pointerEvents: 'none',
-    '&:hover': {
-      backgroundColor: theme.palette.grey[300],
-      borderColor: theme.palette.grey[300],
-      color: theme.palette.text.primary,
-    },
   }),
+}));
+
+const StyledTableCell = styled(TableCell)(() => ({
+  fontWeight: 'bold',
+  borderBottom: 'none',
 }));
 
 const DataTable = <T extends { id: number }>({
@@ -105,13 +106,15 @@ const DataTable = <T extends { id: number }>({
         <TableHead>
           <TableRow>
             {additionalColumn && (
-              <TableCell>{additionalColumn.columnName}</TableCell>
+              <StyledTableCell>{additionalColumn.columnName}</StyledTableCell>
             )}
             {columns.map((column) => (
-              <TableCell key={column.field as string}>{column.label}</TableCell>
+              <StyledTableCell key={column.field as string}>
+                {column.label}
+              </StyledTableCell>
             ))}
             {actionButtons && actionButtons.length > 0 && (
-              <TableCell>Actions</TableCell>
+              <StyledTableCell>Actions</StyledTableCell>
             )}
           </TableRow>
         </TableHead>

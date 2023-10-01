@@ -13,12 +13,12 @@ import {
   Radio,
   Checkbox,
   TableContainer,
-  Theme,
-  ButtonBase,
+  CircularProgress,
+  Button,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Loader } from '@mantine/core';
 import { throttle } from 'lodash';
+
 import {
   ActionButton,
   AdditionalColumn,
@@ -32,47 +32,6 @@ const Container = styled('div')(({ theme }) => ({
   marginBottom: theme.spacing(2),
 }));
 
-const AddButtonLink = styled(Link)<{ disabled?: boolean }>(
-  ({ theme, disabled }: { theme: Theme; disabled?: boolean }) => ({
-    position: 'relative',
-    textDecoration: 'none',
-    color: theme.palette.primary.main,
-    padding: theme.spacing(1),
-    border: `1px solid ${theme.palette.primary.main}`,
-    borderRadius: theme.shape.borderRadius,
-    '&:hover': {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
-    },
-    ...(disabled && {
-      backgroundColor: theme.palette.grey[300],
-      color: theme.palette.text.primary,
-      pointerEvents: 'none',
-      '&:hover': {
-        backgroundColor: theme.palette.grey[300],
-        borderColor: theme.palette.grey[300],
-        color: theme.palette.text.primary,
-      },
-    }),
-    ...(disabled && {
-      pointerEvents: 'none',
-      '&::after': {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        background: 'rgba(255, 255, 255, 0.7)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: theme.shape.borderRadius,
-      },
-    }),
-  })
-);
-
 const StyledTableRow = styled(TableRow)(() => ({
   '&:nth-child(even)': {
     backgroundColor: 'white',
@@ -84,47 +43,6 @@ const StyledTableRow = styled(TableRow)(() => ({
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
   },
 }));
-
-const AddButton = styled(ButtonBase)<{ disabled?: boolean }>(
-  ({ theme, disabled }: { theme: Theme; disabled?: boolean }) => ({
-    position: 'relative',
-    textDecoration: 'none',
-    color: theme.palette.primary.main,
-    padding: theme.spacing(1),
-    border: `1px solid ${theme.palette.primary.main}`,
-    borderRadius: theme.shape.borderRadius,
-    '&:hover': {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
-    },
-    ...(disabled && {
-      backgroundColor: theme.palette.grey[300],
-      color: theme.palette.text.primary,
-      pointerEvents: 'none',
-      '&:hover': {
-        backgroundColor: theme.palette.grey[300],
-        borderColor: theme.palette.grey[300],
-        color: theme.palette.text.primary,
-      },
-    }),
-    ...(disabled && {
-      pointerEvents: 'none',
-      '&::after': {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        background: 'rgba(255, 255, 255, 0.7)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: theme.shape.borderRadius,
-      },
-    }),
-  })
-);
 
 const EnhancedTableHead = styled(TableHead)(({ theme }) => ({
   boxShadow: '0px 3px 10px rgba(0, 0, 0, 0.1)',
@@ -232,30 +150,34 @@ const GenericTable = <T extends Record<string, unknown>>({
         {addButtonLabel && (
           <Grid item>
             {addButtonLink && (
-              <AddButtonLink
-                to={addButtonLink}
-                disabled={isLoading || loadInProgress}
-              >
-                {(isLoading || loadInProgress) && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Loader color="blue" size={30} />
-                  </div>
-                )}
-                {addButtonLabel}
-              </AddButtonLink>
+              <Link to={addButtonLink} style={{ textDecoration: 'none' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={
+                    isLoading || loadInProgress ? (
+                      <CircularProgress size={20} color="inherit" />
+                    ) : null
+                  }
+                >
+                  {addButtonLabel}
+                </Button>
+              </Link>
             )}
             {onAddBtnClick && (
-              <AddButton
+              <Button
+                variant="contained"
+                color="primary"
                 onClick={onAddBtnClick}
                 disabled={isLoading || loadInProgress}
+                startIcon={
+                  isLoading || loadInProgress ? (
+                    <CircularProgress size={20} color="inherit" />
+                  ) : null
+                }
               >
-                {(isLoading || loadInProgress) && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Loader color="blue" size={30} />
-                  </div>
-                )}
                 {addButtonLabel}
-              </AddButton>
+              </Button>
             )}
           </Grid>
         )}
