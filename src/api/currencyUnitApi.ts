@@ -1,29 +1,40 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { MutationFunction } from '@tanstack/react-query';
 import { API_URLS } from '../constants';
 import api from './axios';
+import { CurrencyUnit, PaginatedResponse } from '../interfaces';
 import { handleApiCall } from '../lib/utils';
 
-const handleCurrencyUnitApiCall = async (method, url, data = {}) => {
-  return handleApiCall(method, url, data);
+export const getAllCurrencyUnits = async (
+  page = -1,
+  pageSize?: number,
+  searchQuery?: string
+): Promise<PaginatedResponse<CurrencyUnit>> => {
+  const response = await api.get(API_URLS.CURRENCY_UNITS.ALL, {
+    params: {
+      limit: pageSize,
+      page: page + 1,
+      searchTerm: searchQuery,
+    },
+  });
+  return response.data;
 };
 
-export const getCurrencyUnits = async () => {
-  const apiUrl = API_URLS.CURRENCY_UNITS.ALL;
-  return handleCurrencyUnitApiCall(api.get, apiUrl);
+export const createCurrencyUnit = async (currencyUnit: CurrencyUnit) => {
+  return handleApiCall(api.post, API_URLS.CURRENCY_UNITS.CREATE, currencyUnit);
 };
 
-export const createCurrencyUnit = async ({ name, code, symbol }) => {
-  const apiUrl = API_URLS.CURRENCY_UNITS.ALL;
-  const createCurrencyUnitDto = { name, code, symbol };
-  return handleCurrencyUnitApiCall(api.post, apiUrl, createCurrencyUnitDto);
+export const updateCurrencyUnit: MutationFunction<
+  any,
+  [number, CurrencyUnit]
+> = async (params) => {
+  const [id, data] = params;
+  const apiUrl = API_URLS.CURRENCY_UNITS.UPDATE.replace(':id', String(id));
+
+  return handleApiCall(api.put, apiUrl, data);
 };
 
-
-export const updateCurrencyUnit = async (id, updateCurrencyUnitDto) => { 
-  const apiUrl = `${API_URLS.CURRENCY_UNITS.ALL}/${id}`;
-  return handleCurrencyUnitApiCall(api.put, apiUrl, updateCurrencyUnitDto); 
-};
-
-export const deleteCurrencyUnit = async (id) => {
-  const apiUrl = `${API_URLS.CURRENCY_UNITS.ALL}/${id}`;
-  return handleCurrencyUnitApiCall(api.delete, apiUrl);
+export const deleteCurrencyUnit = async (id: number, data = {}) => {
+  const apiUrl = API_URLS.CURRENCY_UNITS.DELETE.replace(':id', String(id));
+  return handleApiCall(api.delete, apiUrl, data);
 };

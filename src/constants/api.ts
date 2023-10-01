@@ -26,9 +26,15 @@ export const API_URLS = {
   },
   CURRENCY_UNITS: {
     ALL: '/currency-unit',
+    UPDATE: '/currency-unit/:id',
+    CREATE: '/currency-unit',
+    DELETE: '/currency-unit/:id',
   },
   PAYMENT_METHODS: {
     ALL: '/payment-types',
+    CREATE: '/payment-types',
+    UPDATE: '/payment-types/:id',
+    DELETE: '/payment-types/:id',
   },
   ORDER_METHODS: {
     CREATE: '/orders',
