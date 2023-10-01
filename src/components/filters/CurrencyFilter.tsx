@@ -1,21 +1,17 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import { useQuery } from '@tanstack/react-query';
-import PropTypes from 'prop-types';
-import { getAllCurrencyUnits } from '../../api/currencyUnitApi';
+/* eslint-disable react/prop-types */
+import { CurrencyUnit } from '../../interfaces';
 
 interface CurrencyFilterProps {
   selectedCurrency: number;
+  allCurrencyUnits: CurrencyUnit[];
   onCurrencyChange: (newCurrency: number) => void;
 }
 
 const CurrencyFilter: React.FC<CurrencyFilterProps> = ({
   selectedCurrency,
   onCurrencyChange,
+  allCurrencyUnits,
 }) => {
-  const { data: currencyUnits } = useQuery(['currencyUnits'], async () =>
-    getAllCurrencyUnits()
-  );
-
   return (
     <div className="flex items-center">
       <select
@@ -24,7 +20,7 @@ const CurrencyFilter: React.FC<CurrencyFilterProps> = ({
         value={selectedCurrency}
         onChange={(e) => onCurrencyChange(+e.target.value)}
       >
-        {currencyUnits?.data?.map((currency) => (
+        {allCurrencyUnits?.map((currency) => (
           <option key={currency.id} value={currency.id}>
             {currency.name} ({currency.symbol})
           </option>
@@ -32,11 +28,6 @@ const CurrencyFilter: React.FC<CurrencyFilterProps> = ({
       </select>
     </div>
   );
-};
-
-CurrencyFilter.propTypes = {
-  selectedCurrency: PropTypes.number.isRequired,
-  onCurrencyChange: PropTypes.func.isRequired,
 };
 
 export default CurrencyFilter;
