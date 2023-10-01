@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Suspense, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useQuery } from '@tanstack/react-query';
 import CurrencyFilter from '../../components/filters/CurrencyFilter';
 import DashboardCards from './DashboardCards';
 import BarChart from '../../components/charts/BarChart';
@@ -8,6 +9,7 @@ import DoughnutChart from '../../components/charts/DoughnutChart';
 import LineChart from '../../components/charts/LineChart';
 import DummyDashboardCards from './DummyDashboardCards';
 import AverageBarChart from '../../components/charts/AverageBarChart';
+import { getAllCurrencyUnits } from '../../api/currencyUnitApi';
 
 interface ErrorFallbackProps {
   error: Error;
@@ -40,7 +42,14 @@ const LoadingChartPlaceholder: React.FC<{ colSpan: string }> = ({
 };
 
 const Dashboard: React.FC = () => {
-  const [selectedCurrency, setSelectedCurrency] = useState<number>(1);
+  const { data: currencyUnits } = useQuery(['currencyUnits'], async () =>
+    getAllCurrencyUnits()
+  );
+
+  const [selectedCurrency, setSelectedCurrency] = useState<number>(
+    currencyUnits ? currencyUnits?.data[0].id : 1
+  );
+
   const [selectedGraphFilter, setSelectedGraphFilter] = useState<
     'orders' | 'earnings'
   >('orders');
@@ -62,6 +71,7 @@ const Dashboard: React.FC = () => {
           </h2>
           <CurrencyFilter
             selectedCurrency={selectedCurrency}
+            allCurrencyUnits={currencyUnits?.data || []}
             onCurrencyChange={handleCurrencyChange}
           />
         </div>
