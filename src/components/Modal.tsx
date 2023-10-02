@@ -1,40 +1,27 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable import/no-extraneous-dependencies */
 import { Modal, TextField, Button, Box, Typography } from '@mui/material';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, FormikTouched, FormikErrors } from 'formik';
 import { EditContactModalProps } from '../interfaces';
 
-const CustomModal = <T extends Record<string, unknown>>({
-  data,
+const EditModal = <T extends Record<string, unknown>>({
+  contact,
   isOpen,
   onClose,
   onSave,
   fields,
   validationSchema,
-  title,
 }: EditContactModalProps<T>) => {
   return (
-    <Modal open={isOpen} onClose={onClose}>
+    <Modal open={isOpen} onClose={onClose} >
       <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          bgcolor: 'white',
-          boxShadow: 24,
-          p: 4,
-          minWidth: 400,
-          maxWidth: 600,
-          borderRadius: 8,
-        }}
+      
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-md p-4  md:p-8 min-w-[300px] md:min-w-[400px] max-w-[80%] md:max-w-[600px] rounded-lg"
       >
-        <Typography variant="h5" align="center" gutterBottom>
-          {title}
+        <Typography variant="h5" align="center" gutterBottom className="text-2xl font-bold">
+          Edit Contact
         </Typography>
 
         <Formik
-          initialValues={data}
+          initialValues={contact}
           validationSchema={validationSchema}
           onSubmit={(values) => {
             onSave(values);
@@ -42,18 +29,14 @@ const CustomModal = <T extends Record<string, unknown>>({
           }}
         >
           {({ errors, touched }) => (
-            <Form>
+            <Form className="space-y-4">
               {fields.map((field) => {
-                const isNestedField: boolean = (field.name as string).includes(
-                  '.'
-                );
+                const isNestedField: boolean = (field.name as string).includes('.');
                 const [parent, child] = (field.name as string).split('.');
                 const fieldName = isNestedField ? child : field.name;
 
-                // Use type assertion to assert that touchedWithShape and errorsWithShape
-                // are objects of type 'any' temporarily
-                const touchedWithShape = touched as any;
-                const errorsWithShape = errors as any;
+                const touchedWithShape = touched as FormikTouched<T>;
+                const errorsWithShape = errors as FormikErrors<T>;
 
                 const touch = isNestedField
                   ? touchedWithShape[parent]?.[child]
@@ -61,10 +44,11 @@ const CustomModal = <T extends Record<string, unknown>>({
                 const error = isNestedField
                   ? errorsWithShape[parent]?.[child]
                   : errorsWithShape[fieldName];
+
                 return (
                   <Field
                     key={field.name}
-                    type={field.type ?? 'text'}
+                    type={field.type === 'number' ? 'number' : 'text'}
                     name={field.name}
                     as={TextField}
                     label={field.label}
@@ -77,12 +61,13 @@ const CustomModal = <T extends Record<string, unknown>>({
                 );
               })}
 
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+              <Box className="flex justify-end mt-3 md:mt-6">
                 <Button
+                sx={{ mr: 1 }}
                   variant="outlined"
                   color="primary"
                   onClick={onClose}
-                  sx={{ marginRight: 2 }}
+                  className="mr-2"
                 >
                   Cancel
                 </Button>
@@ -98,4 +83,4 @@ const CustomModal = <T extends Record<string, unknown>>({
   );
 };
 
-export default CustomModal;
+export default EditModal;
