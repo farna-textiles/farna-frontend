@@ -4,10 +4,7 @@ import { Navbar, createStyles, rem } from '@mantine/core';
 import {
   IconCalendarStats,
   IconGauge,
-  IconPresentationAnalytics,
   IconFileAnalytics,
-  IconAdjustments,
-  IconLock,
   IconAddressBook,
   IconCreditCard,
 } from '@tabler/icons-react';
