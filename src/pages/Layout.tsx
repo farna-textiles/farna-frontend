@@ -32,7 +32,7 @@ const Layout: React.FC = () => {
 
   return (
     <div className={`h-screen ${mainDivClassName}`}>
-      <div className="flex-shrink-0 h-full overflow-y-auto">
+      <div className="flex-shrink-0 overflow-y-auto">
         <Sidebar />
       </div>
       <div className="flex-1 overflow-y-auto" style={containerStyle}>
