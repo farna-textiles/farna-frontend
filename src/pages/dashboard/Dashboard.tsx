@@ -63,7 +63,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <main className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 p-4 h-full">
+    <main className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 p-4 h-auto">
       <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow-lg p-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
