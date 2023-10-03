@@ -2,13 +2,15 @@ import { Modal, TextField, Button, Box, Typography } from '@mui/material';
 import { Formik, Form, Field, FormikTouched, FormikErrors } from 'formik';
 import { EditContactModalProps } from '../interfaces';
 
-const EditModal = <T extends Record<string, unknown>>({
+const CustomeModal = <T extends Record<string, unknown>>({
   contact,
   isOpen,
   onClose,
+  title,
   onSave,
   fields,
   validationSchema,
+  submitButton,
 }: EditContactModalProps<T>) => {
   return (
     <Modal open={isOpen} onClose={onClose} >
@@ -17,7 +19,7 @@ const EditModal = <T extends Record<string, unknown>>({
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-md p-4  md:p-8 min-w-[300px] md:min-w-[400px] max-w-[80%] md:max-w-[600px] rounded-lg"
       >
         <Typography variant="h5" align="center" gutterBottom className="text-2xl font-bold">
-          Edit Contact
+         {title}
         </Typography>
 
         <Formik
@@ -48,7 +50,7 @@ const EditModal = <T extends Record<string, unknown>>({
                 return (
                   <Field
                     key={field.name}
-                    type={field.type === 'number' ? 'number' : 'text'}
+                    type={field.type ?? 'text'}
                     name={field.name}
                     as={TextField}
                     label={field.label}
@@ -62,17 +64,15 @@ const EditModal = <T extends Record<string, unknown>>({
               })}
 
               <Box className="flex justify-end mt-3 md:mt-6">
-                <Button
-                sx={{ mr: 1 }}
+                <Button  sx={{ marginRight: 2 }}
                   variant="outlined"
                   color="primary"
                   onClick={onClose}
-                  className="mr-2"
                 >
                   Cancel
                 </Button>
                 <Button type="submit" variant="contained" color="primary">
-                  Save
+                {submitButton }
                 </Button>
               </Box>
             </Form>
@@ -83,4 +83,4 @@ const EditModal = <T extends Record<string, unknown>>({
   );
 };
 
-export default EditModal;
+export default CustomeModal;

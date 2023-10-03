@@ -285,6 +285,7 @@ export interface EditContactModalProps<T> {
   fields: FieldConfig<T>[];
   validationSchema: Schema<Omit<T, 'id'>>;
   title: string;
+  submitButton:string;
 }
 
 export interface Option<T = string> {
