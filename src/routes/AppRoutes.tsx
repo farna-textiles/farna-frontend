@@ -17,6 +17,8 @@ import CreateOrder from '../pages/productOrder/CreateOrder';
 import ShowOrder from '../pages/productOrder/ShowOrder';
 import PaymentMethods from '../pages/payment/PaymentMethods';
 import CurrencyUnit from '../pages/payment/CurrencyUnits';
+import { userInfo } from '../services/authService';
+import WelcomeScreen from '../pages/WelCome';
 
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
@@ -71,7 +73,7 @@ export const AppRoutes: React.FC = () => {
           path: '/dashboard',
           element: (
             <AuthRoute path="/dashboard" useErrorBoundaryAndSuspense={false}>
-              <Dashboard />
+              {userInfo()?.role === 'admin' ? <Dashboard /> : <WelcomeScreen />}
             </AuthRoute>
           ),
         },
