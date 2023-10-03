@@ -252,6 +252,7 @@ const EditCustomer = () => {
           fields={contactFields}
           validationSchema={contactValidationSchema}
           title="Add Contact"
+          submitButton="Submit"
         />
       )}
       <Box sx={{ my: 2 }}>
