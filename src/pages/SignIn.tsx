@@ -138,6 +138,7 @@ const SignIn: React.FC = () => {
           fields={userFields}
           validationSchema={userValidationSchema}
           title="Forget Password"
+          submitButton="Request"
         />
         <div className="w-full max-w-md space-y-8 px-4 bg-white text-gray-600 sm:px-0">
           <div className="">

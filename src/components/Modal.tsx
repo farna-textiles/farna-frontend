@@ -1,9 +1,9 @@
 import { Modal, TextField, Button, Box, Typography } from '@mui/material';
-import { Formik, Form, Field, FormikTouched, FormikErrors } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { EditContactModalProps } from '../interfaces';
 
 const CustomeModal = <T extends Record<string, unknown>>({
-  contact,
+  data,
   isOpen,
   onClose,
   title,
@@ -13,17 +13,19 @@ const CustomeModal = <T extends Record<string, unknown>>({
   submitButton,
 }: EditContactModalProps<T>) => {
   return (
-    <Modal open={isOpen} onClose={onClose} >
-      <Box
-      
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-md p-4  md:p-8 min-w-[300px] md:min-w-[400px] max-w-[80%] md:max-w-[600px] rounded-lg"
-      >
-        <Typography variant="h5" align="center" gutterBottom className="text-2xl font-bold">
-         {title}
+    <Modal open={isOpen} onClose={onClose}>
+      <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-md p-4  md:p-8 min-w-[300px] md:min-w-[400px] max-w-[80%] md:max-w-[600px] rounded-lg">
+        <Typography
+          variant="h5"
+          align="center"
+          gutterBottom
+          className="text-2xl font-bold"
+        >
+          {title}
         </Typography>
 
         <Formik
-          initialValues={contact}
+          initialValues={data}
           validationSchema={validationSchema}
           onSubmit={(values) => {
             onSave(values);
@@ -33,12 +35,14 @@ const CustomeModal = <T extends Record<string, unknown>>({
           {({ errors, touched }) => (
             <Form className="space-y-4">
               {fields.map((field) => {
-                const isNestedField: boolean = (field.name as string).includes('.');
+                const isNestedField: boolean = (field.name as string).includes(
+                  '.'
+                );
                 const [parent, child] = (field.name as string).split('.');
                 const fieldName = isNestedField ? child : field.name;
 
-                const touchedWithShape = touched as FormikTouched<T>;
-                const errorsWithShape = errors as FormikErrors<T>;
+                const touchedWithShape = touched as any;
+                const errorsWithShape = errors as any;
 
                 const touch = isNestedField
                   ? touchedWithShape[parent]?.[child]
@@ -64,7 +68,8 @@ const CustomeModal = <T extends Record<string, unknown>>({
               })}
 
               <Box className="flex justify-end mt-3 md:mt-6">
-                <Button  sx={{ marginRight: 2 }}
+                <Button
+                  sx={{ marginRight: 2 }}
                   variant="outlined"
                   color="primary"
                   onClick={onClose}
@@ -72,7 +77,7 @@ const CustomeModal = <T extends Record<string, unknown>>({
                   Cancel
                 </Button>
                 <Button type="submit" variant="contained" color="primary">
-                {submitButton }
+                  {submitButton}
                 </Button>
               </Box>
             </Form>
