@@ -235,7 +235,7 @@ const CreateCustomer = () => {
           data={selectedContact as Contact}
           isOpen={isModalOpen}
           onClose={handleModalClose}
-          submitButton='Save'
+          submitButton="Save"
           onSave={handleContactSave}
           fields={contactFields}
           validationSchema={contactValidationSchema}

@@ -111,6 +111,7 @@ const Users = () => {
         fields={userFields}
         validationSchema={userValidationSchema}
         title="Invite User"
+        submitButton="Invite"
       />
     </Box>
   );
