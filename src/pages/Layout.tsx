@@ -31,11 +31,11 @@ const Layout: React.FC = () => {
   }, [isMobile]);
 
   return (
-    <div className={mainDivClassName}>
-      <div className="flex-shrink-0">
+    <div className={`h-screen ${mainDivClassName}`}>
+      <div className="flex-shrink-0 h-full overflow-y-auto">
         <Sidebar />
       </div>
-      <div className="flex-auto" style={containerStyle}>
+      <div className="flex-1 overflow-y-auto" style={containerStyle}>
         <Outlet />
       </div>
     </div>

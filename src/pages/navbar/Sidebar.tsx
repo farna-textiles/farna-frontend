@@ -1,14 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import { Navbar, createStyles, rem } from '@mantine/core';
-import {
-  IconCalendarStats,
-  IconGauge,
-  IconFileAnalytics,
-  IconAddressBook,
-  IconCreditCard,
-} from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
+import {
+  IconDashboard,
+  IconUser,
+  IconPackage,
+  IconShoppingCart,
+  IconWallet,
+} from '@tabler/icons-react';
 import SwipeableTemporaryDrawer from './MobileSidebar';
 import LinksGroup from './LinksGroup';
 import UserButton from './UserButton';
@@ -60,10 +60,10 @@ const useStyles = createStyles((theme) => ({
 const Sidebar = () => {
   const SideLinks = useMemo(
     () => [
-      { label: 'Dashboard', icon: IconGauge, link: '/dashboard' },
+      { label: 'Dashboard', icon: IconDashboard, link: '/dashboard' },
       {
         label: 'Customers',
-        icon: IconAddressBook,
+        icon: IconUser,
         initiallyOpened: false,
         links: [
           { label: 'All Customers', link: '/customers' },
@@ -72,7 +72,7 @@ const Sidebar = () => {
       },
       {
         label: 'Products',
-        icon: IconCalendarStats,
+        icon: IconPackage,
         links: [
           { label: 'Create Product', link: '/product/new' },
           { label: 'View Products', link: '/products' },
@@ -80,7 +80,7 @@ const Sidebar = () => {
       },
       {
         label: 'Product Orders',
-        icon: IconCalendarStats,
+        icon: IconShoppingCart,
         links: [
           { label: 'Create Orders', link: '/order/new' },
           { label: 'Recent Orders', link: '/orders' },
@@ -88,7 +88,7 @@ const Sidebar = () => {
       },
       {
         label: 'Additions',
-        icon: IconCreditCard,
+        icon: IconWallet,
         links: [
           { label: 'Payment Methdos', link: '/payment' },
           { label: 'Add Currency ', link: '/currency' },
@@ -97,7 +97,7 @@ const Sidebar = () => {
       // { label: 'Analytics', icon: IconPresentationAnalytics },
       {
         label: 'Users',
-        icon: IconFileAnalytics,
+        icon: IconUser,
         link: '/users',
         isAdminRoute: true,
       },
@@ -139,7 +139,9 @@ const Sidebar = () => {
   return (
     <Navbar
       className={classes.navbar}
-      style={{ height: isMobile ? 'fit-content' : '100vh' }}
+      style={{
+        height: isMobile ? 'fit-content' : '100vh',
+      }}
     >
       <Navbar.Section className={classes.header}>
         {isMobile && <SwipeableTemporaryDrawer />}
@@ -156,7 +158,7 @@ const Sidebar = () => {
       </Navbar.Section>
 
       {!isMobile && (
-        <Navbar.Section className={`md:block ${classes.linksInner}`}>
+        <Navbar.Section className={`md:block ${classes.linksInner} flex-1`}>
           {SideLinks.filter((item) => isAdminUser || !item.isAdminRoute).map(
             (item) => (
               <LinksGroup {...item} key={item.label} />
