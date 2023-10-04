@@ -11,6 +11,7 @@ import {
 } from '@tabler/icons-react';
 import SwipeableTemporaryDrawer from './MobileSidebar';
 import LinksGroup from './LinksGroup';
+import { useNavigate } from 'react-router-dom';
 import UserButton from './UserButton';
 import { User } from '../../interfaces';
 
@@ -58,6 +59,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
   const SideLinks = useMemo(
     () => [
       { label: 'Dashboard', icon: IconDashboard, link: '/dashboard' },
@@ -74,16 +77,18 @@ const Sidebar = () => {
         label: 'Products',
         icon: IconPackage,
         links: [
-          { label: 'Create Product', link: '/product/new' },
           { label: 'View Products', link: '/products' },
+          { label: 'Create Product', link: '/product/new' },
+         
         ],
       },
       {
         label: 'Product Orders',
         icon: IconShoppingCart,
         links: [
-          { label: 'Create Orders', link: '/order/new' },
           { label: 'Recent Orders', link: '/orders' },
+          { label: 'Create Orders', link: '/order/new' },
+         
         ],
       },
       {
@@ -149,11 +154,13 @@ const Sidebar = () => {
           className={`${classes.logo} md:flex`}
           style={{ justifyContent: isMobile ? 'flex-end' : 'flex-start' }}
         >
-          <img
-            src="/farna-logo.png"
-            alt="farna logo"
-            width={isMobile ? '68' : ''}
-          />
+          <button onClick={() => navigate('/dashboard')}>
+        <img
+          src="/farna-logo.png"
+          alt="farna logo"
+          width={isMobile ? '68' : ''}
+        />
+      </button>
         </div>
       </Navbar.Section>
 
