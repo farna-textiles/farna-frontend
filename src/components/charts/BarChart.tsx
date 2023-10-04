@@ -85,21 +85,23 @@ const BarChart: React.FC<BarChartProps> = ({ currency, dataFilter }) => {
   };
 
   return (
-    <div className="col-span-2 bg-gray-100 rounded-md shadow-lg dark:bg-gray-900 hover:bg-gray-50">
+    <div className="col-span-2 bg-gray-100 rounded-md shadow-lg dark:bg-gray-900 hover:bg-gray-700">
       <div className="sm:flex items-center justify-between p-4 border-b dark:border-primary">
-        <h4 className="text-lg font-semibold text-gray-500 dark:text-light">
-          Comparison for Two Years
-        </h4>
+      <h4 className="text-lg font-semibold text-gray-500 dark:text-white">
+  Comparison for Two Years
+</h4>
+
         <div className="flex space-x-4 sm:space-x-6 md:space-x-8 lg:space-x-10 items-center">
           <YearPickerInput
             type="default"
             placeholder="Select Year 1"
             title="Select Year 1"
+
             value={selectedYear1}
             onChange={(date) => {
               if (date) setSelectedYear1(date);
             }}
-            className="w-24 sm:w-32 md:w-40 lg:w-48"
+            className="w-24 sm:w-32 md:w-40 lg:w-48 bg-white"
           />
 
           <YearPickerInput
@@ -110,7 +112,7 @@ const BarChart: React.FC<BarChartProps> = ({ currency, dataFilter }) => {
             onChange={(date) => {
               if (date) setSelectedYear2(date);
             }}
-            className="w-24 sm:w-32 md:w-40 lg:w-48"
+            className="w-24 sm:w-32 md:w-40 lg:w-48  bg-white"
           />
         </div>
       </div>

@@ -70,6 +70,7 @@ const Dashboard: React.FC = () => {
             Dashboard
           </h2>
           <CurrencyFilter
+          
             selectedCurrency={selectedCurrency}
             allCurrencyUnits={currencyUnits?.data || []}
             onCurrencyChange={handleCurrencyChange}
@@ -86,17 +87,17 @@ const Dashboard: React.FC = () => {
               Graphical Insights
             </h3>
             <select
-              className="p-2 rounded-md border-2 border-gray-300 dark:border-gray-700 text-sm bg-gray-100 dark:bg-gray-800"
+              className="p-2 rounded-md border-2  border-gray-300 dark:border-gray-700 text-sm dark:bg-white"
               value={selectedGraphFilter}
               onChange={(e) =>
                 handleGraphFilterChange(e.target.value as 'orders' | 'earnings')
               }
             >
-              <option value="orders">Orders</option>
+              <option value="orders" className='bg-white'>Orders</option>
               <option value="earnings">Earnings</option>
             </select>
           </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2  lg:grid-cols-3 mt-4">
             {[
               { ChartComponent: BarChart, colSpan: '2' },
               { ChartComponent: DoughnutChart, colSpan: '1' },

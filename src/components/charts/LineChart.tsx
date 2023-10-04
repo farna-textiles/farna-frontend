@@ -73,9 +73,9 @@ const LineChart: React.FC<LineChartProps> = ({
   };
 
   return (
-    <div className="col-span-2 bg-gray-100 rounded-md shadow-lg dark:bg-gray-900 hover:bg-gray-50">
+    <div className="col-span-2 bg-gray-100 rounded-md shadow-lg dark:bg-gray-900  hover:bg-gray-700">
       <div className="flex items-center justify-between p-4 border-b dark:border-primary">
-        <h4 className="text-lg font-semibold text-gray-500 dark:text-light">
+        <h4 className="text-lg font-semibold text-gray-500 dark:text-white">
           Comparison Over Multiple Years
         </h4>
         <YearPickerInput
@@ -98,10 +98,13 @@ const LineChart: React.FC<LineChartProps> = ({
             }
           }}
           maw={400}
+          className="bg-white"
+
         />
       </div>
-      <div className="p-4 h-72">
-        <ReactEcharts option={option} />
+      <div className="p-4 h-72 ">
+        <ReactEcharts
+        option={option} />
       </div>
     </div>
   );
