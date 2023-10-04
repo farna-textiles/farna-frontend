@@ -15,29 +15,29 @@ import { useNavigate } from 'react-router';
 
 import {
   IconCalendarStats,
-  IconGauge,
-  IconFileAnalytics,
-  IconAdjustments,
+
   IconLogout,
-  IconLock,
-  IconAddressBook,
+  IconDashboard,
+  IconUser,
+  IconPackage,
+  IconShoppingCart,
+ 
 } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { logout } from '../../services/authService';
-
+n
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 const SwipeableTemporaryDrawer = () => {
   const menuLinks = useMemo(
     () => [
-      { label: 'Dashboard', Icon: IconGauge, link: '/' },
-      { label: 'All Customers', Icon: IconAddressBook, link: '/customers' },
-      { label: 'View Products', Icon: IconCalendarStats, link: '/products' },
-      { label: 'All Orders', Icon: IconCalendarStats, link: '/orders' },
+      { label: 'Dashboard', Icon: IconDashboard, link: '/' },
+      { label: 'All Customers', Icon: IconUser, link: '/customers' },
+      { label: 'View Products', Icon: IconPackage, link: '/products' },
+      { label: 'All Orders', Icon: IconShoppingCart, link: '/orders' },
       { label: 'Create Orders', Icon: IconCalendarStats, link: '/order/new' },
-      { label: 'Users', Icon: IconFileAnalytics, link: '/users' },
-      { label: 'Security', Icon: IconLock, link: '/' },
-      { label: 'Settings', Icon: IconAdjustments, link: '/' },
+      { label: 'Users', Icon:   IconUser, link: '/users' },
+
     ],
     []
   );
