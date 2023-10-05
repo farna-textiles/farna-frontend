@@ -14,9 +14,8 @@ import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import { useNavigate } from 'react-router';
 
 import {
-  IconCalendarStats,
-
   IconLogout,
+  IconWallet,
   IconDashboard,
   IconUser,
   IconPackage,
@@ -34,7 +33,10 @@ const SwipeableTemporaryDrawer = () => {
       { label: 'All Customers', Icon: IconUser, link: '/customers' },
       { label: 'View Products', Icon: IconPackage, link: '/products' },
       { label: 'All Orders', Icon: IconShoppingCart, link: '/orders' },
-      { label: 'Create Orders', Icon: IconCalendarStats, link: '/order/new' },
+      { label: 'Add Currency ',Icon:IconWallet, link: '/currency' },
+      { label: 'Payment Methods',Icon:IconWallet, link: '/payment' },
+  
+     
       { label: 'Users', Icon:   IconUser, link: '/users' },
 
     ],

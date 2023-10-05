@@ -86,14 +86,14 @@ const Sidebar = () => {
         icon: IconShoppingCart,
         links: [
           { label: 'Recent Orders', link: '/orders' },
-          { label: 'Create Orders', link: '/order/new' },
+          { label: 'Create Order', link: '/order/new' },
         ],
       },
       {
         label: 'Additions',
         icon: IconWallet,
         links: [
-          { label: 'Payment Methdos', link: '/payment' },
+          { label: 'Payment Methods', link: '/payment' },
           { label: 'Add Currency ', link: '/currency' },
         ],
       },
@@ -159,7 +159,6 @@ const Sidebar = () => {
               width={isMobile ? '68' : ''}
             />
           </button>
-          ;
         </div>
       </Navbar.Section>
 
@@ -169,7 +168,7 @@ const Sidebar = () => {
             (item) => (
               <LinksGroup {...item} key={item.label} />
             )
-          )}
+          )}  
         </Navbar.Section>
       )}
 

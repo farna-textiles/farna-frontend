@@ -251,7 +251,7 @@ const EditCustomer = () => {
           onSave={handleContactSave}
           fields={contactFields}
           validationSchema={contactValidationSchema}
-          title="Add Contact"
+          title="Edit Contact"
           submitButton="Submit"
         />
       )}

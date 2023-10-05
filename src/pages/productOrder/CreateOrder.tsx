@@ -277,8 +277,8 @@ const CreateOrder: React.FC = () => {
         </div>
 
         <div className="grid md:grid-cols-2 gap-4 md:gap-8 mt-4 md:mt-6">
-          <div>
-            <FormControl variant="outlined" fullWidth margin="dense">
+          <div >
+            <FormControl variant="outlined"  fullWidth margin="dense">
               <InputLabel>Payment Method</InputLabel>
               <Select
                 name="paymentTypeId"
@@ -302,6 +302,8 @@ const CreateOrder: React.FC = () => {
                 </FormHelperText>
               )}
             </FormControl>
+            <div className="border-t border-gray-300 w-full mt-8"></div>
+            
           </div>
           <div>
             <FormControl

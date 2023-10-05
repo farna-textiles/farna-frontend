@@ -21,7 +21,6 @@ const Products = () => {
       { field: 'validity', label: 'Validity Date' },
       { field: 'shipmentType', label: 'Shipment Type' },
       { field: 'PI_number', label: 'PI Number' },
-      // ... You can continue this pattern for other fields if needed
     ],
     []
   );

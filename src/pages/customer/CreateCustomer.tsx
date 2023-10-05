@@ -105,8 +105,8 @@ const CreateCustomer = () => {
     name: Yup.string().required('Name is required.'),
     designation: Yup.string().required('Designation is required.'),
     contactNumber: Yup.string()
-      .required('Contact number is required.')
-      .matches(/^(0\d{6,7}|0\d{10})$/, 'Contact number is not valid'),
+    .required('Contact number is required.')
+    .matches(/^(\+\d{1,3}[-\s]?)?\d{6,14}$/, 'Contact number is not valid'),
     address: Yup.object().shape({
       street: Yup.string().required('Street is required.'),
       city: Yup.string().required('City is required.'),
@@ -239,7 +239,7 @@ const CreateCustomer = () => {
           onSave={handleContactSave}
           fields={contactFields}
           validationSchema={contactValidationSchema}
-          title={selectedContact ? 'Edit Contact' : 'Add Contact'}
+          title="Add Contact"
         />
       )}
 

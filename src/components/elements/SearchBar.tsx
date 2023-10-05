@@ -10,13 +10,15 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
   }, [searchQuery, onSearch]);
 
   return (
-    <TextField
-      label="Search"
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      variant="outlined"
-      size="small"
-    />
+<TextField
+  label="Search"
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+  variant="outlined"
+  size="small"
+  className="w-full md:w-64 lg:w-96"
+/>
+
   );
 };
 
