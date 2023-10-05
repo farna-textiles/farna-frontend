@@ -58,16 +58,16 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
   };
 
   return (
-    <div className="col-span-2 bg-gray-100 xl:col-span-1 rounded-md shadow-lg dark:bg-gray-900  hover:bg-gray-700 ">
-      <div className="flex items-center justify-between p-4 border-b dark:border-primary ">
-      <h4 className="text-lg font-semibold text-gray-500 dark:text-white ">
+    <div className="col-span-2 bg-gray-100 xl:col-span-1 rounded-md shadow-lg ">
+      <div className="flex items-center justify-between p-4 border-b  ">
+      <h4 className="text-lg font-semibold text-gray-500  ">
   Demographics
 </h4>
 
         <div className="flex items-center">
           <button
             type="button"
-            className={`text-gray-500 pr-2 focus:outline-none  dark:text-white ${
+            className={`text-gray-500 pr-2 focus:outline-none  ${
               !isDoughnutChartOn ? 'font-semibold' : ''
             }`}
             onClick={handleCountryClick}
@@ -76,7 +76,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
           </button>
           <button
             type="button"
-            className={`text-gray-500 pl-2 focus:outline-none  dark:text-white ${
+            className={`text-gray-500 pl-2 focus:outline-none  ${
               isDoughnutChartOn ? 'font-semibold' : ''
             }`}
             onClick={handleCityClick}

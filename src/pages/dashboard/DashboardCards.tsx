@@ -56,9 +56,9 @@ const DashboardCards: React.FC<{ currency: number }> = ({ currency }) => {
   }, [timeRange, data]);
 
   return (
-    <div className="w-full bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg p-4 col-span-full my-3">
+    <div className="w-full bg-gray-100  rounded-lg shadow-lg p-4 col-span-full my-3">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-2xl font-semibold text-gray-800 dark:text-white">
+        <h3 className="text-2xl font-semibold text-gray-800">
           Data Insights
         </h3>
         <select
@@ -67,7 +67,7 @@ const DashboardCards: React.FC<{ currency: number }> = ({ currency }) => {
             setTimeRange(e.target.value as 'week' | 'month' | 'year')
           }
           value={timeRange}
-          className="p-2 rounded-md border-2 border-gray-300 dark:border-gray-700 text-sm"
+          className="p-2 rounded-md border-2 border-gray-300  text-sm"
         >
           <option value="week">Week</option>
           <option value="month">Month</option>
@@ -82,7 +82,7 @@ const DashboardCards: React.FC<{ currency: number }> = ({ currency }) => {
           percentage={data.earnings.percentageChange}
           icon={
             <svg
-              className="w-12 h-12 text-gray-300 dark:text-primary-light"
+              className="w-12 h-12 text-gray-300 "
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -103,7 +103,7 @@ const DashboardCards: React.FC<{ currency: number }> = ({ currency }) => {
           percentage={data.customers.percentageChange}
           icon={
             <svg
-              className="w-12 h-12 text-gray-300 dark:text-primary-light"
+              className="w-12 h-12 text-gray-300 "
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -124,7 +124,7 @@ const DashboardCards: React.FC<{ currency: number }> = ({ currency }) => {
           percentage={data.orders.percentageChange}
           icon={
             <svg
-              className="w-12 h-12 text-gray-300 dark:text-primary-light"
+              className="w-12 h-12 text-gray-300 "
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"

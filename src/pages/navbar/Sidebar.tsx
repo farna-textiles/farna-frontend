@@ -79,7 +79,6 @@ const Sidebar = () => {
         links: [
           { label: 'View Products', link: '/products' },
           { label: 'Create Product', link: '/product/new' },
-         
         ],
       },
       {
@@ -88,7 +87,6 @@ const Sidebar = () => {
         links: [
           { label: 'Recent Orders', link: '/orders' },
           { label: 'Create Orders', link: '/order/new' },
-         
         ],
       },
       {
@@ -154,13 +152,14 @@ const Sidebar = () => {
           className={`${classes.logo} md:flex`}
           style={{ justifyContent: isMobile ? 'flex-end' : 'flex-start' }}
         >
-          <button onClick={() => navigate('/dashboard')}>
-        <img
-          src="/farna-logo.png"
-          alt="farna logo"
-          width={isMobile ? '68' : ''}
-        />
-      </button>
+          <button type='button' onClick={() => navigate('/dashboard')}>
+            <img
+              src="/farna-logo.png"
+              alt="farna logo"
+              width={isMobile ? '68' : ''}
+            />
+          </button>
+          ;
         </div>
       </Navbar.Section>
 
