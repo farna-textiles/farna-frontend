@@ -60,10 +60,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
   return (
     <div className="col-span-2 bg-gray-100 xl:col-span-1 rounded-md shadow-lg ">
       <div className="flex items-center justify-between p-4 border-b  ">
-      <h4 className="text-lg font-semibold text-gray-500  ">
-  Demographics
-</h4>
-
+        <h4 className="text-lg font-semibold text-gray-500  ">Demographics</h4>
         <div className="flex items-center">
           <button
             type="button"

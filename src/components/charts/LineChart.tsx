@@ -99,13 +99,12 @@ const LineChart: React.FC<LineChartProps> = ({
           }}
           maw={400}
           className="bg-white"
-
         />
       </div>
       <div className="p-4 h-72 ">
-        <ReactEcharts
-        option={option} />
+        <ReactEcharts option={option} />
       </div>
+      ;
     </div>
   );
 };

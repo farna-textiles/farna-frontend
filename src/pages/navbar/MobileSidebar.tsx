@@ -12,7 +12,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import { useNavigate } from 'react-router';
-
+import { useMemo, useState } from 'react';
+import { logout } from '../../services/authService';
 import {
   IconLogout,
   IconWallet,
@@ -20,10 +21,8 @@ import {
   IconUser,
   IconPackage,
   IconShoppingCart,
- 
 } from '@tabler/icons-react';
-import { useMemo, useState } from 'react';
-import { logout } from '../../services/authService';
+
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 const SwipeableTemporaryDrawer = () => {
@@ -33,12 +32,9 @@ const SwipeableTemporaryDrawer = () => {
       { label: 'All Customers', Icon: IconUser, link: '/customers' },
       { label: 'View Products', Icon: IconPackage, link: '/products' },
       { label: 'All Orders', Icon: IconShoppingCart, link: '/orders' },
-      { label: 'Add Currency ',Icon:IconWallet, link: '/currency' },
-      { label: 'Payment Methods',Icon:IconWallet, link: '/payment' },
-  
-     
-      { label: 'Users', Icon:   IconUser, link: '/users' },
-
+      { label: 'Add Currency ', Icon: IconWallet, link: '/currency' },
+      { label: 'Payment Methods', Icon: IconWallet, link: '/payment' },
+      { label: 'Users', Icon: IconUser, link: '/users' },
     ],
     []
   );

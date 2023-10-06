@@ -66,11 +66,8 @@ const Dashboard: React.FC = () => {
     <main className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 p-4 h-auto">
       <div className="bg-gray-50  rounded-lg shadow-lg p-4">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold text-gray-800 ">
-            Dashboard
-          </h2>
+          <h2 className="text-2xl font-semibold text-gray-800 ">Dashboard</h2>
           <CurrencyFilter
-          
             selectedCurrency={selectedCurrency}
             allCurrencyUnits={currencyUnits?.data || []}
             onCurrencyChange={handleCurrencyChange}
@@ -87,13 +84,15 @@ const Dashboard: React.FC = () => {
               Graphical Insights
             </h3>
             <select
-              className="p-2 rounded-md border-2  border-gray-300 text-sm "
+              className="p-2 rounded-md border-2  border-gray-300 text-sm bg-gray-100 "
               value={selectedGraphFilter}
               onChange={(e) =>
                 handleGraphFilterChange(e.target.value as 'orders' | 'earnings')
               }
             >
-              <option value="orders" className='bg-white'>Orders</option>
+              <option value="orders" className="bg-white">
+                Orders
+              </option>
               <option value="earnings">Earnings</option>
             </select>
           </div>

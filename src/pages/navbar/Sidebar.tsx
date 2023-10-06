@@ -152,7 +152,7 @@ const Sidebar = () => {
           className={`${classes.logo} md:flex`}
           style={{ justifyContent: isMobile ? 'flex-end' : 'flex-start' }}
         >
-          <button type='button' onClick={() => navigate('/dashboard')}>
+          <button type="button" onClick={() => navigate('/dashboard')}>
             <img
               src="/farna-logo.png"
               alt="farna logo"
@@ -168,7 +168,7 @@ const Sidebar = () => {
             (item) => (
               <LinksGroup {...item} key={item.label} />
             )
-          )}  
+          )}
         </Navbar.Section>
       )}
 
