@@ -178,6 +178,9 @@ const CreateProduct = () => {
   const handleOpen = () => {
     setOpen(true);
   };
+  const handleclose = () => {
+    setOpen(false);
+  };
 
   return (
     <Box sx={{ m: 4 }}>
@@ -193,6 +196,7 @@ const CreateProduct = () => {
       >
         <div className="md:w-1/2 w-[90%] bg-white py-4 px-8 rounded-md outline-none">
           <CreateUserEnd
+            closeModel={handleclose}
             trigger={handleCreateEndUse}
             isLoading={endUseMutation.isLoading}
           />
