@@ -414,7 +414,7 @@ const EditOrder: React.FC = () => {
           </Grid>
           <Grid>
             <Typography variant="subtitle1" ml={5}>
-              {selectedCurrencySymbol} {totalAmount}
+              {selectedCurrencySymbol} {totalAmount.toFixed(2)}
             </Typography>
           </Grid>
         </Grid>

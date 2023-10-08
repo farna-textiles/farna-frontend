@@ -92,10 +92,9 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
                 </span>
               ))}
             </div>
-
             <div className="w-1/6">{quantity}</div>
             <div className="w-1/6">{rate}</div>
-            <div className="w-1/6">{quantity * rate}</div>
+            <div className="w-1/6">{(quantity * rate).toFixed(2)}</div>
           </div>
         ))}
 
