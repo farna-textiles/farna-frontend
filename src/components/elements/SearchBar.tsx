@@ -16,6 +16,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
       onChange={(e) => setSearchQuery(e.target.value)}
       variant="outlined"
       size="small"
+      className="w-full md:w-64 lg:w-96"
     />
   );
 };

@@ -85,9 +85,9 @@ const BarChart: React.FC<BarChartProps> = ({ currency, dataFilter }) => {
   };
 
   return (
-    <div className="col-span-2 bg-gray-100 rounded-md shadow-lg dark:bg-gray-900 hover:bg-gray-50">
-      <div className="sm:flex items-center justify-between p-4 border-b dark:border-primary">
-        <h4 className="text-lg font-semibold text-gray-500 dark:text-light">
+    <div className="col-span-2 bg-gray-100 rounded-md shadow-lg hover:bg-gray-50">
+      <div className="sm:flex items-center justify-between p-4 border-b">
+        <h4 className="text-lg font-semibold text-gray-500">
           Comparison for Two Years
         </h4>
         <div className="flex space-x-4 sm:space-x-6 md:space-x-8 lg:space-x-10 items-center">
