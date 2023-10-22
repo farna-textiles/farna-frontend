@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import Edit from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { useNavigate } from 'react-router';
 import {
   ActionButton,
@@ -13,6 +13,7 @@ import GenericTable from '../../components/table/GenericTable';
 import { getAllProducts } from '../../api/productApi';
 import { useDeleteProduct } from '../../hooks/useProduct';
 import EndUsesList from './component/EndUsesList';
+import Heading from '../../components/elements/Heading';
 
 const Products = () => {
   const deleteProductMutation = useDeleteProduct();
@@ -61,12 +62,14 @@ const Products = () => {
   );
 
   return (
-    <Box sx={{ m: 4 }}>
-      <Typography variant="h4" component="div" gutterBottom>
-        Products
-      </Typography>
+    <Box sx={{ mx: 4 }}>
+      <Heading
+        title="Product Inventory"
+        description="Browse and manage your products"
+      />
+
       <>
-        <hr className="mb-12" />
+        <hr className="mb-6" />
         <Box sx={{ my: 2 }}>
           <GenericTable<Product>
             tableName="Products"

@@ -11,10 +11,11 @@ import {
   Checkbox,
   Grid,
   styled,
-  Button,
+  TableContainer,
 } from '@mui/material';
 import SearchBar from '../elements/SearchBar';
 import { ActionButton, TableColumn, AdditionalColumn } from '../../interfaces';
+import ButtonLoader from '../elements/buttons/ButtonLoader';
 
 interface DataTableProps<T> {
   data: T[];
@@ -26,32 +27,24 @@ interface DataTableProps<T> {
   onCustomButtonClick?: () => void;
 }
 
-const Container = styled('div')(({ theme }) => ({
-  margin: theme.spacing(2),
-  padding: theme.spacing(2),
-  boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.1)',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: '#fff',
-}));
-
-const CustomButton = styled(Button)(({ theme, disabled }) => ({
-  backgroundColor: theme.palette.primary.main,
-  color: '#fff',
-  padding: theme.spacing(1, 2),
-  borderRadius: theme.shape.borderRadius,
-  '&:hover': {
-    backgroundColor: theme.palette.primary.dark,
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  maxHeight: 600,
+  [theme.breakpoints.down('sm')]: {
+    maxHeight: 400,
   },
-  ...(disabled && {
-    backgroundColor: theme.palette.grey[300],
-    color: theme.palette.text.primary,
-    pointerEvents: 'none',
-  }),
 }));
 
-const StyledTableCell = styled(TableCell)(() => ({
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
   fontWeight: 'bold',
-  borderBottom: 'none',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  [theme.breakpoints.down('sm')]: {
+    maxWidth: 100,
+    whiteSpace: 'normal',
+    overflow: 'visible',
+    textOverflow: 'clip',
+  },
 }));
 
 const DataTable = <T extends { id: number }>({
@@ -88,16 +81,22 @@ const DataTable = <T extends { id: number }>({
   };
 
   return (
-    <Container>
-      <Grid container justifyContent="space-between" spacing={8}>
-        <Grid item>
+    <StyledTableContainer>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item xs={customButtonLabel && onCustomButtonClick ? 8 : 12}>
           <SearchBar onSearch={setSearchQuery} />
         </Grid>
+
         {customButtonLabel && onCustomButtonClick && (
-          <Grid item>
-            <CustomButton onClick={onCustomButtonClick} disabled={isLoading}>
+          <Grid item xs={4}>
+            <ButtonLoader
+              isLoading={!!isLoading}
+              onClick={onCustomButtonClick}
+              disabled={isLoading}
+              className="w-full"
+            >
               {customButtonLabel}
-            </CustomButton>
+            </ButtonLoader>
           </Grid>
         )}
       </Grid>
@@ -191,7 +190,10 @@ const DataTable = <T extends { id: number }>({
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </Container>
+      {/* {!isLoading && data.length === 0 && (
+        <NoDataMessage message="No data available" /> // Consider creating a NoDataMessage component
+      )} */}
+    </StyledTableContainer>
   );
 };
 

@@ -1,44 +1,22 @@
 import {
   Box,
-  Button,
   Typography,
-  styled,
   Card,
   CardContent,
   Avatar,
   Divider,
+  CircularProgress,
 } from '@mui/material';
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { Address, Contact, TableColumn } from '../../interfaces';
 import { useCustomer } from '../../hooks/useCustomer';
 import DataTable from '../../components/table/DataTable';
-
-const CustomButton = styled(Button)(({ theme, disabled }) => ({
-  textDecoration: 'none',
-  color: theme.palette.primary.main,
-  padding: theme.spacing(1),
-  border: `1px solid ${theme.palette.primary.main}`,
-  borderRadius: theme.shape.borderRadius,
-  '&:hover': {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-  },
-  ...(disabled && {
-    backgroundColor: theme.palette.grey[300],
-    color: theme.palette.text.primary,
-    pointerEvents: 'none',
-    '&:hover': {
-      backgroundColor: theme.palette.grey[300],
-      borderColor: theme.palette.grey[300],
-      color: theme.palette.text.primary,
-    },
-  }),
-}));
+import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
 
 const MainContactCard = ({ mainContact }: { mainContact: Contact }) => {
   return (
-    <Card elevation={3}>
+    <Card elevation={3} sx={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
       <CardContent>
         <Box display="flex" alignItems="center" mb={2}>
           <Avatar sx={{ width: 60, height: 60, fontSize: 28, marginRight: 2 }}>
@@ -75,6 +53,13 @@ const ShowCustomer = () => {
   const { data: customerData, isLoading } = useCustomer(
     parseInt(id as string, 10) as number
   );
+  const otherContacts = useMemo(
+    () =>
+      customerData.contacts.filter(
+        (contact: Contact) => contact.id !== customerData.mainContact.id
+      ),
+    [customerData]
+  );
   const navigate = useNavigate();
   const columns: TableColumn<Contact>[] = useMemo(
     () => [
@@ -94,45 +79,55 @@ const ShowCustomer = () => {
   );
 
   return (
-    <Box sx={{ m: 4 }}>
+    <Box sx={{ mx: 4 }}>
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          mb: 3,
         }}
       >
-        <Typography variant="h4" component="div" gutterBottom>
-          {customerData.businessName}
+        <Typography
+          variant="h3"
+          component="div"
+          gutterBottom
+          sx={{ color: 'primary.main' }}
+        >
+          {isLoading ? (
+            <CircularProgress size={24} />
+          ) : (
+            customerData.businessName
+          )}
         </Typography>
-        <CustomButton
+        <ButtonLoader
           onClick={() => navigate(`/customers/${id}/edit`)}
           disabled={isLoading}
+          isLoading={isLoading}
         >
           Edit
-        </CustomButton>
+        </ButtonLoader>
       </Box>
-
       {customerData.mainContact && (
         <Box sx={{ mt: 2 }}>
           <MainContactCard mainContact={customerData.mainContact} />
         </Box>
       )}
 
-      <Box sx={{ my: 2 }}>
-        <Typography variant="h5" component="div" gutterBottom>
-          Other Contacts
-        </Typography>
-        <hr className="mb-12" />
+      {!!otherContacts.length && (
+        <Box sx={{ my: 2 }}>
+          <Typography variant="h5" component="div" gutterBottom>
+            Other Contacts
+          </Typography>
+          <hr className="mb-12" />
 
-        <DataTable<Contact>
-          data={customerData.contacts.filter(
-            (contact: Contact) => contact.id !== customerData.mainContact.id
-          )}
-          columns={columns}
-          isLoading={isLoading}
-        />
-      </Box>
+          <DataTable<Contact>
+            data={otherContacts}
+            columns={columns}
+            isLoading={isLoading}
+          />
+        </Box>
+      )}
     </Box>
   );
 };

@@ -1,51 +1,12 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { TextField, Button, Grid, styled } from '@mui/material';
-import { Loader } from '@mantine/core';
+import { TextField, Grid } from '@mui/material';
+import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
 
 interface CreateUserEndProps {
   trigger: (name: string, description?: string) => void;
   isLoading: boolean;
 }
-
-const CustomButton = styled(Button)(({ theme, disabled }) => ({
-  position: 'relative',
-  textDecoration: 'none',
-  color: theme.palette.primary.main,
-  padding: theme.spacing(1),
-  border: `1px solid ${theme.palette.primary.main}`,
-  borderRadius: theme.shape.borderRadius,
-  '&:hover': {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-  },
-  ...(disabled && {
-    backgroundColor: theme.palette.grey[300],
-    color: theme.palette.text.primary,
-    pointerEvents: 'none',
-    '&:hover': {
-      backgroundColor: theme.palette.grey[300],
-      borderColor: theme.palette.grey[300],
-      color: theme.palette.text.primary,
-    },
-  }),
-  ...(disabled && {
-    pointerEvents: 'none',
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      background: 'rgba(255, 255, 255, 0.7)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: theme.shape.borderRadius,
-    },
-  }),
-}));
 
 const CreateUserEnd: React.FC<CreateUserEndProps> = ({
   trigger,
@@ -65,11 +26,10 @@ const CreateUserEnd: React.FC<CreateUserEndProps> = ({
         trigger(values.name, values.description);
       }}
     >
-      <Form>
-        <h1 className="font-semibold text-2xl pb-4">Create End Use</h1>
-        <Grid container spacing={2}>
-          <div className="flex flex-col flex-1 py-4 pl-4 space-y-4">
-            <div>
+      {({ errors }) => (
+        <Form>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
               <Field
                 as={TextField}
                 id="name"
@@ -77,15 +37,12 @@ const CreateUserEnd: React.FC<CreateUserEndProps> = ({
                 fullWidth
                 label="Name *"
                 variant="outlined"
+                helperText={<ErrorMessage name="name" />}
+                error={Boolean(errors.name)}
               />
-              <ErrorMessage
-                name="name"
-                component="div"
-                style={{ color: 'red', fontSize: '12px' }}
-              />
-            </div>
+            </Grid>
 
-            <div>
+            <Grid item xs={12}>
               <Field
                 as={TextField}
                 id="description"
@@ -94,32 +51,23 @@ const CreateUserEnd: React.FC<CreateUserEndProps> = ({
                 label="Description"
                 variant="outlined"
               />
-              <ErrorMessage
-                name="description"
-                component="div"
-                style={{ color: 'red', fontSize: '12px' }}
-              />
-            </div>
-          </div>
-        </Grid>
-        <Grid item xs={12} style={{ textAlign: 'right' }}>
-          <Button
-            variant="outlined"
-            type="reset"
-            style={{ marginRight: '10px' }}
-          >
-            Reset
-          </Button>
-          <CustomButton type="submit" disabled={isLoading}>
-            {isLoading && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Loader color="white" />
-              </div>
-            )}
-            Create
-          </CustomButton>
-        </Grid>
-      </Form>
+            </Grid>
+
+            <Grid item xs={12} container justifyContent="space-between">
+              <Grid item>
+                <ButtonLoader type="reset" disabled={isLoading}>
+                  Reset
+                </ButtonLoader>
+              </Grid>
+              <Grid item>
+                <ButtonLoader type="submit" disabled={isLoading}>
+                  Create
+                </ButtonLoader>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Form>
+      )}
     </Formik>
   );
 };

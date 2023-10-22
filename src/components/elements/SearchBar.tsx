@@ -17,6 +17,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
       variant="outlined"
       size="small"
       className="w-full md:w-64 lg:w-96"
+      fullWidth
     />
   );
 };

@@ -45,10 +45,10 @@ export const API_URLS = {
   },
   REACTIVATION_REQUEST: '/auth/reactivation',
   DASHBOARD_METHODS: {
-    STATISTICS: 'dashboard/statistics',
-    COMPARE_TWO_YEARS: 'dashboard/compare',
-    DEMOGRAPHICS: 'dashboard/demographic',
-    COMPARE_YEARS_IN_RANGE: 'dashboard/compare-range',
-    AVERAGE_IN_RANGE: 'dashboard/average',
+    STATISTICS: '/dashboard/statistics',
+    COMPARE_TWO_YEARS: '/dashboard/compare',
+    DEMOGRAPHICS: '/dashboard/demographic',
+    COMPARE_YEARS_IN_RANGE: '/dashboard/compare-range',
+    AVERAGE_IN_RANGE: '/dashboard/average',
   },
 };

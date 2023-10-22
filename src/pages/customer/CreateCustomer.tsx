@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography, styled } from '@mui/material';
+import { Box, Grid, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useMemo, useState } from 'react';
 import * as Yup from 'yup';
 import Edit from '@mui/icons-material/Edit';
@@ -14,45 +14,8 @@ import {
 import DataTable from '../../components/table/DataTable';
 import CustomModal from '../../components/Modal';
 import { useCreateCustomer } from '../../hooks/useCustomer';
-
-const CustomButton = styled(Button)(({ theme, disabled }) => ({
-  position: 'relative',
-  textDecoration: 'none',
-  color: theme.palette.primary.main,
-  padding: theme.spacing(1),
-  border: `1px solid ${theme.palette.primary.main}`,
-  borderRadius: theme.shape.borderRadius,
-  '&:hover': {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-  },
-  ...(disabled && {
-    backgroundColor: theme.palette.grey[300],
-    color: theme.palette.text.primary,
-    pointerEvents: 'none',
-    '&:hover': {
-      backgroundColor: theme.palette.grey[300],
-      borderColor: theme.palette.grey[300],
-      color: theme.palette.text.primary,
-    },
-  }),
-  ...(disabled && {
-    pointerEvents: 'none',
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      background: 'rgba(255, 255, 255, 0.7)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: theme.shape.borderRadius,
-    },
-  }),
-}));
+import Heading from '../../components/elements/Heading';
+import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
 
 const CreateCustomer = () => {
   const [newCustomer, setNewCustomer] = useState<Omit<Customer, 'id'>>({
@@ -106,7 +69,7 @@ const CreateCustomer = () => {
     designation: Yup.string().required('Designation is required.'),
     contactNumber: Yup.string()
       .required('Contact number is required.')
-      .matches(/^(0\d{6,7}|0\d{10})$/, 'Contact number is not valid'),
+      .matches(/^(\+\d{1,3}[-\s]?)?\d{6,14}$/, 'Contact number is not valid'),
     address: Yup.object().shape({
       street: Yup.string().required('Street is required.'),
       city: Yup.string().required('City is required.'),
@@ -209,28 +172,44 @@ const CreateCustomer = () => {
   };
 
   return (
-    <Box className="m-4">
-      <Typography
-        className="text-xl font-semibold mb-4"
-        variant="h4"
-        component="div"
-        gutterBottom
-      >
-        Create Customer
-      </Typography>
-      <TextField
-        label="Business Name"
-        value={newCustomer.businessName}
-        onChange={handleBusinessNameChange}
-        variant="outlined"
-        size="small"
-        className="w-modal"
+    <Box sx={{ mx: 4 }}>
+      <Heading
+        title="New Customer with Contacts"
+        description="Begin the process of adding a customer and their contact information."
       />
-
       <hr className="my-6" />
+      <Box marginBottom={4}>
+        <Typography variant="h6" gutterBottom>
+          Business Information
+        </Typography>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={!newCustomer.contacts.length ? 8 : 12}>
+            <TextField
+              label="Business Name"
+              value={newCustomer.businessName}
+              onChange={handleBusinessNameChange}
+              variant="outlined"
+              size="small"
+              fullWidth
+              placeholder="Enter the business name"
+            />
+          </Grid>
+          {!newCustomer?.contacts?.length && (
+            <Grid item xs={4}>
+              <ButtonLoader
+                isLoading={craeteCustomerMutation.isLoading}
+                disabled={craeteCustomerMutation.isLoading}
+                onClick={handleAddContact}
+                className="w-full"
+              >
+                ADD CONTACT
+              </ButtonLoader>
+            </Grid>
+          )}
+        </Grid>
+      </Box>
 
       {(selectedContact || selectedContactIndex) && (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         <CustomModal<Contact & Record<string, any>>
           data={selectedContact as Contact}
           isOpen={isModalOpen}
@@ -239,30 +218,34 @@ const CreateCustomer = () => {
           onSave={handleContactSave}
           fields={contactFields}
           validationSchema={contactValidationSchema}
-          title={selectedContact ? 'Edit Contact' : 'Add Contact'}
+          title="Manage Contact"
         />
       )}
-
-      <div className="my-4 overflow-x-auto">
-        <DataTable<Contact>
-          data={newCustomer.contacts}
-          columns={columns}
-          customButtonLabel="Add New Contact"
-          actionButtons={actionButtons}
-          additionalColumn={mainContactRadioColumn}
-          onCustomButtonClick={handleAddContact}
-          isLoading={craeteCustomerMutation.isLoading}
-        />
-      </div>
-
+      {!!newCustomer.contacts.length && (
+        <Box marginBottom={4}>
+          <Typography variant="h6" gutterBottom>
+            Contacts
+          </Typography>
+          <DataTable<Contact>
+            data={newCustomer.contacts}
+            columns={columns}
+            customButtonLabel="Add New Contact"
+            actionButtons={actionButtons}
+            additionalColumn={mainContactRadioColumn}
+            onCustomButtonClick={handleAddContact}
+            isLoading={craeteCustomerMutation.isLoading}
+          />
+        </Box>
+      )}
       <Box className="flex justify-end mt-4">
-        <CustomButton
+        <ButtonLoader
+          isLoading={craeteCustomerMutation.isLoading}
           onClick={handleSaveButtonClick}
           disabled={craeteCustomerMutation.isLoading}
-          className="relative py-2 px-4 border rounded bg-primary text-white hover:bg-primary-dark"
+          className="w-full"
         >
           Save and Exit
-        </CustomButton>
+        </ButtonLoader>
       </Box>
     </Box>
   );

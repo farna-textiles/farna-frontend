@@ -1,6 +1,7 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { useEffect, useState } from 'react';
-import { TextField, Grid, Modal, Box, Typography } from '@mui/material';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Grid, Modal, Box, Tooltip, IconButton } from '@mui/material';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import AddIcon from '@mui/icons-material/Add';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -20,7 +21,9 @@ import { getAllEndUses } from '../../api/endUserApi';
 import useCreateEndUse from '../../hooks/useEndUse';
 import { userInfo } from '../../services/authService';
 import { useProduct, useUpdateProduct } from '../../hooks/useProduct';
-import CustomButton from '../../components/elements/CustomButton';
+import Heading from '../../components/elements/Heading';
+import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
+import FormFields from '../../components/form/FormFields';
 
 const validationSchema = Yup.object().shape({
   lotNo: Yup.string()
@@ -195,21 +198,63 @@ const EditProduct = () => {
 
   return (
     <Box sx={{ m: 4 }}>
-      <Typography variant="h4" component="div" gutterBottom>
-        Edit Product
-      </Typography>
-      <hr className="my-12" />
+      <Heading
+        title="Product Details Editing"
+        description="Modify the information for an existing product"
+      />
+
+      <hr className="mb-6" />
 
       <Modal
         open={open}
         onClose={handleClose}
         className="flex justify-center items-center"
       >
-        <div className="md:w-1/2 w-[90%] bg-white py-4 px-8 rounded-md outline-none">
-          <CreateUserEnd
-            trigger={handleCreateEndUse}
-            isLoading={endUseMutation.isLoading}
-          />
+        <div
+          className="relative bg-white rounded-lg shadow-lg overflow-hidden
+           md:w-1/2 w-full max-w-3xl transition-transform transform ease-out duration-300"
+        >
+          <div className="px-6 py-4">
+            <div className="flex justify-between items-center">
+              <h3
+                id="modal-title"
+                className="text-lg leading-6 font-medium text-gray-900"
+              >
+                Create New End Use
+              </h3>
+              <button
+                type="button"
+                className="text-gray-400 hover:text-gray-500 p-2 rounded-full"
+                onClick={handleClose}
+              >
+                <span className="sr-only">Close</span>
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="mt-2">
+              <CreateUserEnd
+                trigger={handleCreateEndUse}
+                isLoading={endUseMutation.isLoading}
+              />
+              {endUseMutation.isLoading && (
+                <div className="flex justify-center items-center mt-4">
+                  <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-200" />
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </Modal>
 
@@ -218,30 +263,17 @@ const EditProduct = () => {
         onSubmit={handleUpdate}
         validationSchema={validationSchema}
       >
-        {() => (
+        {({ isSubmitting }) => (
           <Form onKeyDown={handleKeyDown}>
-            <Grid container spacing={2}>
-              <div className="flex flex-col flex-1 py-4 pl-4 space-y-4">
-                {formFields.map((field) => (
-                  <div key={field.name}>
-                    <Field
-                      as={TextField}
-                      id={field.name}
-                      name={field.name}
-                      fullWidth
-                      type={field.type}
-                      label={field.label}
-                      variant="outlined"
-                    />
-                    <ErrorMessage
-                      name={field.name}
-                      component="div"
-                      style={{ color: 'red', fontSize: '12px' }}
-                    />
-                  </div>
-                ))}
-                <div className="flex spaxe-x-2 justify-between items-center">
-                  <div className="w-[90%]">
+            <Grid container spacing={2} direction="column">
+              {formFields.map((field) => (
+                <Grid item xs={12} key={field.name}>
+                  <FormFields key={field.name} {...field} />
+                </Grid>
+              ))}
+              <Grid item xs={12}>
+                <div className="flex items-center justify-between">
+                  <div className="flex-grow">
                     <Multiselect
                       options={multiselectOptions}
                       displayValue="name"
@@ -265,24 +297,29 @@ const EditProduct = () => {
                       className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:border-primary"
                     />
                   </div>
-                  <button
-                    type="button"
-                    onClick={handleOpen}
-                    className="w-[8%] flex justify-center items-center border border-gray-300 cursor-pointer hover:border-none hover:bg-gray-300 rounded-md h-full px-2"
-                  >
-                    <AddIcon />
-                  </button>
+                  <div className="flex-shrink-0 ml-4">
+                    <Tooltip title="Add new end use">
+                      <IconButton
+                        type="button"
+                        onClick={handleOpen}
+                        className=""
+                      >
+                        <AddIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
                 </div>
-              </div>
-            </Grid>
-            <Grid item xs={12} style={{ textAlign: 'right' }}>
-              <CustomButton
-                type="submit"
-                disabled={updateProductMutation.isLoading}
-                isLoading={updateProductMutation.isLoading}
-              >
-                Save & Exit
-              </CustomButton>
+              </Grid>
+              <Grid item xs={12} className="submitBtnContainer">
+                <ButtonLoader
+                  type="submit"
+                  disabled={isSubmitting}
+                  isLoading={isSubmitting}
+                  className="w-full"
+                >
+                  Update & Exit
+                </ButtonLoader>
+              </Grid>
             </Grid>
           </Form>
         )}

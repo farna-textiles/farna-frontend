@@ -1,9 +1,8 @@
-import { Box, Button, TextField, Typography, styled } from '@mui/material';
+import { Box, Grid, TextField } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { Loader } from '@mantine/core';
 import * as Yup from 'yup';
 
 import {
@@ -18,6 +17,8 @@ import {
 import { useCustomer, useUpdateCustomer } from '../../hooks/useCustomer';
 import DataTable from '../../components/table/DataTable';
 import CustomModal from '../../components/Modal';
+import Heading from '../../components/elements/Heading';
+import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
 
 const initialContactState: Omit<Contact, 'id'> & { id?: number } = {
   name: '',
@@ -31,28 +32,6 @@ const initialContactState: Omit<Contact, 'id'> & { id?: number } = {
     postalCode: '',
   },
 };
-
-const CustomButton = styled(Button)(({ theme, disabled }) => ({
-  textDecoration: 'none',
-  color: theme.palette.primary.main,
-  padding: theme.spacing(1),
-  border: `1px solid ${theme.palette.primary.main}`,
-  borderRadius: theme.shape.borderRadius,
-  '&:hover': {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-  },
-  ...(disabled && {
-    backgroundColor: theme.palette.grey[300],
-    color: theme.palette.text.primary,
-    pointerEvents: 'none',
-    '&:hover': {
-      backgroundColor: theme.palette.grey[300],
-      borderColor: theme.palette.grey[300],
-      color: theme.palette.text.primary,
-    },
-  }),
-}));
 
 const EditCustomer = () => {
   const { id } = useParams<{ id: string }>();
@@ -229,19 +208,39 @@ const EditCustomer = () => {
   });
 
   return (
-    <Box sx={{ m: 4 }}>
-      <Typography variant="h4" component="div" gutterBottom>
-        Edit Customer
-      </Typography>
-      <TextField
-        label="Business Name"
-        value={editedCustomer.businessName}
-        onChange={handleBusinessNameChange}
-        variant="outlined"
-        size="small"
+    <Box sx={{ mx: 4 }}>
+      <Heading
+        title="Customer and Contacts Update"
+        description="Update the information for a customer and their contacts"
       />
-
-      <hr className="my-12" />
+      <hr className="my-6" />
+      <Box marginBottom={4}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={!editedCustomer.contacts.length ? 8 : 12}>
+            <TextField
+              label="Business Name"
+              value={editedCustomer.businessName}
+              onChange={handleBusinessNameChange}
+              variant="outlined"
+              size="small"
+              fullWidth
+              placeholder="Enter the business name"
+            />
+          </Grid>
+          {!editedCustomer?.contacts?.length && (
+            <Grid item xs={4}>
+              <ButtonLoader
+                isLoading={updateCustomerMutation.isLoading}
+                disabled={updateCustomerMutation.isLoading}
+                onClick={handleAddContact}
+                className="w-full"
+              >
+                ADD CONTACT
+              </ButtonLoader>
+            </Grid>
+          )}
+        </Grid>
+      </Box>
       {(selectedContact || isAddingContact) && (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         <CustomModal<Contact & Record<string, any>>
@@ -255,7 +254,7 @@ const EditCustomer = () => {
           submitButton="Submit"
         />
       )}
-      <Box sx={{ my: 2 }}>
+      {!!editedCustomer.contacts.length && (
         <DataTable<Contact>
           data={editedCustomer.contacts}
           columns={columns}
@@ -265,15 +264,16 @@ const EditCustomer = () => {
           onCustomButtonClick={handleAddContact}
           isLoading={updateCustomerMutation.isLoading}
         />
-      </Box>
+      )}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        <CustomButton
+        <ButtonLoader
+          isLoading={updateCustomerMutation.isLoading}
           onClick={handleSaveButtonClick}
           disabled={updateCustomerMutation.isLoading}
+          className="w-full"
         >
-          {updateCustomerMutation.isLoading && <Loader />}
-          Save
-        </CustomButton>
+          Save and Exit
+        </ButtonLoader>
       </Box>
     </Box>
   );

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import Edit from '@mui/icons-material/Edit';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ import { getAllUsers } from '../../api/userApi';
 import useUpdateUser from '../../hooks/useUser';
 import CustomModal from '../../components/Modal';
 import { useInvite } from '../../hooks/useAuth';
+import Heading from '../../components/elements/Heading';
 
 const Users = () => {
   const navigate = useNavigate();
@@ -81,14 +82,11 @@ const Users = () => {
   };
 
   return (
-    <Box sx={{ m: 4 }}>
-      <Typography variant="h4" component="div" gutterBottom>
-        User Management
-      </Typography>
-      <Typography variant="subtitle1" component="div" gutterBottom>
-        Use the search bar to find specific users. Click on a user to edit their
-        details.
-      </Typography>
+    <Box sx={{ mx: 4 }}>
+      <Heading
+        title="User Management"
+        description="Manage and review user resgistrations (Admins only)"
+      />
       <Box sx={{ my: 2 }}>
         <GenericTable<User>
           tableName="Users"

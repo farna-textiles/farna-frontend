@@ -1,26 +1,26 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useMemo, useState } from 'react';
 import {
   TextField,
-  Select,
-  MenuItem,
   FormControl,
-  InputLabel,
   TableContainer,
   Table,
   TableHead,
-  Grid,
   Typography,
   TableBody,
   Paper,
   TableRow,
   TableCell,
   FormHelperText,
+  Autocomplete,
+  Tooltip,
+  IconButton,
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
-import CustomButton from '../../components/elements/CustomButton';
 import {
   CurrencyUnit,
   Customer,
@@ -37,6 +37,8 @@ import { notifyError } from '../../lib/utils';
 import { useOrder, useUpdateOrder } from '../../hooks/useOrder';
 import { getAllCurrencyUnits } from '../../api/currencyUnitApi';
 import { getAllPaymentTypes } from '../../api/paymentMethodApi';
+import Heading from '../../components/elements/Heading';
+import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
 
 const headerCellStyle = {
   backgroundColor: '#3F9FEB',
@@ -91,6 +93,7 @@ const EditOrder: React.FC = () => {
     getAllPaymentTypes()
   );
   const useUpdateProductMutation = useUpdateOrder();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -184,17 +187,15 @@ const EditOrder: React.FC = () => {
   return (
     <form
       onSubmit={formik.handleSubmit}
-      className="bg-gray-100 min-h-screen flex flex-col justify-center items-center p-4 md:p-8"
+      className="bg-gray-100 min-h-[90vh] flex flex-col justify-center items-center p-4 md:p-8"
     >
-      <div className="bg-white shadow-md p-4 md:p-8 rounded-lg w-full max-w">
-        <div className="flex justify-end">
-          <CustomButton to="/product/new">Add New Product</CustomButton>
-        </div>
+      <div className="bg-white shadow-lg p-4 md:p-8 rounded-xl w-full max-w">
+        <Heading
+          title="Sales Receipt Modification"
+          description="Make changes to an existing sales receipt"
+        />
 
-        <h2 className="text-xl font-semibold mb-4">
-          Sales Receipt # {orderData.id}
-        </h2>
-        <div className="grid md:grid-cols-2 gap-4 md:gap-8">
+        <section className="grid md:grid-cols-2 gap-6 mb-6">
           <div>
             <FormControl fullWidth variant="outlined" margin="dense">
               <SearchDropdown<Customer>
@@ -221,7 +222,7 @@ const EditOrder: React.FC = () => {
                 variant="outlined"
                 fullWidth
                 multiline
-                rows={4}
+                rows={7}
                 margin="dense"
                 value={
                   selectedCustomer?.mainContact?.address
@@ -299,142 +300,146 @@ const EditOrder: React.FC = () => {
               helperText={formik.touched.PI_number && formik.errors.PI_number}
             />
           </div>
-        </div>
+        </section>
 
-        <div className="grid md:grid-cols-2 gap-4 md:gap-8 mt-4 md:mt-6">
-          <div>
-            <FormControl variant="outlined" fullWidth margin="dense">
-              <InputLabel>Payment Method</InputLabel>
-              <Select
-                name="paymentTypeId"
-                label="Payment Method"
-                value={formik.values.paymentTypeId}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.paymentTypeId &&
-                  Boolean(formik.errors.paymentTypeId)
-                }
-              >
-                {paymentMethods?.data?.map((method: PaymentMethod) => (
-                  <MenuItem key={method.id} value={method.id}>
-                    {method.name}
-                  </MenuItem>
-                ))}
-              </Select>
-              {formik.touched.paymentTypeId && formik.errors.paymentTypeId && (
-                <FormHelperText error>
-                  {formik.errors.paymentTypeId}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </div>
-          <div>
-            <FormControl
-              variant="outlined"
-              fullWidth
-              margin="dense"
-              className="mb-4 md:mb-8"
-            >
-              <InputLabel>Currency</InputLabel>
-              <Select
-                name="currencyUnitId"
-                label="Currency"
-                value={formik.values.currencyUnitId}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.currencyUnitId &&
-                  Boolean(formik.errors.currencyUnitId)
-                }
-              >
-                {currencyUnits?.data?.map((currency: CurrencyUnit) => (
-                  <MenuItem key={currency.id} value={currency.id}>
-                    {currency.symbol}
-                  </MenuItem>
-                ))}
-              </Select>
-              {formik.touched.currencyUnitId &&
-                formik.errors.currencyUnitId && (
-                  <FormHelperText error>
-                    {formik.errors.currencyUnitId}
-                  </FormHelperText>
-                )}
-            </FormControl>
-          </div>
-        </div>
-        <div className="mb-4 md:mb-8 mt-4 md:mt-5">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <SearchDropdown<ProductOrderType>
-              type="Product"
-              queryFn={getProducts}
-              onSelect={handleSelectProduct}
-              placeholder="Search for a customer..."
-              itemToString={(customer: ProductOrderType) => customer.lotNo}
-            />
-            <hr className="border-t border-gray-300 w-full md:w-2/3 mt-2 md:ml-4" />
-          </div>
-        </div>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {fields.map((field) => (
-                  <TableCell
-                    key={field.key}
-                    align="center"
-                    sx={headerCellStyle}
-                  >
-                    {field.label}
-                  </TableCell>
-                ))}
-                <TableCell align="center" sx={headerCellStyle}>
-                  Actions
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {selectedProducts.map((product) => (
-                <ProductRow
-                  fields={fields}
-                  key={product.lotNo}
-                  product={product}
-                  currency={selectedCurrencySymbol ?? ''}
-                  onProductUpdate={handleProductUpdate}
-                  onProductRemove={handleProductRemove}
+        <section className="grid md:grid-cols-2 gap-6 mb-6">
+          <FormControl variant="outlined" fullWidth margin="dense">
+            <Autocomplete
+              options={paymentMethods?.data || []}
+              getOptionLabel={(option: PaymentMethod) => option.name}
+              value={
+                paymentMethods?.data.find(
+                  (method) => method.id === formik.values.paymentTypeId
+                ) || null
+              }
+              onChange={(_event, newValue) => {
+                formik.setFieldValue('paymentTypeId', newValue?.id || '');
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  name="paymentTypeId"
+                  label="Payment Method"
+                  error={
+                    formik.touched.paymentTypeId &&
+                    Boolean(formik.errors.paymentTypeId)
+                  }
+                  helperText={
+                    formik.touched.paymentTypeId && formik.errors.paymentTypeId
+                  }
                 />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              )}
+            />
+          </FormControl>
+          <FormControl
+            variant="outlined"
+            fullWidth
+            margin="dense"
+            className="mb-4 md:mb-8"
+          >
+            <Autocomplete
+              options={currencyUnits?.data || []}
+              getOptionLabel={(option: CurrencyUnit) =>
+                `${option.name}: ${option.code} - ${option.symbol}`
+              }
+              value={
+                currencyUnits?.data.find(
+                  (currency) => currency.id === formik.values.currencyUnitId
+                ) || null
+              }
+              onChange={(_event, newValue) => {
+                formik.setFieldValue('currencyUnitId', newValue?.id || '');
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  name="currencyUnitId"
+                  label="Currency"
+                  error={
+                    formik.touched.currencyUnitId &&
+                    Boolean(formik.errors.currencyUnitId)
+                  }
+                  helperText={
+                    formik.touched.currencyUnitId &&
+                    formik.errors.currencyUnitId
+                  }
+                />
+              )}
+            />
+          </FormControl>
+        </section>
+        <h3 className="text-xl font-semibold mb-3">Product Details</h3>
 
-        <Grid container justifyContent="flex-end" mt={4}>
-          <Grid item xs={1}>
-            <Typography variant="subtitle1" fontWeight="bold">
-              Total Amount:
-            </Typography>
-          </Grid>
-          <Grid>
-            <Typography variant="subtitle1" ml={5}>
-              {selectedCurrencySymbol} {totalAmount.toFixed(2)}
-            </Typography>
-          </Grid>
-        </Grid>
-
-        <Grid
-          container
-          justifyContent="flex-end"
-          alignItems="center"
-          mt={2}
-          spacing={2}
-        >
-          <Grid item>
-            <CustomButton
-              isLoading={useUpdateProductMutation.isLoading}
-              onClick={formik.handleSubmit}
+        <div className="flex justify-between items-center mb-5 space-x-4">
+          <SearchDropdown<ProductOrderType>
+            type="Product"
+            queryFn={getProducts}
+            onSelect={handleSelectProduct}
+            placeholder="Search for a customer..."
+            itemToString={(customer: ProductOrderType) => customer.lotNo}
+          />
+          <Tooltip title="Create new Product">
+            <IconButton
+              type="button"
+              onClick={() => navigate('/product/new')}
+              className=""
             >
-              Update
-            </CustomButton>
-          </Grid>
-        </Grid>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>{' '}
+        </div>
+        {!!selectedProducts.length && (
+          <div className="mb-4 md:mb-8 mt-4 md:mt-5">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <hr className="border-t border-gray-300 w-full md:w-2/3 mt-2 md:ml-4" />
+            </div>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    {fields.map((field) => (
+                      <TableCell
+                        key={field.key}
+                        align="center"
+                        sx={headerCellStyle}
+                      >
+                        {field.label}
+                      </TableCell>
+                    ))}
+                    <TableCell align="center" sx={headerCellStyle}>
+                      Actions
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {selectedProducts.map((product) => (
+                    <ProductRow
+                      fields={fields}
+                      key={product.lotNo}
+                      product={product}
+                      currency={selectedCurrencySymbol ?? ''}
+                      onProductUpdate={handleProductUpdate}
+                      onProductRemove={handleProductRemove}
+                    />
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <footer className="flex justify-between items-center mt-6">
+              <Typography variant="h6">
+                Total: {selectedCurrencySymbol}{' '}
+                {parseFloat(totalAmount.toFixed(2))}
+              </Typography>
+              <ButtonLoader
+                isLoading={useUpdateProductMutation.isLoading}
+                disabled={useUpdateProductMutation.isLoading}
+                onClick={formik.handleSubmit}
+              >
+                Update
+              </ButtonLoader>
+            </footer>
+          </div>
+        )}
       </div>
     </form>
   );

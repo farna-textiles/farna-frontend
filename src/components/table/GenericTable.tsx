@@ -148,7 +148,7 @@ const GenericTable = <T extends Record<string, unknown>>({
           <SearchBar onSearch={setSearchTermThrottled} />
         </Grid>
         {addButtonLabel && (
-          <Grid item>
+          <Grid item columnSpacing={100}>
             {addButtonLink && (
               <Link to={addButtonLink} style={{ textDecoration: 'none' }}>
                 <Button
@@ -197,7 +197,11 @@ const GenericTable = <T extends Record<string, unknown>>({
                 </WhiteTextTableCell>
               ))}
               {actionButtons && (
-                <WhiteTextTableCell key={columns.length + 1}>
+                <WhiteTextTableCell
+                  className="w-40"
+                  style={{ textAlign: 'center' }}
+                  key={columns.length + 1}
+                >
                   Actions
                 </WhiteTextTableCell>
               )}
@@ -247,7 +251,7 @@ const GenericTable = <T extends Record<string, unknown>>({
                     </TableCell>
                   ))}
                   {actionButtons && (
-                    <TableCell>
+                    <TableCell className="w-40" style={{ textAlign: 'center' }}>
                       {actionButtons?.map((button, buttonsIndex) => (
                         <StyledIcon
                           title={button.title}

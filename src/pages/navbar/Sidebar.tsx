@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-
 import { Navbar, createStyles, rem } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
 import {
@@ -9,6 +8,7 @@ import {
   IconShoppingCart,
   IconWallet,
 } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import SwipeableTemporaryDrawer from './MobileSidebar';
 import LinksGroup from './LinksGroup';
 import UserButton from './UserButton';
@@ -58,6 +58,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
   const SideLinks = useMemo(
     () => [
       { label: 'Dashboard', icon: IconDashboard, link: '/dashboard' },
@@ -66,35 +68,34 @@ const Sidebar = () => {
         icon: IconUser,
         initiallyOpened: false,
         links: [
-          { label: 'All Customers', link: '/customers' },
-          { label: 'Create Customer', link: '/customer' },
+          { label: 'Customer Records', link: '/customers' },
+          { label: 'New Customer', link: '/customer' },
         ],
       },
       {
         label: 'Products',
         icon: IconPackage,
         links: [
-          { label: 'Create Product', link: '/product/new' },
-          { label: 'View Products', link: '/products' },
+          { label: 'Product Inventory', link: '/products' },
+          { label: 'Add Product', link: '/product/new' },
         ],
       },
       {
         label: 'Product Orders',
         icon: IconShoppingCart,
         links: [
-          { label: 'Create Orders', link: '/order/new' },
           { label: 'Recent Orders', link: '/orders' },
+          { label: 'Create Order', link: '/order/new' },
         ],
       },
       {
         label: 'Additions',
         icon: IconWallet,
         links: [
-          { label: 'Payment Methdos', link: '/payment' },
-          { label: 'Add Currency ', link: '/currency' },
+          { label: 'Payment Methods', link: '/payment' },
+          { label: 'Currency Units', link: '/currency' },
         ],
       },
-      // { label: 'Analytics', icon: IconPresentationAnalytics },
       {
         label: 'Users',
         icon: IconUser,
@@ -116,7 +117,10 @@ const Sidebar = () => {
   );
 
   const userInfoString = localStorage.getItem('userInfo');
-  const userInfo: User = userInfoString ? JSON.parse(userInfoString) : null;
+  const userInfo: User =
+    userInfoString && userInfoString !== 'undefine'
+      ? JSON.parse(userInfoString)
+      : null;
   const isAdminUser = useMemo(() => userInfo.role === 'admin', [userInfo.role]);
 
   const [isMobile, setIsMobile] = useState(false);
@@ -149,11 +153,13 @@ const Sidebar = () => {
           className={`${classes.logo} md:flex`}
           style={{ justifyContent: isMobile ? 'flex-end' : 'flex-start' }}
         >
-          <img
-            src="/farna-logo.png"
-            alt="farna logo"
-            width={isMobile ? '68' : ''}
-          />
+          <button type="button" onClick={() => navigate('/dashboard')}>
+            <img
+              src="/farna-logo.png"
+              alt="farna logo"
+              width={isMobile ? '68' : ''}
+            />
+          </button>
         </div>
       </Navbar.Section>
 

@@ -2,12 +2,13 @@ import { useMemo } from 'react';
 import Edit from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { ActionButton, TableColumn, Order } from '../../interfaces';
 import GenericTable from '../../components/table/GenericTable';
 import { getAllOrders } from '../../api';
 import { useDeleteOrder } from '../../hooks/useOrder';
+import Heading from '../../components/elements/Heading';
 
 const Products = () => {
   const deleteOrderMutation = useDeleteOrder();
@@ -21,7 +22,6 @@ const Products = () => {
       { field: 'validity', label: 'Validity Date' },
       { field: 'shipmentType', label: 'Shipment Type' },
       { field: 'PI_number', label: 'PI Number' },
-      // ... You can continue this pattern for other fields if needed
     ],
     []
   );
@@ -55,12 +55,13 @@ const Products = () => {
   );
 
   return (
-    <Box sx={{ m: 4 }}>
-      <Typography variant="h4" component="div" gutterBottom>
-        Recent Order
-      </Typography>
+    <Box sx={{ mx: 4 }}>
+      <Heading
+        title="Order List"
+        description="Keep track of your orders with ease"
+      />
       <>
-        <hr className="mb-12" />
+        <hr className="mb-6" />
         <Box sx={{ my: 2 }}>
           <GenericTable<Order>
             tableName="Orders"

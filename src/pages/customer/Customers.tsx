@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { useMemo } from 'react';
@@ -9,6 +9,7 @@ import { ActionButton, Customer, TableColumn } from '../../interfaces';
 import GenericTable from '../../components/table/GenericTable';
 import { getAllCustomers } from '../../api/customerApi';
 import { useDeleteCustomer } from '../../hooks/useCustomer';
+import Heading from '../../components/elements/Heading';
 
 const Customers = () => {
   const deleteCustomerMutation = useDeleteCustomer();
@@ -55,11 +56,12 @@ const Customers = () => {
   );
 
   return (
-    <Box sx={{ m: 4 }}>
-      <Typography variant="h4" component="div" gutterBottom>
-        Customers
-      </Typography>
-      <hr className="mb-12" />
+    <Box sx={{ mx: 4 }}>
+      <Heading
+        title="Customer Records"
+        description="Manage and track your customer base here"
+      />
+      <hr className="mb-6" />
       <Box sx={{ my: 2 }}>
         <GenericTable<Customer>
           tableName="Customers"
