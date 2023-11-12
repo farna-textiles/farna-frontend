@@ -54,7 +54,7 @@ const validationSchema = yup.object({
       'Validity date should be after or the same as sales receipt date.'
     ),
   shipmentType: yup.string().required('Shipment Type is required'),
-  PI_number: yup.string().required('PI Number is required'),
+  PI_number: yup.string(),
   paymentTypeId: yup.number().required('Payment Method is required'),
   currencyUnitId: yup.number().required('Currency is required'),
   customerId: yup.number().required('Customer is required'),
