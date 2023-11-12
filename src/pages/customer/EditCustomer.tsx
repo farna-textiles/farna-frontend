@@ -135,9 +135,8 @@ const EditCustomer = () => {
         onClick: (contactId: number) => {
           handleEditClick(
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            editedCustomer.contacts.find(
-              (contact, index) =>
-                contact.id === contactId || contactId === index
+            editedCustomer.contacts.find((contact, index) =>
+              contact.id ? contact.id !== contactId : index !== contactId
             )!
           );
         },

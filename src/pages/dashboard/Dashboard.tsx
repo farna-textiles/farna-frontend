@@ -51,14 +51,16 @@ const Dashboard: React.FC = () => {
   );
 
   const [selectedGraphFilter, setSelectedGraphFilter] = useState<
-    'orders' | 'earnings'
+    'orders' | 'earnings' | 'quantity'
   >('orders');
 
   const handleCurrencyChange = (newCurrency: number) => {
     setSelectedCurrency(newCurrency);
   };
 
-  const handleGraphFilterChange = (newFilter: 'orders' | 'earnings') => {
+  const handleGraphFilterChange = (
+    newFilter: 'orders' | 'earnings' | 'quantity'
+  ) => {
     setSelectedGraphFilter(newFilter);
   };
 
@@ -87,11 +89,14 @@ const Dashboard: React.FC = () => {
               className="p-2 rounded-md border-2 border-gray-300 text-sm bg-gray-100"
               value={selectedGraphFilter}
               onChange={(e) =>
-                handleGraphFilterChange(e.target.value as 'orders' | 'earnings')
+                handleGraphFilterChange(
+                  e.target.value as 'orders' | 'earnings' | 'quantity'
+                )
               }
             >
               <option value="orders">Orders</option>
               <option value="earnings">Earnings</option>
+              <option value="quantity">Quantity</option>
             </select>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-4">

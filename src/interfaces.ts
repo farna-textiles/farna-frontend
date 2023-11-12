@@ -348,7 +348,7 @@ export interface CompareRangeType {
   data: number[];
 }
 
-export type DashboardDataFilter = 'orders' | 'earnings';
+export type DashboardDataFilter = 'orders' | 'earnings' | 'quantity';
 
 export interface PaymentType {
   id: number;

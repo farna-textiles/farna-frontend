@@ -2,6 +2,8 @@ import { Box, Grid, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useMemo, useState } from 'react';
 import * as Yup from 'yup';
 import Edit from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import {
   ActionButton,
   AdditionalColumn,
@@ -27,7 +29,7 @@ const CreateCustomer = () => {
   const [selectedContactIndex, setSelectedContactIndex] = useState<
     number | null
   >(null);
-  const craeteCustomerMutation = useCreateCustomer();
+  const createCustomerMutation = useCreateCustomer();
 
   const mainContactRadioColumn: AdditionalColumn<Contact> = useMemo(
     () => ({
@@ -126,8 +128,22 @@ const CreateCustomer = () => {
           }
         },
       },
+      {
+        icon: <DeleteIcon />,
+        title: 'Delete',
+        onClick: (contactIndex: number) => {
+          const updatedContacts = newCustomer.contacts.filter(
+            (_contact: Contact, index: number) => index !== contactIndex
+          );
+          const updatedSampleObject = {
+            ...newCustomer,
+            contacts: updatedContacts,
+          };
+          setNewCustomer(updatedSampleObject);
+        },
+      },
     ],
-    [newCustomer.contacts]
+    [newCustomer]
   );
 
   const handleBusinessNameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -168,7 +184,7 @@ const CreateCustomer = () => {
   };
 
   const handleSaveButtonClick = async () => {
-    await craeteCustomerMutation.mutateAsync(newCustomer);
+    await createCustomerMutation.mutateAsync(newCustomer);
   };
 
   return (
@@ -197,8 +213,8 @@ const CreateCustomer = () => {
           {!newCustomer?.contacts?.length && (
             <Grid item xs={4}>
               <ButtonLoader
-                isLoading={craeteCustomerMutation.isLoading}
-                disabled={craeteCustomerMutation.isLoading}
+                isLoading={createCustomerMutation.isLoading}
+                disabled={createCustomerMutation.isLoading}
                 onClick={handleAddContact}
                 className="w-full"
               >
@@ -233,15 +249,15 @@ const CreateCustomer = () => {
             actionButtons={actionButtons}
             additionalColumn={mainContactRadioColumn}
             onCustomButtonClick={handleAddContact}
-            isLoading={craeteCustomerMutation.isLoading}
+            isLoading={createCustomerMutation.isLoading}
           />
         </Box>
       )}
       <Box className="flex justify-end mt-4">
         <ButtonLoader
-          isLoading={craeteCustomerMutation.isLoading}
+          isLoading={createCustomerMutation.isLoading}
           onClick={handleSaveButtonClick}
-          disabled={craeteCustomerMutation.isLoading}
+          disabled={createCustomerMutation.isLoading}
           className="w-full"
         >
           Save and Exit

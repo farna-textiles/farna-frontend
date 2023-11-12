@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import { YearPickerInput } from '@mantine/dates';
 import { useCompareYears } from '../../hooks/useDashboard';
-import { CompareRangeType } from '../../interfaces';
+import { CompareRangeType, DashboardDataFilter } from '../../interfaces';
 import { notifyError } from '../../lib/utils';
 
 type LineChartProps = {
   currency: number;
-  dataFilter?: 'orders' | 'earnings';
+  dataFilter?: DashboardDataFilter;
 };
 
 const LineChart: React.FC<LineChartProps> = ({
