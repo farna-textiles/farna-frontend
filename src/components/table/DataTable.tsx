@@ -135,7 +135,7 @@ const DataTable = <T extends { id: number }>({
                         disabled={isLoading}
                         onChange={(e) =>
                           handleAdditionalColumnChange(
-                            item.id || dataIndex,
+                            item.id,
                             e.target.checked
                           )
                         }
