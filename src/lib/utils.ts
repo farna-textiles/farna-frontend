@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
 import { ApiFunction } from '../interfaces';
-import { isAuthenticated } from '../services/authService';
+import { hasCookieToken } from '../services/authService';
 
 export const notifySuccess = (text: string) =>
   toast.success(text, { theme: 'light' });
@@ -20,8 +20,9 @@ export const handleApiCall = async <T>(
     if (
       error?.response?.data?.statusCode === 401 &&
       error?.response?.data?.message === 'Unauthorized' &&
-      !isAuthenticated()
+      !hasCookieToken()
     ) {
+      localStorage.clear();
       window.location.href = '/signin';
     }
     throw error?.response?.data;
