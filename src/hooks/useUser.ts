@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ErrorResponse, UpdateUserRequest } from '../interfaces';
 import { notifyError, notifySuccess } from '../lib/utils';
-import { updateUser } from '../api/userApi';
+import { changePassword, updateUser } from '../api/userApi';
+import { logout } from '../services/authService';
 
-const useUpdateUser = () => {
+export const useUpdateUser = () => {
   const queryClient = useQueryClient();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,4 +29,20 @@ const useUpdateUser = () => {
   );
 };
 
-export default useUpdateUser;
+export const useChangePassword = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(changePassword, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['user']);
+      notifySuccess('Password updated successfully');
+      logout()
+    },
+
+    onError: async (error: ErrorResponse) => {
+      notifyError(
+        typeof error.message === 'object' ? error.message[0] : error.message
+      );
+    },
+  });
+};

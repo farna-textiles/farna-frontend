@@ -38,3 +38,7 @@ export const getUserById = async (id: number, data = {}) => {
 
   return handleApiCall(api.get, apiUrl, data);
 };
+
+export const changePassword = async (data = {}) => {
+  return handleApiCall(api.put, API_URLS.AUTH_CHANGE_PASSWORD, data);
+};

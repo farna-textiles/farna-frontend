@@ -15,10 +15,10 @@ import {
 } from '../../interfaces';
 import GenericTable from '../../components/table/GenericTable';
 import { getAllUsers } from '../../api/userApi';
-import useUpdateUser from '../../hooks/useUser';
 import CustomModal from '../../components/Modal';
 import { useInvite } from '../../hooks/useAuth';
 import Heading from '../../components/elements/Heading';
+import { useUpdateUser } from '../../hooks/useUser';
 
 const Users = () => {
   const navigate = useNavigate();
