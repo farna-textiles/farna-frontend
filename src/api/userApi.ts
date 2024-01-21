@@ -42,3 +42,9 @@ export const getUserById = async (id: number, data = {}) => {
 export const changePassword = async (data = {}) => {
   return handleApiCall(api.put, API_URLS.AUTH_CHANGE_PASSWORD, data);
 };
+
+export const deleteUser = async (id: number, data = {}) => {
+  const apiUrl = API_URLS.DELETE_USER.replace(':id', String(id));
+
+  return handleApiCall(api.delete, apiUrl, data);
+};

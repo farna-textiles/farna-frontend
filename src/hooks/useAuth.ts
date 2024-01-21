@@ -100,8 +100,11 @@ export const useConfirm = () => {
 };
 
 export const useInvite = () => {
+  const queryClient = useQueryClient();
+
   return useMutation(invite, {
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['Users']);
       notifySuccess('User Invited Succesfully');
     },
 
