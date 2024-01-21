@@ -21,7 +21,9 @@ export const useSignUp = () => {
       notifySuccess(data.message);
     },
     onError: (error: ErrorResponse) => {
-      notifyError(error.message);
+      notifyError(
+        typeof error.message === 'object' ? error.message[0] : error.message
+      );
     },
   });
 };

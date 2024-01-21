@@ -10,14 +10,15 @@ export const getAllCurrencyUnits = async (
   pageSize?: number,
   searchQuery?: string
 ): Promise<PaginatedResponse<CurrencyUnit>> => {
-  const response = await api.get(API_URLS.CURRENCY_UNITS.ALL, {
+  const response = await handleApiCall(api.get, API_URLS.CURRENCY_UNITS.ALL, {
     params: {
       limit: pageSize,
       page: page + 1,
       searchTerm: searchQuery,
     },
-  });
-  return response.data;
+  })
+
+  return response;
 };
 
 export const createCurrencyUnit = async (currencyUnit: CurrencyUnit) => {
