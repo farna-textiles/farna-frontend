@@ -22,6 +22,8 @@ export const handleApiCall = async <T>(
       error?.response?.data?.message === 'Unauthorized' &&
       !hasCookieToken()
     ) {
+      notifyError('Session expired. Please sign in again.');
+
       localStorage.clear();
       window.location.href = '/signin';
     }
