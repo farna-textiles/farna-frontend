@@ -21,7 +21,9 @@ export const useSignUp = () => {
       notifySuccess(data.message);
     },
     onError: (error: ErrorResponse) => {
-      notifyError(error.message);
+      notifyError(
+        typeof error.message === 'object' ? error.message[0] : error.message
+      );
     },
   });
 };
@@ -100,8 +102,11 @@ export const useConfirm = () => {
 };
 
 export const useInvite = () => {
+  const queryClient = useQueryClient();
+
   return useMutation(invite, {
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['Users']);
       notifySuccess('User Invited Succesfully');
     },
 

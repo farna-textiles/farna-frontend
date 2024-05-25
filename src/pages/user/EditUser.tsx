@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { useQuery } from '@tanstack/react-query';
 import { getUserById } from '../../api/userApi';
 import { UpdateUserRequest } from '../../interfaces';
-import useUpdateUser from '../../hooks/useUser';
+import { useUpdateUser } from '../../hooks/useUser';
 
 const EditUser = () => {
   const { id: userId } = useParams();

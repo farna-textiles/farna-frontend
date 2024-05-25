@@ -9,14 +9,14 @@ export const getAllUsers = async (
   pageSize: number,
   searchQuery: string
 ): Promise<PaginatedResponse<User>> => {
-  const response = await api.get(API_URLS.ALL_USERS, {
+  const response = await handleApiCall(api.get, API_URLS.ALL_USERS, {
     params: {
       limit: pageSize,
       page: page + 1,
       searchTerm: searchQuery,
     },
   });
-  return response.data;
+  return response;
 };
 
 export const getAllUser = async (data: { confirmationToken: string }) => {
@@ -37,4 +37,14 @@ export const getUserById = async (id: number, data = {}) => {
   const apiUrl = API_URLS.GET_USER_BY_ID.replace(':id', String(id));
 
   return handleApiCall(api.get, apiUrl, data);
+};
+
+export const changePassword = async (data = {}) => {
+  return handleApiCall(api.put, API_URLS.AUTH_CHANGE_PASSWORD, data);
+};
+
+export const deleteUser = async (id: number, data = {}) => {
+  const apiUrl = API_URLS.DELETE_USER.replace(':id', String(id));
+
+  return handleApiCall(api.delete, apiUrl, data);
 };

@@ -9,7 +9,7 @@ import {
   createStyles,
 } from '@mantine/core';
 
-import { IconChevronRight } from '@tabler/icons-react';
+import { IconChevronRight, IconPassword } from '@tabler/icons-react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -17,6 +17,7 @@ import { ListItemIcon } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { logout } from '../../services/authService';
+import { Link } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
   user: {
@@ -123,6 +124,14 @@ const UserButton = ({
           horizontal: 'left',
         }}
       >
+        <Link to="/change-password">
+          <MenuItem>
+            <ListItemIcon>
+              <IconPassword fontSize="small" />
+            </ListItemIcon>
+            Change Password
+          </MenuItem>
+        </Link>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <LogoutIcon fontSize="small" />

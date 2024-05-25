@@ -146,8 +146,7 @@ const EditCustomer = () => {
         title: 'Delete',
         onClick: (contactId: number) => {
           const updatedContacts = editedCustomer.contacts.filter(
-            (contact, index) =>
-              contact.id ? contact.id !== contactId : index !== contactId
+            (contact) => contact.id !== contactId || contact.id !== undefined
           );
           const updatedSampleObject = {
             ...editedCustomer,
@@ -164,9 +163,9 @@ const EditCustomer = () => {
     columnName: 'Main Contact',
     type: 'radio',
     valueGetter: (item) => !!item.isMainContact,
-    onChange: (contactId) => {
-      const updatedContacts = editedCustomer.contacts.map((contact, index) =>
-        contact.id === contactId || contactId === index
+    onChange: (contactId, checked) => {
+      const updatedContacts = editedCustomer.contacts.map((contact) =>
+        contact.id === contactId || (contactId === undefined && !checked)
           ? { ...contact, isMainContact: true }
           : { ...contact, isMainContact: false }
       );

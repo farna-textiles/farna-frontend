@@ -18,6 +18,7 @@ import {
   IconPackage,
   IconShoppingCart,
   IconLogout,
+  IconSettings,
 } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { logout } from '../../services/authService';
@@ -86,6 +87,12 @@ const SwipeableTemporaryDrawer = () => {
       </List>
       <Divider />
       <List sx={{ marginTop: '200px' }}>
+        <ListItemButton component={Link} to="/change-password">
+          <ListItemIcon sx={{ color: 'error.main' }}>
+            <IconSettings />
+          </ListItemIcon>
+          <ListItemText primary="Change Password" />
+        </ListItemButton>
         <ListItemButton onClick={handleLogout}>
           <ListItemIcon sx={{ color: 'error.main' }}>
             <IconLogout />

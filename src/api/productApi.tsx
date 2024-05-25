@@ -9,14 +9,15 @@ export const getAllProducts = async (
   pageSize: number,
   searchQuery: string
 ): Promise<PaginatedResponse<Product>> => {
-  const response = await api.get(API_URLS.Products.ALL_PRODUCTS, {
+  const response = handleApiCall(api.get, API_URLS.Products.ALL_PRODUCTS, {
     params: {
       limit: pageSize,
       page: page + 1,
       searchTerm: searchQuery,
     },
   });
-  return response.data;
+
+  return response;
 };
 
 export const getProducts = async (

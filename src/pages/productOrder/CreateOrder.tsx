@@ -37,6 +37,7 @@ import { getAllPaymentTypes } from '../../api/paymentMethodApi';
 import { notifyError } from '../../lib/utils';
 import Heading from '../../components/elements/Heading';
 import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
+import EndUsesList from '../product/component/EndUsesList';
 
 const headerCellStyle = {
   backgroundColor: '#3F9FEB',
@@ -198,6 +199,7 @@ const CreateOrder: React.FC = () => {
                 handleOnChange={() => formik.setFieldValue('customerId', null)}
                 placeholder="Search for a customer..."
                 itemToString={(customer: Customer) => customer.businessName}
+                itemToShow={(customer: Customer) => customer.businessName}
               />
               {formik.touched.customerId && formik.errors.customerId && (
                 <FormHelperText error>
@@ -365,7 +367,22 @@ const CreateOrder: React.FC = () => {
             queryFn={getProducts}
             onSelect={handleSelectProduct}
             placeholder="Search for a product..."
-            itemToString={(customer: ProductOrderType) => customer.lotNo}
+            itemToShow={(productOrder: ProductOrderType) => (
+              <div className="px-5 w-full border-gray-300 transition duration-300 ease-in-out transform hover:scale-105">
+                <div className="flex justify-between items-center">
+                  <div className="text-lg text-gray-800">
+                    {productOrder.denier} &bull; {productOrder.lotNo} &bull;{' '}
+                    {productOrder.noOfFilaments}
+                  </div>
+                  <div className="text-gray-500">
+                    <EndUsesList endUses={productOrder.endUses} />
+                  </div>
+                </div>
+              </div>
+            )}
+            itemToString={(productOrder: ProductOrderType) =>
+              productOrder.lotNo
+            }
           />
           <Tooltip title="Create new Product">
             <IconButton

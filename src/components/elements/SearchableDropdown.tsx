@@ -15,6 +15,7 @@ interface SearchDropdownProps<T> {
   queryFn: (pageParam: number, query: string) => Promise<any>;
   onSelect: (item: T | null) => void;
   placeholder?: string;
+  itemToShow: (item: T) => React.ReactNode;
   itemToString: (item: T) => string;
   handleOnChange?: () => void;
   type: string;
@@ -28,6 +29,7 @@ const SearchDropdown = <T extends { id: number }>({
   itemToString,
   defaultValue,
   handleOnChange,
+  itemToShow,
   type,
 }: SearchDropdownProps<T>) => {
   const [inputValue, setInputValue] = useState<string>(defaultValue ?? '');
@@ -120,7 +122,7 @@ const SearchDropdown = <T extends { id: number }>({
                         setIsFocused(false);
                       }}
                     >
-                      {itemToString(item)}
+                      {itemToShow(item)}
                     </ListItemButton>
                   </ListItem>
                 ))}
