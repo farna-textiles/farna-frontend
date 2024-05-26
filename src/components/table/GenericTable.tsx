@@ -124,6 +124,7 @@ const GenericTable = <T extends Record<string, unknown>>({
   };
 
   const getColumnValue = (item: T, column: TableColumn<T>): React.ReactNode => {
+
     if (typeof column.field === 'string' && column.field.includes('.')) {
       const [firstKey, secondKey] = (column.field as string).split('.');
       if (column.format) {
@@ -131,13 +132,20 @@ const GenericTable = <T extends Record<string, unknown>>({
           item[firstKey as keyof T][secondKey as keyof T[keyof T]]
         );
       }
+      console.log('yaaha', item[firstKey as keyof T][
+        secondKey as keyof T[keyof T]
+      ] as ReactNode)
+      console.log('yaaha', column.field)
       return item[firstKey as keyof T][
         secondKey as keyof T[keyof T]
       ] as ReactNode;
     }
+
+
     if (column.format) {
       return column.format(item[column.field]);
     }
+
     return item[column.field] as React.ReactNode;
   };
 

@@ -62,25 +62,31 @@ const CreateCustomer = () => {
         country: '',
         postalCode: '',
       },
+      billingAddress: ''
     }),
     []
   );
 
+  // const contactValidationSchema = Yup.object().shape({
+  //   name: Yup.string().required('Name is required.'),
+  //   designation: Yup.string().required('Designation is required.'),
+  //   contactNumber: Yup.string()
+  //     .required('Contact number is required.')
+  //     .matches(/^(\+\d{1,3}[-\s]?)?\d{6,14}$/, 'Contact number is not valid'),
+  //   address: Yup.object().shape({
+  //     street: Yup.string().required('Street is required.'),
+  //     city: Yup.string().required('City is required.'),
+  //     state: Yup.string().required('State is required.'),
+  //     country: Yup.string().required('Country is required.'),
+  //     postalCode: Yup.string()
+  //       .required('Postal code is required.')
+  //       .matches(/^\d{5}$/, 'Invalid postal code. Must be 5 digits.'),
+  //   }),
+  // });
+
   const contactValidationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required.'),
-    designation: Yup.string().required('Designation is required.'),
-    contactNumber: Yup.string()
-      .required('Contact number is required.')
-      .matches(/^(\+\d{1,3}[-\s]?)?\d{6,14}$/, 'Contact number is not valid'),
-    address: Yup.object().shape({
-      street: Yup.string().required('Street is required.'),
-      city: Yup.string().required('City is required.'),
-      state: Yup.string().required('State is required.'),
-      country: Yup.string().required('Country is required.'),
-      postalCode: Yup.string()
-        .required('Postal code is required.')
-        .matches(/^\d{5}$/, 'Invalid postal code. Must be 5 digits.'),
-    }),
+
   });
 
   const contactFields: FieldConfig<Contact>[] = useMemo(
@@ -93,6 +99,7 @@ const CreateCustomer = () => {
       { label: 'State', name: 'address.state' },
       { label: 'Country', name: 'address.country' },
       { label: 'Postal Code', name: 'address.postalCode' },
+      { label: 'Full Billing Address', name: 'billingAddress' },
     ],
     []
   );
@@ -110,6 +117,9 @@ const CreateCustomer = () => {
           return `${street}, ${city} - ${postalCode}`;
         },
       },
+      {
+        field: 'billingAddress', label: 'Billing Address'
+      }
     ],
     []
   );

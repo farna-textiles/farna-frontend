@@ -137,6 +137,7 @@ export interface OrderUpdateData {
   }[];
   shipmentType?: string;
   PI_number?: string;
+  note?:string;
   paymentTypeId?: number;
   currencyUnitId?: number;
   customerId?: number;
@@ -174,6 +175,7 @@ export interface Contact {
   designation: string;
   contactNumber: string;
   address?: Address;
+  billingAddress: string;
   isMainContact?: boolean;
 }
 
@@ -335,6 +337,7 @@ export interface Order {
   validity: string;
   shipmentType: string;
   PI_number: string;
+  note:string;
   paymentType: PaymentMethod;
   currencyUnit: CurrencyUnit;
   customer: Customer;

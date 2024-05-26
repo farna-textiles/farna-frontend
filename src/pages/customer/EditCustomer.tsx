@@ -31,6 +31,7 @@ const initialContactState: Omit<Contact, 'id'> & { id?: number } = {
     country: '',
     postalCode: '',
   },
+  billingAddress: ''
 };
 
 const EditCustomer = () => {
@@ -108,6 +109,7 @@ const EditCustomer = () => {
     { label: 'State', name: 'address.state' },
     { label: 'Country', name: 'address.country' },
     { label: 'Postal Code', name: 'address.postalCode' },
+    { label: 'Full Billing Address', name: 'billingAddress' },
   ];
 
   const columns: TableColumn<Contact>[] = useMemo(
@@ -115,6 +117,9 @@ const EditCustomer = () => {
       { field: 'name', label: 'Name' },
       { field: 'designation', label: 'Designation' },
       { field: 'contactNumber', label: 'Contact #' },
+      {
+        field: 'billingAddress', label: 'Billing Address'
+      },
       {
         field: 'address',
         label: 'Address',
@@ -146,8 +151,7 @@ const EditCustomer = () => {
         title: 'Delete',
         onClick: (contactId: number) => {
           const updatedContacts = editedCustomer.contacts.filter(
-            (contact, index) =>
-              contact.id ? contact.id !== contactId : index !== contactId
+            (contact) => contact.id !== contactId || contact.id !== undefined
           );
           const updatedSampleObject = {
             ...editedCustomer,
@@ -164,9 +168,9 @@ const EditCustomer = () => {
     columnName: 'Main Contact',
     type: 'radio',
     valueGetter: (item) => !!item.isMainContact,
-    onChange: (contactId) => {
-      const updatedContacts = editedCustomer.contacts.map((contact, index) =>
-        contact.id === contactId || contactId === index
+    onChange: (contactId, checked) => {
+      const updatedContacts = editedCustomer.contacts.map((contact) =>
+        contact.id === contactId || (contactId === undefined && !checked)
           ? { ...contact, isMainContact: true }
           : { ...contact, isMainContact: false }
       );

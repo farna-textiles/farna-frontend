@@ -57,6 +57,7 @@ const validationSchema = yup.object({
     ),
   shipmentType: yup.string().required('Shipment Type is required'),
   PI_number: yup.string().required('PI Number is required'),
+  note: yup.string(),
   paymentTypeId: yup.number().required('Payment Method is required'),
   currencyUnitId: yup.number().required('Currency is required'),
   customerId: yup.number().required('Customer is required'),
@@ -101,6 +102,7 @@ const EditOrder: React.FC = () => {
       validity: orderData.validity,
       shipmentType: orderData.shipmentType,
       PI_number: orderData.PI_number,
+      note: orderData.note,
       paymentTypeId: orderData.paymentType.id,
       currencyUnitId: orderData.currencyUnit.id,
       customerId: orderData.customer.id,
@@ -298,6 +300,21 @@ const EditOrder: React.FC = () => {
                 formik.touched.PI_number && Boolean(formik.errors.PI_number)
               }
               helperText={formik.touched.PI_number && formik.errors.PI_number}
+            />
+          </div>
+          <div>
+            <TextField
+              label="Note"
+              placeholder='Type the note regarding booking.'
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={7}
+              margin="dense"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.note}
+              autoComplete="off"
             />
           </div>
         </section>

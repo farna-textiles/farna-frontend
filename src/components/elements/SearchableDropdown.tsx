@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import {
   TextField,
@@ -10,6 +10,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { throttle } from 'lodash';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 interface SearchDropdownProps<T> {
   queryFn: (pageParam: number, query: string) => Promise<any>;
@@ -33,6 +34,7 @@ const SearchDropdown = <T extends { id: number }>({
   const [inputValue, setInputValue] = useState<string>(defaultValue ?? '');
   const [isFocused, setIsFocused] = useState(false);
   const listRef = useRef<HTMLUListElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { fetchNextPage, hasNextPage, isFetchingNextPage, data } =
     useInfiniteQuery({
@@ -66,7 +68,7 @@ const SearchDropdown = <T extends { id: number }>({
       if (
         hasNextPage &&
         event.currentTarget.scrollHeight - event.currentTarget.scrollTop ===
-          event.currentTarget.clientHeight
+        event.currentTarget.clientHeight
       ) {
         fetchNextPage();
       }
@@ -74,28 +76,55 @@ const SearchDropdown = <T extends { id: number }>({
     [hasNextPage, fetchNextPage]
   );
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      setIsFocused(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const toggleFocus = () => {
+    if (isFocused) {
+      setIsFocused(false)
+    }
+    else {
+      setIsFocused(true)
+    }
+  };
+
   return (
-    <Grid container spacing={1} style={{ position: 'relative' }}>
+    <Grid container spacing={1} style={{ position: 'relative' }} ref={containerRef}>
       <Grid item xs={12} style={{ position: 'relative' }}>
-        <TextField
-          label={type}
-          fullWidth
-          variant="outlined"
-          value={inputValue}
-          onChange={(e) => {
-            const { value } = e.target;
-            setInputValue(value);
-            setSearchTermThrottled(value);
-            onSelect(null);
-          }}
-          onFocus={() => setIsFocused(true)}
-          placeholder={placeholder}
-          autoComplete="off"
-          onClick={() => {
-            if (handleOnChange) handleOnChange();
-            setInputValue('');
-          }}
-        />
+        <div className='flex gap-x-2 justify-start items-center'>
+          <TextField
+            label={type}
+            fullWidth
+            variant="standard"
+            value={inputValue}
+            onChange={(e) => {
+              const { value } = e.target;
+              setInputValue(value);
+              setSearchTermThrottled(value);
+              onSelect(null);
+            }}
+            onFocus={toggleFocus}
+            placeholder={placeholder}
+            autoComplete="off"
+            onClick={() => {
+              if (handleOnChange) handleOnChange();
+              setIsFocused(true);
+            }}
+          />
+          <button type="button" className='flex justify-center items-center' onClick={toggleFocus}>
+            <ArrowDropDownIcon />
+          </button>
+        </div>
         {items.length > 0 && isFocused && (
           <div
             style={{
@@ -114,7 +143,7 @@ const SearchDropdown = <T extends { id: number }>({
                 {items.map((item) => (
                   <ListItem key={item.id}>
                     <ListItemButton
-                      onClick={() => {
+                      onMouseDown={() => {
                         setInputValue(itemToString(item));
                         onSelect(item);
                         setIsFocused(false);
@@ -141,7 +170,7 @@ const SearchDropdown = <T extends { id: number }>({
 SearchDropdown.defaultProps = {
   placeholder: 'Search...',
   defaultValue: '',
-  handleOnChange: () => {},
+  handleOnChange: () => { },
 };
 
 export default SearchDropdown;

@@ -22,6 +22,7 @@ const Products = () => {
       { field: 'validity', label: 'Validity Date' },
       { field: 'shipmentType', label: 'Shipment Type' },
       { field: 'PI_number', label: 'PI Number' },
+      { field: 'note', label: 'Customer Notes' },
     ],
     []
   );

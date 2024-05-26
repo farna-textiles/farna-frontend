@@ -10,14 +10,15 @@ export const getAllCustomers = async (
   pageSize: number,
   searchQuery: string
 ): Promise<PaginatedResponse<Customer>> => {
-  const response = await api.get(API_URLS.ALL_CUSTOMERS, {
+  const response = await handleApiCall(api.get, API_URLS.ALL_CUSTOMERS, {
     params: {
       limit: pageSize,
       page: page + 1,
       searchTerm: searchQuery,
     },
   });
-  return response.data;
+  console.log('res ', response)
+  return response;
 };
 
 export const getCustomers = async (

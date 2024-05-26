@@ -37,6 +37,12 @@ const MainContactCard = ({ mainContact }: { mainContact: Contact }) => {
             Contact #: {mainContact.contactNumber}
           </Typography>
         )}
+        <Divider sx={{ my: 2 }} />
+        {mainContact.billingAddress && (
+          <Typography variant="body2" gutterBottom>
+            Billing Address: {mainContact.billingAddress}
+          </Typography>
+        )}
         {mainContact.address && (
           <Typography variant="body2" sx={{ display: 'block' }}>
             Address:{' '}

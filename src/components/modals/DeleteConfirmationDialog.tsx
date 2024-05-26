@@ -30,7 +30,7 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
         <Button onClick={handleCancelDelete} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleConfirmDelete} color="secondary">
+        <Button onClick={handleConfirmDelete} color="error">
           Delete
         </Button>
       </DialogActions>

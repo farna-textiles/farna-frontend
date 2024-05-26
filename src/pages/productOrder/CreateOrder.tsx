@@ -55,6 +55,7 @@ const validationSchema = yup.object({
     ),
   shipmentType: yup.string().required('Shipment Type is required'),
   PI_number: yup.string(),
+  note: yup.string(),
   paymentTypeId: yup.number().required('Payment Method is required'),
   currencyUnitId: yup.number().required('Currency is required'),
   customerId: yup.number().required('Customer is required'),
@@ -98,6 +99,7 @@ const CreateOrder: React.FC = () => {
       paymentTypeId: null,
       currencyUnitId: defaultCurrencyUnitId,
       customerId: null,
+      note: ''
     },
     enableReinitialize: true,
     validationSchema,
@@ -214,8 +216,8 @@ const CreateOrder: React.FC = () => {
                 rows={7}
                 margin="dense"
                 value={
-                  selectedCustomer?.mainContact?.address
-                    ? `${selectedCustomer.mainContact.address.street}, ${selectedCustomer.mainContact.address.city}, ${selectedCustomer.mainContact.address.state}, ${selectedCustomer.mainContact.address.country}, ${selectedCustomer.mainContact.address.postalCode}`
+                  selectedCustomer?.mainContact?.billingAddress
+                    ? selectedCustomer?.mainContact?.billingAddress
                     : ''
                 }
                 disabled={!!selectedCustomer}
@@ -287,6 +289,22 @@ const CreateOrder: React.FC = () => {
                 formik.touched.PI_number && Boolean(formik.errors.PI_number)
               }
               helperText={formik.touched.PI_number && formik.errors.PI_number}
+            />
+          </div>
+          <div>
+            <TextField
+              name="note"
+              label="Note"
+              placeholder='Type the note regarding booking.'
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={7}
+              margin="dense"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.note}
+              autoComplete="off"
             />
           </div>
         </section>

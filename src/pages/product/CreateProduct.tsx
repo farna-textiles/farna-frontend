@@ -18,20 +18,26 @@ import Heading from '../../components/elements/Heading';
 import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
 import FormFields from '../../components/form/FormFields';
 
+// const validationSchema = Yup.object().shape({
+//   lotNo: Yup.string()
+//     .required('Lot No is required')
+//     .matches(/^[a-zA-Z0-9]+$/, 'Invalid lot number'),
+//   denier: Yup.string().required('Denier is required'),
+//   type: Yup.string()
+//     .required('Type is required')
+//     .matches(/^[a-zA-Z0-9]+$/, 'Invalid type'),
+//   noOfFilaments: Yup.string()
+//     .required('No Of Filaments is required')
+//     .matches(/^[a-zA-Z0-9]+$/, 'Invalid No of Filaments'),
+//   luster: Yup.string().required('Luster is required'),
+// });
+
 const validationSchema = Yup.object().shape({
   lotNo: Yup.string()
     .required('Lot No is required')
     .matches(/^[a-zA-Z0-9]+$/, 'Invalid lot number'),
   denier: Yup.string().required('Denier is required'),
-  type: Yup.string()
-    .required('Type is required')
-    .matches(/^[a-zA-Z0-9]+$/, 'Invalid type'),
-  noOfFilaments: Yup.string()
-    .required('No Of Filaments is required')
-    .matches(/^[a-zA-Z0-9]+$/, 'Invalid No of Filaments'),
-  luster: Yup.string().required('Luster is required'),
 });
-
 const CreateProduct = () => {
   const initialValue: Product = {
     lotNo: '',
@@ -96,7 +102,7 @@ const CreateProduct = () => {
       }
     }
 
-    return () => {};
+    return () => { };
   }, [dropdownRef, fetchNextPage, hasNextPage]);
 
   useEffect(() => {

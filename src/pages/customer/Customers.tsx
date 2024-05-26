@@ -20,6 +20,7 @@ const Customers = () => {
       { field: 'businessName', label: 'Business' },
       { field: 'mainContact.name', label: 'Name' },
       { field: 'mainContact.contactNumber', label: 'Contact #' },
+      { field: 'mainContact.billingAddress', label: 'Billing Address' },
       {
         field: 'mainContact.address',
         label: 'Address',

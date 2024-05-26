@@ -18,16 +18,17 @@ import ShowOrder from '../pages/productOrder/ShowOrder';
 import PaymentMethods from '../pages/payment/PaymentMethods';
 import CurrencyUnit from '../pages/payment/CurrencyUnits';
 import { userInfo } from '../services/authService';
-import WelcomeScreen from '../pages/WelCome';
 
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignUp = lazy(() => import('../pages/SignUp'));
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
-const Profile = lazy(() => import('../pages/Profile'));
+const ChangePassword = lazy(() => import('../pages/user/ChangePassword'));
 const CreateProduct = lazy(() => import('../pages/product/CreateProduct'));
 const EditProduct = lazy(() => import('../pages/product/EditProduct'));
 const EditOrder = lazy(() => import('../pages/productOrder/EditOrder'));
 const EditUser = lazy(() => import('../pages/user/EditUser'));
+const WelcomeScreen = lazy(() => import('../pages/WelCome'));
+
 
 const PageNotFound = lazy(() => import('../pages/PageNotFound'));
 
@@ -78,10 +79,10 @@ export const AppRoutes: React.FC = () => {
           ),
         },
         {
-          path: '/profile',
+          path: '/change-password',
           element: (
-            <AuthRoute path="/profile">
-              <Profile />
+            <AuthRoute path="/change-password">
+              <ChangePassword />
             </AuthRoute>
           ),
         },
