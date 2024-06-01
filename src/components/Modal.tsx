@@ -19,7 +19,7 @@ const CustomeModal = <T extends Record<string, unknown>>({
           variant="h5"
           align="center"
           gutterBottom
-          className="text-2xl font-bold"
+          className="text-2xl font-bold text-black"
         >
           {title}
         </Typography>
