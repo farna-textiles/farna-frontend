@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { InputHTMLAttributes, ReactNode } from 'react';
-import { Schema } from 'yup';
+import { InputHTMLAttributes, ReactNode } from "react";
+import { Schema } from "yup";
 
 export interface FormInputProps {
   id: string;
@@ -104,7 +104,7 @@ export interface Product {
   userId: string;
 }
 
-export type ProductOrderType = Omit<Product, 'id'> & {
+export type ProductOrderType = Omit<Product, "id"> & {
   id: number;
   quantity: number;
   rate: number;
@@ -137,7 +137,7 @@ export interface OrderUpdateData {
   }[];
   shipmentType?: string;
   PI_number?: string;
-  note?:string;
+  note?: string;
   paymentTypeId?: number;
   currencyUnitId?: number;
   customerId?: number;
@@ -236,7 +236,8 @@ export interface GenericTableProps<T> {
   fetchData: (
     page: number,
     pageSize: number,
-    searchQuery: string
+    searchQuery: string,
+    searchKey: string
   ) => Promise<PaginatedResponse<T>>;
 }
 
@@ -252,7 +253,7 @@ export interface SearchBarProps {
 }
 
 export interface AdditionalColumn<T> {
-  type: 'radio' | 'checkbox';
+  type: "radio" | "checkbox";
   onChange: (itemId: number, checked: boolean) => void;
   valueGetter: (item: T) => boolean;
   columnName: string;
@@ -285,7 +286,7 @@ export interface EditContactModalProps<T> {
   onClose: () => void;
   onSave: (editedContact: T) => void;
   fields: FieldConfig<T>[];
-  validationSchema: Schema<Omit<T, 'id'>>;
+  validationSchema: Schema<Omit<T, "id">>;
   title: string;
   submitButton: string;
 }
@@ -337,7 +338,7 @@ export interface Order {
   validity: string;
   shipmentType: string;
   PI_number: string;
-  note:string;
+  note: string;
   paymentType: PaymentMethod;
   currencyUnit: CurrencyUnit;
   customer: Customer;
@@ -351,7 +352,7 @@ export interface CompareRangeType {
   data: number[];
 }
 
-export type DashboardDataFilter = 'orders' | 'earnings' | 'quantity';
+export type DashboardDataFilter = "orders" | "earnings" | "quantity";
 
 export interface PaymentType {
   id: number;

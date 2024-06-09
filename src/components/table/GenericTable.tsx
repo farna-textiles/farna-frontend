@@ -15,6 +15,10 @@ import {
   TableContainer,
   CircularProgress,
   Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { throttle } from 'lodash';
@@ -90,9 +94,10 @@ const GenericTable = <T extends Record<string, unknown>>({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchColumn, setSearchColumn] = useState('businessName');
   const { data: responseData, isLoading } = useQuery(
-    [tableName, page, rowsPerPage, searchQuery],
-    () => fetchData(page, rowsPerPage, searchQuery),
+    [tableName, page, rowsPerPage, searchQuery, searchColumn],
+    () => fetchData(page, rowsPerPage, searchQuery, searchColumn),
     {
       keepPreviousData: true,
     }
@@ -105,6 +110,7 @@ const GenericTable = <T extends Record<string, unknown>>({
     }, 300),
     []
   );
+
 
   const data = responseData?.data;
   const total = responseData?.total;
@@ -153,7 +159,28 @@ const GenericTable = <T extends Record<string, unknown>>({
     <Container>
       <Grid container justifyContent="space-between" spacing={8}>
         <Grid item>
-          <SearchBar onSearch={setSearchTermThrottled} />
+          <div className='flex items-center justify-start gap-x-2'>
+            <SearchBar onSearch={setSearchTermThrottled} />
+
+
+            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+              <InputLabel id="demo-select-small-label">Filter</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={searchColumn}
+                label="Age"
+                onChange={(e) => { setSearchColumn(e.target.value) }}
+              >
+                <MenuItem value="businessName">
+                  Business
+                </MenuItem>
+                <MenuItem value="name">Customer Name</MenuItem>
+                <MenuItem value="contactNumber">Customer Contact No</MenuItem>
+                <MenuItem value="designation">Customer Designation</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
         </Grid>
         {addButtonLabel && (
           <Grid item columnSpacing={100}>

@@ -8,13 +8,15 @@ import api from './axios';
 export const getAllCustomers = async (
   page: number,
   pageSize: number,
-  searchQuery: string
+  searchQuery: string,
+  searchKey: string
 ): Promise<PaginatedResponse<Customer>> => {
   const response = await handleApiCall(api.get, API_URLS.ALL_CUSTOMERS, {
     params: {
       limit: pageSize,
       page: page + 1,
       searchTerm: searchQuery,
+      searchKey: searchKey
     },
   });
   console.log('res ', response)
@@ -24,6 +26,7 @@ export const getAllCustomers = async (
 export const getCustomers = async (
   page: number,
   searchQuery: string,
+  searchKey: string,
   pageSize = 5
 ): Promise<PaginatedResponse<Customer>> => {
   const response = await api.get(API_URLS.ALL_CUSTOMERS, {
@@ -31,6 +34,7 @@ export const getCustomers = async (
       limit: pageSize,
       page,
       searchTerm: searchQuery,
+      searchKey: searchKey
     },
   });
   return response.data;
