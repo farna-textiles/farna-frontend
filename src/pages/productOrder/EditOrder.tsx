@@ -39,6 +39,7 @@ import { getAllCurrencyUnits } from '../../api/currencyUnitApi';
 import { getAllPaymentTypes } from '../../api/paymentMethodApi';
 import Heading from '../../components/elements/Heading';
 import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
+import CustomerSearchDropdown from '../../components/elements/CustomerSearchableDropdown';
 
 const headerCellStyle = {
   backgroundColor: '#3F9FEB',
@@ -200,7 +201,7 @@ const EditOrder: React.FC = () => {
         <section className="grid md:grid-cols-2 gap-6 mb-6">
           <div>
             <FormControl fullWidth variant="outlined" margin="dense">
-              <SearchDropdown<Customer>
+              <CustomerSearchDropdown<Customer>
                 type="Customer"
                 queryFn={getCustomers}
                 onSelect={(customer: Customer | null) => {
