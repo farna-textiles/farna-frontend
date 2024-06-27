@@ -99,15 +99,15 @@ const CustomerSearchDropdown = <T extends { id: number }>({
     }
   };
 
-  const [focusedIndex, setFocusedIndex] = useState(-1);
 
-  const handleKeyDown = (event: any, index: any, item: any) => {
+
+  const handleKeyDown = (event: any, item: any) => {
     if (event.key === 'Enter') {
       setInputValue(itemToString(item));
       onSelect(item);
       setIsFocused(false);
     } else if (event.key === 'Tab') {
-      setFocusedIndex(index);
+
     }
   };
 
@@ -153,7 +153,7 @@ const CustomerSearchDropdown = <T extends { id: number }>({
                 style={{ maxHeight: '200px', overflowY: 'auto' }}
                 onScroll={handleScroll}
               >
-                {items.map((item, index) => (
+                {items.map((item) => (
                   <ListItem key={item.id}>
                     <ListItemButton
                       onMouseDown={() => {
@@ -161,7 +161,7 @@ const CustomerSearchDropdown = <T extends { id: number }>({
                         onSelect(item);
                         setIsFocused(false);
                       }}
-                      onKeyDown={(event) => handleKeyDown(event, index, item)}
+                      onKeyDown={(event) => handleKeyDown(event, item)}
                     >
                       {itemToString(item)}
                     </ListItemButton>

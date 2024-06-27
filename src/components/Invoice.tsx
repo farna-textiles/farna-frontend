@@ -6,7 +6,6 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
   (
     {
       order: {
-        id,
         orderProducts,
         customer,
         salesReceiptDate,
