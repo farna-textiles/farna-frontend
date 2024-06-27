@@ -98,6 +98,18 @@ const SearchDropdown = <T extends { id: number }>({
     }
   };
 
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+
+  const handleKeyDown = (event: any, index: any, item: any) => {
+    if (event.key === 'Enter') {
+      setInputValue(itemToString(item));
+      onSelect(item);
+      setIsFocused(false);
+    } else if (event.key === 'Tab') {
+      setFocusedIndex(index);
+    }
+  };
+
   return (
     <Grid container spacing={1} style={{ position: 'relative' }} ref={containerRef}>
       <Grid item xs={12} style={{ position: 'relative' }}>
@@ -140,7 +152,7 @@ const SearchDropdown = <T extends { id: number }>({
                 style={{ maxHeight: '200px', overflowY: 'auto' }}
                 onScroll={handleScroll}
               >
-                {items.map((item) => (
+                {items.map((item, index) => (
                   <ListItem key={item.id}>
                     <ListItemButton
                       onMouseDown={() => {
@@ -148,6 +160,7 @@ const SearchDropdown = <T extends { id: number }>({
                         onSelect(item);
                         setIsFocused(false);
                       }}
+                      onKeyDown={(event) => handleKeyDown(event, index, item)}
                     >
                       {itemToString(item)}
                     </ListItemButton>

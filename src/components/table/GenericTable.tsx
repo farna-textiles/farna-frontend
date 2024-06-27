@@ -31,6 +31,8 @@ import {
 } from '../../interfaces';
 import SearchBar from '../elements/SearchBar';
 
+import { format } from 'date-fns';
+
 const Container = styled('div')(({ theme }) => ({
   marginTop: theme.spacing(2),
   marginBottom: theme.spacing(2),
@@ -129,7 +131,11 @@ const GenericTable = <T extends Record<string, unknown>>({
     setPage(0);
   };
 
-  const getColumnValue = (item: T, column: TableColumn<T>): React.ReactNode => {
+  const getColumnValue = <T,>(item: T, column: TableColumn<T>): React.ReactNode => {
+    const formatDate = (dateString: string): string => {
+      const date = new Date(dateString);
+      return format(date, 'dd/MM/yyyy');
+    };
 
     if (typeof column.field === 'string' && column.field.includes('.')) {
       const [firstKey, secondKey] = (column.field as string).split('.');
@@ -138,18 +144,22 @@ const GenericTable = <T extends Record<string, unknown>>({
           item[firstKey as keyof T][secondKey as keyof T[keyof T]]
         );
       }
-      console.log('yaaha', item[firstKey as keyof T][
-        secondKey as keyof T[keyof T]
-      ] as ReactNode)
-      console.log('yaaha', column.field)
+
+      if (secondKey === 'salesReceiptDate' || secondKey === 'validity') {
+        return formatDate(item[firstKey as keyof T][secondKey as keyof T[keyof T]] as unknown as string);
+      }
+
       return item[firstKey as keyof T][
         secondKey as keyof T[keyof T]
-      ] as ReactNode;
+      ] as React.ReactNode;
     }
-
 
     if (column.format) {
       return column.format(item[column.field]);
+    }
+
+    if (column.field === 'salesReceiptDate' || column.field === 'validity') {
+      return formatDate(item[column.field] as unknown as string);
     }
 
     return item[column.field] as React.ReactNode;

@@ -18,6 +18,7 @@ const Products = () => {
   const columns: TableColumn<Order>[] = useMemo(
     () => [
       { field: 'id', label: 'Order ID' },
+      { field: 'customer.businessName', label: 'Customer Name' },
       { field: 'salesReceiptDate', label: 'Sales Receipt Date' },
       { field: 'validity', label: 'Validity Date' },
       { field: 'shipmentType', label: 'Shipment Type' },

@@ -29,9 +29,8 @@ const useStyles = createStyles((theme) => ({
     padding: theme.spacing.md,
     paddingTop: 0,
     color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-    borderBottom: `${rem(1)} solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
+    borderBottom: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+      }`,
   },
 
   logo: {
@@ -51,9 +50,8 @@ const useStyles = createStyles((theme) => ({
   footer: {
     marginLeft: `calc(${theme.spacing.md} * -1)`,
     marginRight: `calc(${theme.spacing.md} * -1)`,
-    borderTop: `${rem(1)} solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
+    borderTop: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+      }`,
   },
 }));
 
@@ -84,7 +82,7 @@ const Sidebar = () => {
         label: 'Product Orders',
         icon: IconShoppingCart,
         links: [
-          { label: 'Recent Orders', link: '/orders' },
+          { label: 'History', link: '/orders' },
           { label: 'Create Order', link: '/order/new' },
         ],
       },

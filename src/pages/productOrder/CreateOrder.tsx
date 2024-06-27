@@ -115,7 +115,7 @@ const CreateOrder: React.FC = () => {
           orderProducts: selectedProducts.map((product: ProductOrderType) => {
             return {
               productId: product.id,
-              quantity: parseInt(product.quantity.toString(), 10),
+              quantity: parseFloat(product.quantity.toString()),
               rate: parseFloat(product.rate.toString()),
             };
           }),
@@ -384,7 +384,7 @@ const CreateOrder: React.FC = () => {
             queryFn={getProducts}
             onSelect={handleSelectProduct}
             placeholder="Search for a product..."
-            itemToString={(customer: ProductOrderType) => customer.lotNo}
+            itemToString={(product: ProductOrderType) => product.denier}
           />
           <Tooltip title="Create new Product">
             <IconButton
@@ -424,7 +424,7 @@ const CreateOrder: React.FC = () => {
                   {selectedProducts.map((product) => (
                     <ProductRow
                       fields={fields}
-                      key={product.lotNo}
+                      key={product.denier}
                       product={product}
                       currency={selectedCurrencySymbol ?? ''}
                       onProductUpdate={handleProductUpdate}

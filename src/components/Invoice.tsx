@@ -1,10 +1,12 @@
 import React from 'react';
 import { Order } from '../interfaces';
+import { format } from 'date-fns';
 
 const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
   (
     {
       order: {
+        id,
         orderProducts,
         customer,
         salesReceiptDate,
@@ -13,6 +15,7 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
         shipmentType,
         currencyUnit,
         PI_number,
+        note
       },
     },
     ref
@@ -21,6 +24,11 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
       (total, product) => total + product.quantity * product.rate,
       0
     );
+
+    const formatDate = (dateString: string): string => {
+      const date = new Date(dateString);
+      return format(date, 'dd/MM/yyyy');
+    };
 
     return (
       <div
@@ -47,7 +55,7 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
           <div>
             <div className="text-left mb-6 flex">
               <div className="text-2xs text-gray-400">DATE</div>
-              <div className="text-base ml-3">{salesReceiptDate}</div>
+              <div className="text-base ml-3">{formatDate(salesReceiptDate)}</div>
             </div>
             <div className="text-2xs text-gray-400">PAYMENT METHOD</div>
             <div className="text-base">{paymentType.name}</div>
@@ -56,7 +64,7 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
         <div className="flex justify-between mb-8">
           <div>
             <div className="text-2xs text-gray-400">VALIDITY</div>
-            <div className="text-base uppercase text-black-500">{validity}</div>
+            <div className="text-base uppercase text-black-500">{formatDate(validity)}</div>
           </div>
           <div>
             <div className="text-2xs text-gray-400">SHIPMENT</div>
@@ -71,30 +79,50 @@ const Invoice = React.forwardRef<HTMLDivElement, { order: Order }>(
             </div>
           </div>
         </div>
+        <div>
+          <div className='flex flex-col mb-8 justify-start items-start'>
+            <div className="text-2xs text-gray-400">Customer Notes</div>
+            <div className="text-base uppercase text-black-500">
+              {note ? note : 'No Customer Notes Available'}
+            </div>
+          </div>
+        </div>
         <div className="flex items-center justify-between  mb-2 text-green-600 bg-gray-200 p-2 ">
-          <div className="w-1/6 ml-1   font-medium">PRODUCTS</div>
-          <div className="w-1/6  font-medium">DESCRIPTION</div>
-          <div className="w-1/6  font-medium">QTY</div>
-          <div className="w-1/6  font-medium">RATE</div>
-          <div className="w-1/6  font-medium">AMOUNT</div>
+          <div className="w-1/6 text-[12px]  font-medium">Transaction No.</div>
+          <div className="w-1/6  text-[12px] font-medium">Date</div>
+          <div className="w-1/6  text-[12px] font-medium">Product</div>
+          <div className="w-1/6 text-[12px] font-medium">Lot #</div>
+          <div className="w-1/6 text-[12px] font-medium">Description</div>
+          <div className="w-1/6 text-[12px] font-medium">PI #</div>
+          <div className="w-1/6 text-[12px] font-medium">QTY</div>
+          <div className="w-1/6 text-[12px] font-medium">Salesprice</div>
+          <div className="w-1/6 text-[12px] font-medium">Amount</div>
         </div>
         {orderProducts.map(({ id, product, quantity, rate }) => (
           <div key={id} className="flex justify-between mb-4">
-            <div className="w-1/6">
-              {product.denier} Lot #{product.lotNo}
+            <div className="w-1/6 text-[12px] ml-1">{id}</div>
+            <div className="w-1/6 text-[12px]">
+              {formatDate(validity)}
+
+            </div>
+            <div className="w-1/6 text-[12px]">
+              {`${product.denier}`}
+            </div>
+            <div className="w-1/6 text-[12px]">
+              {`${product.lotNo}`}
             </div>
             <div className="w-1/6">
-              {`${product.luster} | ${product.denier} | ${product.noOfFilaments} `}
               {product.endUses.map((endUse, index) => (
-                <span key={endUse.name}>
+                <span key={endUse.name} className='text-[12px]'>
                   {endUse.name}
                   {index !== product.endUses.length - 1 && ' | '}
                 </span>
               ))}
             </div>
-            <div className="w-1/6">{quantity}</div>
-            <div className="w-1/6">{rate}</div>
-            <div className="w-1/6">{(quantity * rate).toFixed(2)}</div>
+            <div className="w-1/6 text-[12px]">{PI_number}</div>
+            <div className="w-1/6 text-[12px]">{quantity}</div>
+            <div className="w-1/6 text-[12px]">{rate}</div>
+            <div className="w-1/6 text-[12px]">{(quantity * rate).toFixed(2)}</div>
           </div>
         ))}
 
