@@ -8,6 +8,7 @@ import {
 } from '../interfaces';
 import { handleApiCall } from '../lib/utils';
 import api from './axios';
+import { toast } from 'react-toastify';
 
 export const createOrder = async (data: Omit<ProductOrderType, 'id'>) => {
   return handleApiCall(api.post, API_URLS.ORDER_METHODS.CREATE, data);
@@ -16,13 +17,22 @@ export const createOrder = async (data: Omit<ProductOrderType, 'id'>) => {
 export const getAllOrders = async (
   page: number,
   pageSize: number,
-  searchQuery: string
+  searchQuery: string,
+  sortby: string,
+  reportPeriod?: string,
+  start_date?: string,
+  end_date?: string
 ): Promise<PaginatedResponse<Order>> => {
+  console.log('sortBy', sortby);
   const response = await api.get(API_URLS.ORDER_METHODS.ALL, {
     params: {
       limit: pageSize,
       page: page + 1,
       searchTerm: searchQuery,
+      sort_by: sortby,
+      report_period: reportPeriod,
+      start_date: start_date,
+      end_date: end_date,
     },
   });
   return response.data;

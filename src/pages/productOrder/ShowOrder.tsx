@@ -22,13 +22,24 @@ const ShowOrder: React.FC = () => {
       'background-color: white; padding: 4px; width: 575pt; height: auto; font-family: serif; overflow-y: auto;'
     );
 
+    // Prompt the user to enter a file name
+    const fileName = prompt('Enter the file name', 'report');
+    if (!fileName) {
+      // If user cancels the prompt, exit the function
+      invoiceDiv?.setAttribute('style', originalStyle || '');
+      return;
+    }
+
+    // Inform the user about browser settings
+    alert('If you are not prompted to save the file, please adjust your browser settings to ask where to save each file before downloading.');
+
     // eslint-disable-next-line new-cap
     const report = new jsPDF('portrait', 'pt', 'a4');
     const invoice = document.querySelector('#pdf-invoice');
     if (!invoice) return;
     report.html(invoice as HTMLElement, {
       callback(pdf) {
-        pdf.save('report.pdf');
+        pdf.save(`${fileName}.pdf`);
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         invoiceDiv?.setAttribute('style', originalStyle!);
       },
@@ -38,6 +49,7 @@ const ShowOrder: React.FC = () => {
       html2canvas: { scale: 0.75 },
     });
   };
+
 
   return (
     <div className="container mx-auto p-4">

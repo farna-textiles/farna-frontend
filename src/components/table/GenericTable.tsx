@@ -33,6 +33,11 @@ import SearchBar from '../elements/SearchBar';
 
 import { format } from 'date-fns';
 
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 const Container = styled('div')(({ theme }) => ({
   marginTop: theme.spacing(2),
   marginBottom: theme.spacing(2),
@@ -97,9 +102,12 @@ const GenericTable = <T extends Record<string, unknown>>({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchColumn, setSearchColumn] = useState('businessName');
+  const [start_date, setStartDate] = useState<any>(null);
+  const [end_date, setEndDate] = useState<any>(null);
+  const [reportPeriod, setReportPeriod] = useState('currentYear');
   const { data: responseData, isLoading } = useQuery(
-    [tableName, page, rowsPerPage, searchQuery, searchColumn],
-    () => fetchData(page, rowsPerPage, searchQuery, searchColumn),
+    [tableName, page, rowsPerPage, searchQuery, searchColumn, reportPeriod, start_date, end_date],
+    () => fetchData(page, rowsPerPage, searchQuery, searchColumn, reportPeriod, start_date, end_date),
     {
       keepPreviousData: true,
     }
@@ -174,7 +182,7 @@ const GenericTable = <T extends Record<string, unknown>>({
 
 
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-              <InputLabel id="demo-select-small-label">Filter</InputLabel>
+              <InputLabel id="demo-select-small-label">Sort By</InputLabel>
               <Select
                 labelId="demo-select-small-label"
                 id="demo-select-small"
@@ -190,6 +198,47 @@ const GenericTable = <T extends Record<string, unknown>>({
                 <MenuItem value="designation">Customer Designation</MenuItem>
               </Select>
             </FormControl>
+
+
+            <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+              <InputLabel id="demo-select-small-label">Report Period</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={reportPeriod}
+                label="Age"
+                onChange={(e) => { setReportPeriod(e.target.value) }}
+              >
+                <MenuItem value="currentMonth">
+                  Current Month
+                </MenuItem>
+                <MenuItem value="previousMonth">Last Month</MenuItem>
+                <MenuItem value="customDate">Custom Date</MenuItem>
+                <MenuItem value="currentYear">Current Year</MenuItem>
+                <MenuItem value="previousYear">Last Year</MenuItem>
+              </Select>
+            </FormControl>
+
+
+          </div>
+          <div>
+            {
+              reportPeriod && reportPeriod === 'customDate' && (
+                <div className='flex justify-start gap-2 mt-2 items-center'>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DatePicker']}>
+                      <DatePicker label="Start Date" value={start_date} onChange={(e) => { setStartDate(e) }} />
+                    </DemoContainer>
+                  </LocalizationProvider>
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DatePicker']}>
+                      <DatePicker label="End Date" value={end_date} onChange={(e) => { setEndDate(e) }} />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+              )
+            }
           </div>
         </Grid>
         {addButtonLabel && (
