@@ -8,7 +8,6 @@ import {
 } from '../interfaces';
 import { handleApiCall } from '../lib/utils';
 import api from './axios';
-import { toast } from 'react-toastify';
 
 export const createOrder = async (data: Omit<ProductOrderType, 'id'>) => {
   return handleApiCall(api.post, API_URLS.ORDER_METHODS.CREATE, data);
