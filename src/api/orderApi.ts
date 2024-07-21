@@ -18,22 +18,24 @@ export const getAllOrders = async (
   pageSize: number,
   searchQuery: string,
   sortby: string,
+  groupBy?: string,
   reportPeriod?: string,
   start_date?: string,
   end_date?: string
 ): Promise<PaginatedResponse<Order>> => {
-  console.log('sortBy', sortby);
   const response = await api.get(API_URLS.ORDER_METHODS.ALL, {
     params: {
       limit: pageSize,
       page: page + 1,
       searchTerm: searchQuery,
       sort_by: sortby,
+      group_by: groupBy,
       report_period: reportPeriod,
       start_date: start_date,
       end_date: end_date,
     },
   });
+
   return response.data;
 };
 

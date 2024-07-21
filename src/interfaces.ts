@@ -342,6 +342,9 @@ export interface Order {
   shipmentType: string;
   PI_number: string;
   note: string;
+  denier?: string;
+  quantity?: string;
+  amount?: string;
   paymentType: PaymentMethod;
   currencyUnit: CurrencyUnit;
   customer: Customer;
