@@ -7,7 +7,7 @@ import ReactToPrint from 'react-to-print';
 import jsPDF from 'jspdf';
 import * as XLSX from 'xlsx';
 
-const FullScreenDialog = styled(Dialog)(({ theme }) => ({
+const FullScreenDialog = styled(Dialog)(() => ({
     '& .MuiDialog-paper': {
         width: '100vw',
         height: '100vh',

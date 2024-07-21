@@ -18,7 +18,7 @@ export const getAllOrders = async (
   pageSize: number,
   searchQuery: string,
   sortby: string,
-  groupBy?: string,
+  groupBy?: string | null,
   reportPeriod?: string,
   start_date?: string,
   end_date?: string

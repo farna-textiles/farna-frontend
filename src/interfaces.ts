@@ -238,6 +238,7 @@ export interface GenericTableProps<T> {
     pageSize: number,
     searchQuery: string,
     searchKey: string,
+    groupBy?: string | null,
     reportPeriod?: string,
     start_date?: string,
     end_date?: string
