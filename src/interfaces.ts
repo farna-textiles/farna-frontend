@@ -241,8 +241,14 @@ export interface GenericTableProps<T> {
     groupBy?: string | null,
     reportPeriod?: string,
     start_date?: string,
-    end_date?: string
+    end_date?: string,
+    productSearchKeyword?: string
   ) => Promise<PaginatedResponse<T>>;
+  fetchProducts?: (
+    page: number,
+    rowsPerPage: number,
+    searchQuery: string
+  ) => Promise<any>;
 }
 
 export interface ActionButton {

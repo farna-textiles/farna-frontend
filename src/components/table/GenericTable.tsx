@@ -86,6 +86,7 @@ const GenericTable = <T extends Record<string, unknown>>({
   tableName,
   columns,
   fetchData,
+  fetchProducts,
   addButtonLink,
   addButtonLabel,
   actionButtons,
@@ -103,18 +104,31 @@ const GenericTable = <T extends Record<string, unknown>>({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchProductQuery, setProductSearchQuery] = useState('');
   const [searchColumn, setSearchColumn] = useState('businessName');
   const [groupBy, setGroupBy] = useState(null);
   const [start_date, setStartDate] = useState<any>(null);
+  const [productSearchKeyword, setProduct] = useState<any>(null)
   const [end_date, setEndDate] = useState<any>(null);
   const [reportPeriod, setReportPeriod] = useState('currentYear');
   const { data: responseData, isLoading } = useQuery(
-    [tableName, page, rowsPerPage, searchQuery, searchColumn, groupBy, reportPeriod, start_date, end_date],
-    () => fetchData(page, rowsPerPage, searchQuery, searchColumn, groupBy, reportPeriod, start_date, end_date),
+    [tableName, page, rowsPerPage, searchQuery, searchColumn, groupBy, reportPeriod, start_date, end_date, productSearchKeyword],
+    () => fetchData(page, rowsPerPage, searchQuery, searchColumn, groupBy, reportPeriod, start_date, end_date, productSearchKeyword),
     {
       keepPreviousData: true,
     }
   );
+
+  const { data: productsResponseData } = useQuery(
+    ['Products', page, rowsPerPage, searchProductQuery],
+    () => searchProductQuery && fetchProducts ? fetchProducts(page, rowsPerPage, searchProductQuery) : Promise.resolve({ data: [], total: 0 }),
+    {
+      enabled: !!fetchProducts,
+      keepPreviousData: true,
+    }
+  );
+
+
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setSearchTermThrottled = useCallback(
@@ -124,10 +138,24 @@ const GenericTable = <T extends Record<string, unknown>>({
     []
   );
 
+  const setProductSearchTermThrottled = useCallback(
+    throttle((value: string) => {
+      setProductSearchQuery(value);
+    }, 300),
+    []
+  );
 
   const data: any = responseData?.data;
 
   const total = responseData?.total;
+
+
+
+
+
+  let productsData: any = productsResponseData?.data;
+
+  let productsTotal = productsResponseData?.total;
 
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
@@ -220,6 +248,7 @@ const GenericTable = <T extends Record<string, unknown>>({
     setSearchColumn('businessName')
     setReportPeriod('currentYear')
     setGroupBy(null)
+    clearProductSearch()
   }
 
 
@@ -244,6 +273,17 @@ const GenericTable = <T extends Record<string, unknown>>({
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+
+
+
+
+  const clearProductSearch = () => {
+    setProduct(null)
+    setProductSearchQuery('')
+    productsData = []
+    productsTotal = 0
+  }
 
   return (
     <Container>
@@ -273,11 +313,39 @@ const GenericTable = <T extends Record<string, unknown>>({
               <MenuItem value="businessName">
                 Business
               </MenuItem>
+              <MenuItem value="product">
+                Product
+              </MenuItem>
               <MenuItem value="name">Customer Name</MenuItem>
               <MenuItem value="contactNumber">Customer Contact No</MenuItem>
               <MenuItem value="designation">Customer Designation</MenuItem>
             </Select>
           </FormControl>
+
+          {
+            searchColumn === 'product' &&
+            <>
+              <div className='flex justify-center w-full items-center gap-x-2'>
+                <div className='w-[70%] basis-[70%] px-2'>
+                  {productSearchKeyword ? <div className='w-full border border-gray-400 rounded-md p-2'>{productSearchKeyword}</div> : <SearchBar onSearch={setProductSearchTermThrottled} />}
+
+                </div>
+                <div className='w-[30%] basis-[30%]'>
+                  {productSearchKeyword ?
+                    <button type='button' className='bg-red-600 text-white px-2 py-2 rounded-md' onClick={clearProductSearch}>Clear Product</button>
+                    : <></>}
+                </div>
+
+              </div>
+              {productsData && productsTotal > 0 && !productSearchKeyword && <div className='border-gray-200 mx-2 px-3 py-2 border w-full max-h-[300px] overflow-y-auto'>
+                {productsData && productsData.map((product: any, index: number) => (<div key={index} className='border-t-gray-200 py-2 border-t'>
+                  <span onClick={() => { setProduct(product.lotNo); setProductSearchQuery(product.lotNo) }}> {product.lotNo} {product.denier}</span>
+                </div>))}
+              </div>}
+            </>
+          }
+
+
 
           <FormControl sx={{ m: 1, minWidth: 120 }} className='w-full'>
             <InputLabel id="demo-select-small-label">Group By</InputLabel>

@@ -9,7 +9,7 @@ import GenericTable from '../../components/table/GenericTable';
 import { getAllOrders } from '../../api';
 import { useDeleteOrder } from '../../hooks/useOrder';
 import Heading from '../../components/elements/Heading';
-
+import { getAllProducts } from '../../api/productApi';
 const Products = () => {
   const deleteOrderMutation = useDeleteOrder();
 
@@ -71,6 +71,7 @@ const Products = () => {
           <GenericTable<Order>
             tableName="Orders"
             columns={columns}
+            fetchProducts={getAllProducts}
             fetchData={getAllOrders}
             actionButtons={actionButtons}
             addButtonLink="/order/new"

@@ -6,7 +6,12 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    onSearch(searchQuery);
+
+    if (searchQuery) {
+
+      onSearch(searchQuery);
+    }
+
   }, [searchQuery, onSearch]);
 
   return (

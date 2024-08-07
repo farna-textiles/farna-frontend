@@ -21,7 +21,8 @@ export const getAllOrders = async (
   groupBy?: string | null,
   reportPeriod?: string,
   start_date?: string,
-  end_date?: string
+  end_date?: string,
+  productSearchKeyword?: string
 ): Promise<PaginatedResponse<Order>> => {
   const response = await api.get(API_URLS.ORDER_METHODS.ALL, {
     params: {
@@ -33,6 +34,7 @@ export const getAllOrders = async (
       report_period: reportPeriod,
       start_date: start_date,
       end_date: end_date,
+      product_search_keyword: productSearchKeyword,
     },
   });
 
