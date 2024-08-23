@@ -16,15 +16,28 @@ export const createOrder = async (data: Omit<ProductOrderType, 'id'>) => {
 export const getAllOrders = async (
   page: number,
   pageSize: number,
-  searchQuery: string
+  searchQuery: string,
+  sortby: string,
+  groupBy?: string | null,
+  reportPeriod?: string,
+  start_date?: string,
+  end_date?: string,
+  productSearchKeyword?: string
 ): Promise<PaginatedResponse<Order>> => {
   const response = await api.get(API_URLS.ORDER_METHODS.ALL, {
     params: {
       limit: pageSize,
       page: page + 1,
       searchTerm: searchQuery,
+      sort_by: sortby,
+      group_by: groupBy,
+      report_period: reportPeriod,
+      start_date: start_date,
+      end_date: end_date,
+      product_search_keyword: productSearchKeyword,
     },
   });
+
   return response.data;
 };
 

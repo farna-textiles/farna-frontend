@@ -23,10 +23,12 @@ const ProductRow: React.FC<ProductRowProps> = ({
 }) => {
   const [localProduct, setLocalProduct] = useState(product);
 
-  const handleValueChange = (key: EditableFields, value: number) => {
-    const sanitizedValue = Number(value).toString();
+  const handleValueChange = (key: EditableFields, value: any) => {
+    console.log('value', value)
+    const sanitizedValue = value;
 
     const updatedProduct = { ...localProduct, [key]: sanitizedValue };
+    console.log('updateProduct', updatedProduct)
     setLocalProduct(updatedProduct);
     onProductUpdate(updatedProduct);
   };
@@ -47,37 +49,40 @@ const ProductRow: React.FC<ProductRowProps> = ({
     >
       {fields.map((field) => {
         if (field.key === 'quantity' || field.key === 'rate') {
-          const min = field.key === 'quantity' ? 1 : 0;
+          const min = 0.00000001;
           return (
             <TableCell key={field.key} align="center">
               <TextField
                 variant="outlined"
                 size="small"
-                type="number"
+                type="number" // Change this to "number"
+
                 value={localProduct[field.key]}
                 onChange={(e) =>
                   handleValueChange(
                     field.key as EditableFields,
-                    +e.target.value
+                    parseFloat(e.target.value) // Parse the value to float
                   )
                 }
                 inputProps={{
                   style: { width: '80px', padding: '5px' },
                   min,
+                  step: "0.001" // Add step attribute
                 }}
               />
             </TableCell>
           );
         }
 
+
         if (field.key === 'amount') {
           return (
             <TableCell key={field.key} align="center">
               <Box fontWeight="bold">
                 {currency}
-                {parseFloat(
+                {
                   (localProduct.quantity * localProduct.rate).toFixed(2)
-                ).toString()}
+                    .toString()}
               </Box>
             </TableCell>
           );

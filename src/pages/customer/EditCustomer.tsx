@@ -67,6 +67,7 @@ const EditCustomer = () => {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
 
   const handleEditClick = (contact: Contact) => {
+
     if (contact) {
       setSelectedContact(contact);
       setIsAddingContact(false);
@@ -138,12 +139,14 @@ const EditCustomer = () => {
         icon: <Edit />,
         title: 'Edit',
         onClick: (contactId: number) => {
-          handleEditClick(
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            editedCustomer.contacts.find((contact, index) =>
-              contact.id ? contact.id !== contactId : index !== contactId
-            )!
-          );
+
+          const contactToEdit = editedCustomer.contacts.find(contact => contact.id === contactId);
+
+          if (contactToEdit) {
+            handleEditClick(contactToEdit);
+          } else {
+            console.error(`No contact found with ID ${contactId}`);
+          }
         },
       },
       {
@@ -151,7 +154,7 @@ const EditCustomer = () => {
         title: 'Delete',
         onClick: (contactId: number) => {
           const updatedContacts = editedCustomer.contacts.filter(
-            (contact) => contact.id !== contactId || contact.id !== undefined
+            (contact) => contact.id !== contactId
           );
           const updatedSampleObject = {
             ...editedCustomer,
@@ -195,17 +198,17 @@ const EditCustomer = () => {
 
   const contactValidationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required.'),
-    designation: Yup.string().required('Designation is required.'),
+    // designation: Yup.string().required('Designation is required.'),
     contactNumber: Yup.string()
-      .required('Contact number is required.')
+      //  .required('Contact number is required.')
       .matches(/^(0\d{6,7}|0\d{10})$/, 'Contact number is not valid'),
     address: Yup.object().shape({
-      street: Yup.string().required('Street is required.'),
-      city: Yup.string().required('City is required.'),
-      state: Yup.string().required('State is required.'),
-      country: Yup.string().required('Country is required.'),
+      // street: Yup.string().required('Street is required.'),
+      // city: Yup.string().required('City is required.'),
+      // state: Yup.string().required('State is required.'),
+      // country: Yup.string().required('Country is required.'),
       postalCode: Yup.string()
-        .required('Postal code is required.')
+        //     .required('Postal code is required.')
         .matches(/^\d{5}$/, 'Invalid postal code. Must be 5 digits.'),
     }),
   });

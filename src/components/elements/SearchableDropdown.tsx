@@ -54,6 +54,7 @@ const SearchDropdown = <T extends { id: number }>({
     });
 
   const items = data ? data.pages.flatMap((page) => page.data) : [];
+  console.log('items', items);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setSearchTermThrottled = useCallback(
@@ -98,6 +99,18 @@ const SearchDropdown = <T extends { id: number }>({
     }
   };
 
+
+
+  const handleKeyDown = (event: any, item: any) => {
+    if (event.key === 'Enter') {
+      setInputValue(itemToString(item));
+      onSelect(item);
+      setIsFocused(false);
+    } else if (event.key === 'Tab') {
+
+    }
+  };
+
   return (
     <Grid container spacing={1} style={{ position: 'relative' }} ref={containerRef}>
       <Grid item xs={12} style={{ position: 'relative' }}>
@@ -137,19 +150,21 @@ const SearchDropdown = <T extends { id: number }>({
             <Paper elevation={3}>
               <List
                 ref={listRef}
-                style={{ maxHeight: '200px', overflowY: 'auto' }}
+                style={{ maxHeight: '100px', overflowY: 'auto' }}
                 onScroll={handleScroll}
               >
                 {items.map((item) => (
-                  <ListItem key={item.id}>
+                  <ListItem key={item.id} className='!py-0 border-b border-b-gray-200'>
                     <ListItemButton
+                      className='!p-0 text-sm'
                       onMouseDown={() => {
                         setInputValue(itemToString(item));
                         onSelect(item);
                         setIsFocused(false);
                       }}
+                      onKeyDown={(event) => handleKeyDown(event, item)}
                     >
-                      {itemToString(item)}
+                      {itemToString(item) + ' ' + item.lotNo}
                     </ListItemButton>
                   </ListItem>
                 ))}

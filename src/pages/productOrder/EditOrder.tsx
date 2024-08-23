@@ -39,6 +39,7 @@ import { getAllCurrencyUnits } from '../../api/currencyUnitApi';
 import { getAllPaymentTypes } from '../../api/paymentMethodApi';
 import Heading from '../../components/elements/Heading';
 import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
+import CustomerSearchDropdown from '../../components/elements/CustomerSearchableDropdown';
 
 const headerCellStyle = {
   backgroundColor: '#3F9FEB',
@@ -123,7 +124,7 @@ const EditOrder: React.FC = () => {
             orderProducts: selectedProducts.map((product: ProductOrderType) => {
               return {
                 productId: product.id,
-                quantity: parseInt(product.quantity.toString(), 10),
+                quantity: parseFloat(product.quantity.toString()),
                 rate: parseFloat(product.rate.toString()),
               };
             }),
@@ -155,7 +156,7 @@ const EditOrder: React.FC = () => {
     ) {
       const productWithDefaults = {
         ...product,
-        quantity: 1,
+        quantity: 0,
         rate: 0,
       };
       setSelectedProducts([...selectedProducts, productWithDefaults]);
@@ -200,7 +201,7 @@ const EditOrder: React.FC = () => {
         <section className="grid md:grid-cols-2 gap-6 mb-6">
           <div>
             <FormControl fullWidth variant="outlined" margin="dense">
-              <SearchDropdown<Customer>
+              <CustomerSearchDropdown<Customer>
                 type="Customer"
                 queryFn={getCustomers}
                 onSelect={(customer: Customer | null) => {
@@ -386,77 +387,78 @@ const EditOrder: React.FC = () => {
           </FormControl>
         </section>
         <h3 className="text-xl font-semibold mb-3">Product Details</h3>
-
-        <div className="flex justify-between items-center mb-5 space-x-4">
-          <SearchDropdown<ProductOrderType>
-            type="Product"
-            queryFn={getProducts}
-            onSelect={handleSelectProduct}
-            placeholder="Search for a customer..."
-            itemToString={(customer: ProductOrderType) => customer.lotNo}
-          />
-          <Tooltip title="Create new Product">
-            <IconButton
-              type="button"
-              onClick={() => navigate('/product/new')}
-              className=""
-            >
-              <AddIcon />
-            </IconButton>
-          </Tooltip>{' '}
-        </div>
-        {!!selectedProducts.length && (
-          <div className="mb-4 md:mb-8 mt-4 md:mt-5">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <hr className="border-t border-gray-300 w-full md:w-2/3 mt-2 md:ml-4" />
-            </div>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    {fields.map((field) => (
-                      <TableCell
-                        key={field.key}
-                        align="center"
-                        sx={headerCellStyle}
-                      >
-                        {field.label}
-                      </TableCell>
-                    ))}
-                    <TableCell align="center" sx={headerCellStyle}>
-                      Actions
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {selectedProducts.map((product) => (
-                    <ProductRow
-                      fields={fields}
-                      key={product.lotNo}
-                      product={product}
-                      currency={selectedCurrencySymbol ?? ''}
-                      onProductUpdate={handleProductUpdate}
-                      onProductRemove={handleProductRemove}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <footer className="flex justify-between items-center mt-6">
-              <Typography variant="h6">
-                Total: {selectedCurrencySymbol}{' '}
-                {parseFloat(totalAmount.toFixed(2))}
-              </Typography>
-              <ButtonLoader
-                isLoading={useUpdateProductMutation.isLoading}
-                disabled={useUpdateProductMutation.isLoading}
-                onClick={formik.handleSubmit}
+        <div className='min-h-[200px]'>
+          <div className="flex justify-between items-center mb-5 space-x-4">
+            <SearchDropdown<ProductOrderType>
+              type="Product"
+              queryFn={getProducts}
+              onSelect={handleSelectProduct}
+              placeholder="Search for a product..."
+              itemToString={(product: ProductOrderType) => product.denier}
+            />
+            <Tooltip title="Create new Product">
+              <IconButton
+                type="button"
+                onClick={() => navigate('/product/new')}
+                className=""
               >
-                Update
-              </ButtonLoader>
-            </footer>
+                <AddIcon />
+              </IconButton>
+            </Tooltip>{' '}
           </div>
-        )}
+          {!!selectedProducts.length && (
+            <div className="mb-4 md:mb-8 mt-4 md:mt-5">
+              <div className="flex flex-col md:flex-row justify-between items-center">
+                <hr className="border-t border-gray-300 w-full md:w-2/3 mt-2 md:ml-4" />
+              </div>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      {fields.map((field) => (
+                        <TableCell
+                          key={field.key}
+                          align="center"
+                          sx={headerCellStyle}
+                        >
+                          {field.label}
+                        </TableCell>
+                      ))}
+                      <TableCell align="center" sx={headerCellStyle}>
+                        Actions
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {selectedProducts.map((product) => (
+                      <ProductRow
+                        fields={fields}
+                        key={product.denier}
+                        product={product}
+                        currency={selectedCurrencySymbol ?? ''}
+                        onProductUpdate={handleProductUpdate}
+                        onProductRemove={handleProductRemove}
+                      />
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <footer className="flex justify-between items-center mt-6">
+                <Typography variant="h6">
+                  Total: {selectedCurrencySymbol}{' '}
+                  {parseFloat(totalAmount.toFixed(2))}
+                </Typography>
+                <ButtonLoader
+                  isLoading={useUpdateProductMutation.isLoading}
+                  disabled={useUpdateProductMutation.isLoading}
+                  onClick={formik.handleSubmit}
+                >
+                  Update
+                </ButtonLoader>
+              </footer>
+            </div>
+          )}
+        </div>
       </div>
     </form>
   );

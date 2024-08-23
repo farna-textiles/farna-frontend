@@ -9,7 +9,7 @@ import GenericTable from '../../components/table/GenericTable';
 import { getAllOrders } from '../../api';
 import { useDeleteOrder } from '../../hooks/useOrder';
 import Heading from '../../components/elements/Heading';
-
+import { getAllProducts } from '../../api/productApi';
 const Products = () => {
   const deleteOrderMutation = useDeleteOrder();
 
@@ -18,10 +18,14 @@ const Products = () => {
   const columns: TableColumn<Order>[] = useMemo(
     () => [
       { field: 'id', label: 'Order ID' },
+      { field: 'customer.businessName', label: 'Customer Name' },
       { field: 'salesReceiptDate', label: 'Sales Receipt Date' },
       { field: 'validity', label: 'Validity Date' },
       { field: 'shipmentType', label: 'Shipment Type' },
       { field: 'PI_number', label: 'PI Number' },
+      { field: 'denier', label: 'Product' },
+      { field: 'quantity', label: 'Qty' },
+      { field: 'amount', label: 'Amount' },
       { field: 'note', label: 'Customer Notes' },
     ],
     []
@@ -67,6 +71,7 @@ const Products = () => {
           <GenericTable<Order>
             tableName="Orders"
             columns={columns}
+            fetchProducts={getAllProducts}
             fetchData={getAllOrders}
             actionButtons={actionButtons}
             addButtonLink="/order/new"
