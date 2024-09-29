@@ -13,6 +13,7 @@ import { Address, Contact, TableColumn } from '../../interfaces';
 import { useCustomer } from '../../hooks/useCustomer';
 import DataTable from '../../components/table/DataTable';
 import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
+import React from 'react';
 
 const MainContactCard = ({ mainContact }: { mainContact: Contact }) => {
   return (

@@ -76,7 +76,7 @@ const CurrencyAndPayment: React.FC<CurrencyAndPaymentProps<any>> = ({
             fields={formConfig}
             primaryButtonLabel={selectedItem ? 'Update' : 'Create'}
             validationSchema={validationSchema}
-            initialValues={{ ...selectedItem } || initialValues}
+            initialValues={selectedItem ? { ...selectedItem } : initialValues}
             handleSubmit={(values) => {
               handleFormSubmit(values);
             }}

@@ -93,7 +93,6 @@ const BarChart: React.FC<BarChartProps> = ({ currency, dataFilter }) => {
         <div className="flex space-x-4 sm:space-x-6 md:space-x-8 lg:space-x-10 items-center">
           <YearPickerInput
             type="default"
-            placeholder="Select Year 1"
             title="Select Year 1"
             value={selectedYear1}
             onChange={(date) => {
@@ -104,7 +103,6 @@ const BarChart: React.FC<BarChartProps> = ({ currency, dataFilter }) => {
 
           <YearPickerInput
             type="default"
-            placeholder="Select Year 2"
             value={selectedYear2}
             title="Select Year 2"
             onChange={(date) => {

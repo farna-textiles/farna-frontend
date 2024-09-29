@@ -159,7 +159,7 @@ const DataTable = <T extends { id: number }>({
                   <TableCell key={column.field as string}>
                     {column.format
                       ? column.format(item[column.field] as any)
-                      : item[column.field]}
+                      : String(item[column.field] || '')}
                   </TableCell>
                 ))}
                 {actionButtons && actionButtons.length > 0 && (
@@ -201,7 +201,7 @@ DataTable.defaultProps = {
   additionalColumn: null,
   isLoading: false,
   customButtonLabel: '',
-  onCustomButtonClick: () => {},
+  onCustomButtonClick: () => { },
   actionButtons: [],
 };
 

@@ -5,7 +5,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-
+    
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -21,11 +21,11 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "vite.config.ts",
     ".eslintrc.cjs",
     "tailwind.config.js",
     "postcss.config.js",
     "src"
   ],
+  "exclude": ["vite.config.ts"],  // Added this line to exclude vite.config.ts
   "references": [{ "path": "./tsconfig.node.json" }]
 }

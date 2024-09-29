@@ -90,7 +90,6 @@ const AverageBarChart: React.FC<AverageBarChartProps> = ({
         </h4>
         <YearPickerInput
           type="range"
-          placeholder="Pick dates range"
           value={value}
           onChange={(dateRange) => {
             const [start, end] = dateRange;

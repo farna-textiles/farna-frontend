@@ -19,6 +19,7 @@ import DataTable from '../../components/table/DataTable';
 import CustomModal from '../../components/Modal';
 import Heading from '../../components/elements/Heading';
 import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
+import React from 'react';
 
 const initialContactState: Omit<Contact, 'id'> & { id?: number } = {
   name: '',

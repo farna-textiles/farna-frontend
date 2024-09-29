@@ -18,6 +18,7 @@ import CustomModal from '../../components/Modal';
 import { useCreateCustomer } from '../../hooks/useCustomer';
 import Heading from '../../components/elements/Heading';
 import ButtonLoader from '../../components/elements/buttons/ButtonLoader';
+import React from 'react';
 
 const CreateCustomer = () => {
   const [newCustomer, setNewCustomer] = useState<Omit<Customer, 'id'>>({

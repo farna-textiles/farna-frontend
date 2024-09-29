@@ -80,7 +80,6 @@ const LineChart: React.FC<LineChartProps> = ({
         </h4>
         <YearPickerInput
           type="range"
-          placeholder="Pick dates range"
           value={value}
           onChange={(dateRange) => {
             const [start, end] = dateRange;
