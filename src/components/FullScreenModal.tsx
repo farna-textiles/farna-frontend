@@ -239,12 +239,14 @@ const FullScreenModal: React.FC<FullScreenModalProps> = ({ open, onClose, orders
                         </div>
                     </div>
                     <div>
-                        <div className='flex flex-col mb-8 justify-start items-start'>
-                            <div className="text-2xs text-gray-400">Customer Notes</div>
-                            <div className="text-base uppercase text-black-500">
-                                {orders[0].note ? orders[0].note : 'No Customer Notes Available'}
+                        {orders[0].note &&
+                            <div className='flex flex-col mb-8 justify-start items-start'>
+                                <div className="text-2xs text-gray-400">Customer Notes</div>
+                                <div className="text-base uppercase text-black-500">
+                                    {orders[0].note}
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                     <div className="flex items-center justify-between  mb-2 text-green-600 bg-gray-200 p-2 ">
                         <div className="w-1/6 text-[12px]  font-medium">Order ID.</div>

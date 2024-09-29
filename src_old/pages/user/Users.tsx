@@ -21,6 +21,7 @@ import Heading from '../../components/elements/Heading';
 import { useDeleteUser, useUpdateUser } from '../../hooks/useUser';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteConfirmationDialog from '../../components/modals/DeleteConfirmationDialog';
+import React from 'react';
 
 const Users = () => {
   const navigate = useNavigate();

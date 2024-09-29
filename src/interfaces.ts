@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { InputHTMLAttributes, ReactNode } from 'react';
-import { Schema } from 'yup';
+import { InputHTMLAttributes, ReactNode } from "react";
+import { Schema } from "yup";
 
 export interface FormInputProps {
   id: string;
@@ -104,7 +104,7 @@ export interface Product {
   userId: string;
 }
 
-export type ProductOrderType = Omit<Product, 'id'> & {
+export type ProductOrderType = Omit<Product, "id"> & {
   id: number;
   quantity: number;
   rate: number;
@@ -249,6 +249,12 @@ export interface GenericTableProps<T> {
     rowsPerPage: number,
     searchQuery: string
   ) => Promise<any>;
+  fetchCustomers?: (
+    page: number,
+    rowsPerPage: number,
+    searchKey: string,
+    searchQuery: string
+  ) => Promise<any>;
 }
 
 export interface ActionButton {
@@ -263,7 +269,7 @@ export interface SearchBarProps {
 }
 
 export interface AdditionalColumn<T> {
-  type: 'radio' | 'checkbox';
+  type: "radio" | "checkbox";
   onChange: (itemId: number, checked: boolean) => void;
   valueGetter: (item: T) => boolean;
   columnName: string;
@@ -296,7 +302,7 @@ export interface EditContactModalProps<T> {
   onClose: () => void;
   onSave: (editedContact: T) => void;
   fields: FieldConfig<T>[];
-  validationSchema: Schema<Omit<T, 'id'>>;
+  validationSchema: Schema<Omit<T, "id">>;
   title: string;
   submitButton: string;
 }
@@ -365,7 +371,7 @@ export interface CompareRangeType {
   data: number[];
 }
 
-export type DashboardDataFilter = 'orders' | 'earnings' | 'quantity';
+export type DashboardDataFilter = "orders" | "earnings" | "quantity";
 
 export interface PaymentType {
   id: number;

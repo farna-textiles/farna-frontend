@@ -9,6 +9,7 @@ import GenericTable from '../../components/table/GenericTable';
 import { getAllOrders } from '../../api';
 import { useDeleteOrder } from '../../hooks/useOrder';
 import Heading from '../../components/elements/Heading';
+import React from 'react';
 
 const Products = () => {
   const deleteOrderMutation = useDeleteOrder();

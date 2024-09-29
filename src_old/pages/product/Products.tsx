@@ -14,6 +14,7 @@ import { getAllProducts } from '../../api/productApi';
 import { useDeleteProduct } from '../../hooks/useProduct';
 import EndUsesList from './component/EndUsesList';
 import Heading from '../../components/elements/Heading';
+import React from 'react';
 
 const Products = () => {
   const deleteProductMutation = useDeleteProduct();

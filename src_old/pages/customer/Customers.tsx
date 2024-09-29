@@ -10,6 +10,7 @@ import GenericTable from '../../components/table/GenericTable';
 import { getAllCustomers } from '../../api/customerApi';
 import { useDeleteCustomer } from '../../hooks/useCustomer';
 import Heading from '../../components/elements/Heading';
+import React from 'react';
 
 const Customers = () => {
   const deleteCustomerMutation = useDeleteCustomer();

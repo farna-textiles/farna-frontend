@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { ActionButton, TableColumn, Order } from '../../interfaces';
 import GenericTable from '../../components/table/GenericTable';
-import { getAllOrders } from '../../api';
+import { getAllCustomers, getAllOrders } from '../../api';
 import { useDeleteOrder } from '../../hooks/useOrder';
 import Heading from '../../components/elements/Heading';
 import { getAllProducts } from '../../api/productApi';
@@ -72,6 +72,7 @@ const Products = () => {
             tableName="Orders"
             columns={columns}
             fetchProducts={getAllProducts}
+            fetchCustomers={getAllCustomers}
             fetchData={getAllOrders}
             actionButtons={actionButtons}
             addButtonLink="/order/new"
