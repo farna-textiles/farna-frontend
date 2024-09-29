@@ -132,10 +132,7 @@ const GenericTable = <T extends Record<string, unknown>>({
           item[firstKey as keyof T][secondKey as keyof T[keyof T]]
         );
       }
-      console.log('yaaha', item[firstKey as keyof T][
-        secondKey as keyof T[keyof T]
-      ] as ReactNode)
-      console.log('yaaha', column.field)
+
       return item[firstKey as keyof T][
         secondKey as keyof T[keyof T]
       ] as ReactNode;

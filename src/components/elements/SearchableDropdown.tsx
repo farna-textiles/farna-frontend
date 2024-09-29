@@ -54,7 +54,7 @@ const SearchDropdown = <T extends { id: number }>({
     });
 
   const items = data ? data.pages.flatMap((page) => page.data) : [];
-  console.log('items', items);
+
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setSearchTermThrottled = useCallback(

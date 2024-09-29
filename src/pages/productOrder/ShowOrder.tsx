@@ -52,7 +52,7 @@ const ShowOrder: React.FC = () => {
   };
 
 
-  console.log(orderData)
+
 
   // Calculate total amount
   const getTotalAmount = () => {

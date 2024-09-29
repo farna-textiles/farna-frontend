@@ -17,7 +17,7 @@ export const getAllCustomers = async (
       searchTerm: searchQuery,
     },
   });
-  console.log('res ', response)
+
   return response;
 };
 

@@ -19,7 +19,7 @@ export const getAllCustomers = async (
       searchKey: searchKey
     },
   });
-  console.log('res ', response)
+
   return response;
 };
 
